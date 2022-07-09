@@ -64,12 +64,15 @@ export default class {
         // console.log(divide(data, 50))
         const tbody = document.createElement('tbody');
         const renders = divideArr(data, 5000);
-
+        const stopBtn = document.querySelector('#stop');
         let renderedCounter = 1
+        let stopped = false;
+
         renders.map( data => {
-            // console.log(data)
             
-            setTimeout(() => {
+            const renderTimeout = setTimeout(() => {
+                console.log(stopped)            
+                if(stopped) return;
                 data.forEach(row => {
                     const tr = document.createElement('tr');
                     row.forEach( data => {
@@ -97,7 +100,12 @@ export default class {
                     setTimeout(()=> document.querySelector('#status').innerText = `Done`, 500)
                 }
             }, 1500);
-            
+
+            stopBtn.onclick = ()=> {
+                stopped = true;
+                console.log('stopped', stopped)
+                clearTimeout(renderTimeout)
+            }
         });
     };
     
