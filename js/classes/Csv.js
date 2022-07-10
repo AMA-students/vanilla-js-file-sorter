@@ -98,6 +98,8 @@ export default class {
                 } else {
                     document.querySelector('#status').innerText = `Loading: ${renderedCounter++}/${renders.length}`
                     setTimeout(()=> document.querySelector('#status').innerText = `Done`, 500)
+                    document.querySelector('#clear').style.display = 'block';
+                    document.querySelector('#stop').style.display = 'none';
                 }
             }, 1500);
 

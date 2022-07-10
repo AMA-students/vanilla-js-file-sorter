@@ -9,12 +9,14 @@ const select = document.querySelector('#select');
 const displayBtn = document.querySelector('#display')
 const clearBtn = document.querySelector('#clear')
 const selectGroup = document.querySelector('#sort-select-group')
+const stopBtn = document.querySelector('#stop')
 
 let parsedCsvFile;
 
-displayBtn.style.display = 'none';
-clearBtn.style.display = 'none';
-selectGroup.style.display = 'none';
+// displayBtn.style.display = 'none';
+// clearBtn.style.display = 'none';
+// stopBtn.style.display = 'none';
+// selectGroup.style.display = 'none';
 
 const Status = new STATUS(document.querySelector('#status'));
 
@@ -22,22 +24,25 @@ const csv = new CSV(document.querySelector('table'))
 
 // status options
 const onChooseFileOptions = {
-    hideBtn:[clearBtn, displayBtn],
+    hideBtn:[clearBtn, displayBtn, stopBtn],
 }
 
 const onDoneOptions = {
-    hideBtn:[displayBtn],
+    hideBtn:[displayBtn, stopBtn],
     showBtn: [clearBtn]
 }
 
 const onSetFileOptions = {
-    hideBtn:[clearBtn],
-    showBtn: [displayBtn]
+    hideBtn:[clearBtn, stopBtn],
+    showBtn: [displayBtn, selectGroup]
 }
 
 const onLoadingOptions = {
     hideBtn:[clearBtn, displayBtn]
 }
+
+Status.onChooseFile();
+Status.Options.hide([stopBtn, clearBtn, selectGroup, displayBtn]);
 
 form.onsubmit = async e => {
     e.preventDefault();
@@ -54,8 +59,8 @@ form.onsubmit = async e => {
     const csvHeaders = parsedCsvFile.data[0].map(element => `<option>${element}</option>`);
 
     select.innerHTML = csvHeaders.join('');
-    displayBtn.style.display = 'block';
-    selectGroup.style.display = 'block';
+    Status.Options.hide([stopBtn, clearBtn])
+    Status.Options.show([displayBtn, selectGroup])
     form.reset();
 }
 
@@ -68,12 +73,19 @@ displayBtn.onclick = () => {
     // csv.render2(bodyData)
     // displayData(parsedCsvFile.data)
     // Status.onDone(onDoneOptions);
-    clearBtn.style.display = 'block';
+    Status.Options.hide([clearBtn, displayBtn, selectGroup])
+    Status.Options.show([stopBtn])
 };
 
 clearBtn.onclick = () => {
     csv.clear();
     Status.onChooseFile(onChooseFileOptions);
+    Status.Options.hide([clearBtn, stopBtn, selectGroup])
+}
+
+stopBtn.onclick = () => {
+    console.log('yeet')
+    Status.Options.show([clearBtn])
 }
 
 const removeUndefined = data => data.filter(element => element !== undefined && element != '');

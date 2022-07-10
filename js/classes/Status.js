@@ -3,30 +3,28 @@ export default class {
         this.root = root;
     }
 
-    onChooseFile(Options) {
+    onChooseFile() {
         this.root.innerText = 'Choose your file';
-        if(!Options) return;
-        Options.hideBtn.map( button => button.style.display = 'none');
     }
 
-    onLoading(Options) {
+    onLoading() {
         this.root.innerText = 'Loading...';
-        if(!Options) return;
-        Options.hideBtn.map( button => button.style.display = 'none');
     }
 
-    onDone(Options) {
+    onDone() {
         this.root.innerText = 'Done';
-        if(!Options) return;
-        Options.hideBtn.map( button => button.style.display = 'none');
-        Options.showBtn.map(button => button.style.display = 'initial');
     }
 
-    onSetFile(fileName, Options) {
+    onSetFile(fileName) {
         this.root.innerText = fileName;
-        if(!Options) return;
-        
-        Options.hideBtn.map( button => button.style.display = 'none');
-        Options.showBtn.map(button => button.style.display = 'initial');
+    }
+
+    Options = {
+        hide: function(elements) {
+            elements.map(element => element.style.display = 'none')
+        },
+        show: function(elements) {
+            elements.map(element => element.style.display = 'initial')
+        }
     }
 }
