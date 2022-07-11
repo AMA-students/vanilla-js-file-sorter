@@ -1,4 +1,5 @@
-import divideArr from "../functions/divideArr.js";
+import elementLimiter from "../functions/elementLimiter.js";
+import STATUS from './Status.js';
 export default class {
     constructor(root) {
         this.root = root;
@@ -63,8 +64,7 @@ export default class {
     splitRendering(data) {
         // console.log(divide(data, 50))
         const tbody = document.createElement('tbody');
-        const renders = divideArr(data, 5000);
-        const stopBtn = document.querySelector('#stop');
+        const renders = elementLimiter(data, 5000);
         let renderedCounter = 1
         let stopped = false;
 
@@ -118,4 +118,4 @@ for(let i = 0; i < 100; i++) {
     arr.push(i)
 }
 
-console.log(divideArr(arr, 45))
+console.log(elementLimiter(arr, 45))
