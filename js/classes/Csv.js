@@ -103,7 +103,10 @@ export default class {
                 }
             }, 1500);
 
-            stopBtn.onclick = ()=> {
+            document.querySelector('#stop').onclick = ()=> {
+                const Status = new STATUS(document.querySelector('#status'));
+                Status.Options.enable([document.querySelector('#clear')]);
+                Status.Options.disable([document.querySelector('#stop')]);
                 stopped = true;
                 console.log('stopped', stopped)
                 clearTimeout(renderTimeout)

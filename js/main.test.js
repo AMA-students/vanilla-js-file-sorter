@@ -42,7 +42,8 @@ const onLoadingOptions = {
 }
 
 Status.onChooseFile();
-Status.Options.hide([stopBtn, clearBtn, selectGroup, displayBtn]);
+Status.Options.hide([selectGroup]);
+Status.Options.disable([stopBtn, clearBtn ,displayBtn]);
 
 form.onsubmit = async e => {
     e.preventDefault();
@@ -59,8 +60,10 @@ form.onsubmit = async e => {
     const csvHeaders = parsedCsvFile.data[0].map(element => `<option>${element}</option>`);
 
     select.innerHTML = csvHeaders.join('');
-    Status.Options.hide([stopBtn, clearBtn])
-    Status.Options.show([displayBtn, selectGroup])
+    Status.Options.disable([stopBtn, clearBtn])
+
+    Status.Options.show([selectGroup])
+    Status.Options.enable([displayBtn])
     form.reset();
 }
 
@@ -73,19 +76,24 @@ displayBtn.onclick = () => {
     // csv.render2(bodyData)
     // displayData(parsedCsvFile.data)
     // Status.onDone(onDoneOptions);
-    Status.Options.hide([clearBtn, displayBtn, selectGroup])
+    Status.Options.hide([selectGroup])
+    Status.Options.disable([clearBtn, displayBtn])
+    
     Status.Options.show([stopBtn])
+    Status.Options.enable([stopBtn])
 };
 
 clearBtn.onclick = () => {
     csv.clear();
     Status.onChooseFile(onChooseFileOptions);
-    Status.Options.hide([clearBtn, stopBtn, selectGroup])
+    Status.Options.hide([selectGroup])
+    Status.Options.disable([clearBtn, stopBtn])
+    select.innerHTML = '';
 }
 
-stopBtn.onclick = () => {
-    console.log('yeet')
-    Status.Options.show([clearBtn])
-}
+// stopBtn.onclick = () => {
+//     console.log('yeet')
+//     Status.Options.show([clearBtn])
+// }
 
 const removeUndefined = data => data.filter(element => element !== undefined && element != '');
