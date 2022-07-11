@@ -13,16 +13,13 @@ const stopBtn = document.querySelector('#stop')
 
 let parsedCsvFile;
 
-// displayBtn.style.display = 'none';
-// clearBtn.style.display = 'none';
-// stopBtn.style.display = 'none';
-// selectGroup.style.display = 'none';
-
 const Status = new STATUS(document.querySelector('#status'));
 
 const csv = new CSV(document.querySelector('table'))
 
 // status options
+const allBtn = [clearBtn, displayBtn, stopBtn];
+
 const onChooseFileOptions = {
     hideBtn:[clearBtn, displayBtn, stopBtn],
 }
@@ -45,6 +42,7 @@ Status.onChooseFile();
 Status.Options.hide([selectGroup]);
 Status.Options.disable([stopBtn, clearBtn ,displayBtn]);
 
+//buttons on click
 form.onsubmit = async e => {
     e.preventDefault();
     const firstFile = inputFile.files[0];
@@ -54,9 +52,7 @@ form.onsubmit = async e => {
     Status.onSetFile(firstFile.name, onSetFileOptions);
 
     parsedCsvFile = await fileParse(firstFile.name);
-    // parsedCsvFile = await fileParse('test2.csv');
-    // parsedCsvFile = await fileParse('test.csv');
-    
+
     const csvHeaders = parsedCsvFile.data[0].map(element => `<option>${element}</option>`);
 
     select.innerHTML = csvHeaders.join('');
@@ -73,9 +69,7 @@ displayBtn.onclick = () => {
     const bodyData = removeUndefined(csvBody);
 
     csv.update(parsedCsvFile.data[0], bodyData );
-    // csv.render2(bodyData)
-    // displayData(parsedCsvFile.data)
-    // Status.onDone(onDoneOptions);
+
     Status.Options.hide([selectGroup])
     Status.Options.disable([clearBtn, displayBtn])
     
@@ -90,10 +84,5 @@ clearBtn.onclick = () => {
     Status.Options.disable([clearBtn, stopBtn])
     select.innerHTML = '';
 }
-
-// stopBtn.onclick = () => {
-//     console.log('yeet')
-//     Status.Options.show([clearBtn])
-// }
 
 const removeUndefined = data => data.filter(element => element !== undefined && element != '');

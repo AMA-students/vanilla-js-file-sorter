@@ -8,7 +8,6 @@ export default class {
     update(headerColumns = [], datas) {
         this.clear();
         this.setHeader(headerColumns);
-        // this.setBody(datas);
         this.splitRendering(datas);
     }
 
@@ -21,7 +20,6 @@ export default class {
         const tr = document.createElement('tr');
 
         headerColumns.map(headerText => {
-            // console.log(headerText)
             const th = document.createElement('th');
             th.innerText = headerText;
             tr.appendChild(th);
@@ -29,15 +27,6 @@ export default class {
 
         thead.appendChild(tr);
         this.root.appendChild(thead)
-
-        // this.root.insertAdjacentHTML('afterbegin',`
-        //     <thead>
-        //         <tr>
-        //             ${headerColumns.map(headerText => `<th>${headerText}</th>` ).join('') }
-        //         </tr>
-        //     </thead>
-        // `
-        // )
     }
 
     setBody(datas) {
@@ -50,19 +39,9 @@ export default class {
                 </tr>
             `
         })
-
-        // original render method
-        // this.root.insertAdjacentHTML('beforeend', `
-        //     <tbody>
-        //     ${
-        //         rowsHtml.join('')
-        //     }
-        //     </tbody>
-        // `);
     }
 
     splitRendering(data) {
-        // console.log(divide(data, 50))
         const tbody = document.createElement('tbody');
         const renders = elementLimiter(data, 5000);
         let renderedCounter = 1
@@ -83,11 +62,8 @@ export default class {
                         }else {
                             td.innerText = data;
                         }
-
-                        // tableDatas.appendChild(td);
                         tr.appendChild(td)
 
-                        // console.log(data)
                     })
 
                     this.root.appendChild(tr)
