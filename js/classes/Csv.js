@@ -1,5 +1,18 @@
 import elementLimiter from "../functions/elementLimiter.js";
 import STATUS from './Status.js';
+
+const Status = new STATUS(document.querySelector('#status'));
+
+const form = document.querySelector("#getfile");
+const selectGroup = document.querySelector('#sort-select-group')
+const select = document.querySelector('#select');
+
+//buttons
+const inputFile = document.querySelector("#file");
+const submitBtn = document.querySelector("#submit");
+const displayBtn = document.querySelector('#display')
+const clearBtn = document.querySelector('#clear')
+const stopBtn = document.querySelector('#stop')
 export default class {
     constructor(root) {
         this.root = root;
@@ -72,17 +85,17 @@ export default class {
                 if(renderedCounter !== renders.length) {
                     document.querySelector('#status').innerText = `Loading: ${renderedCounter++}/${renders.length}`
                 } else {
+                    // when loading is done
                     document.querySelector('#status').innerText = `Loading: ${renderedCounter++}/${renders.length}`
                     setTimeout(()=> document.querySelector('#status').innerText = `Done`, 500)
-                    document.querySelector('#clear').style.display = 'block';
-                    document.querySelector('#stop').style.display = 'none';
+                    Status.Options.enable([clearBtn, inputFile, submitBtn]);
+                    Status.Options.disable([stopBtn]);
                 }
             }, 1500);
 
             document.querySelector('#stop').onclick = ()=> {
-                const Status = new STATUS(document.querySelector('#status'));
-                Status.Options.enable([document.querySelector('#clear')]);
-                Status.Options.disable([document.querySelector('#stop')]);
+                Status.Options.enable([clearBtn]);
+                Status.Options.disable([stopBtn]);
                 stopped = true;
                 console.log('stopped', stopped)
                 clearTimeout(renderTimeout)
