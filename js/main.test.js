@@ -2,6 +2,7 @@
 import fileParse from './functions/getFile.js'
 import CSV from './classes/Csv.js';
 import STATUS from './classes/Status.js';
+import { bubbleSort } from './functions/algorithms.js';
 
 const form = document.querySelector("#getfile");
 const selectGroup = document.querySelector('#sort-select-group')
@@ -73,8 +74,22 @@ displayBtn.onclick = () => {
     Status.onLoading(onLoadingOptions);
     const csvBody = parsedCsvFile.data.slice(1);
     const bodyData = removeUndefined(csvBody);
+    const controlVar = select.selectedIndex;
 
-    csv.update(parsedCsvFile.data[0], bodyData );
+    // console.log(bodyData)
+    const converted = bodyData.map( elem => {
+        console.log(elem[controlVar], isNaN(elem[controlVar]) )
+        if( !isNaN(elem[controlVar]) ) {
+            elem[controlVar] = parseFloat(elem[controlVar])
+        }
+        console.log(elem)
+        return elem
+    })
+    
+    console.log(converted)
+    // console.log(bubbleSort(converted, true, controlVar))
+
+    csv.update(parsedCsvFile.data[0], bubbleSort(converted, false, controlVar) );
 
     Status.Options.hide([selectGroup])
     Status.Options.disable([clearBtn, displayBtn, submitBtn, inputFile])
