@@ -42,17 +42,17 @@ export default class {
         this.root.appendChild(thead)
     }
 
-    setBody(datas) {
-        const rowsHtml = datas.map( row => {
-            return `
-                <tr>
-                    ${
-                        row.map(text => `<td>${text}</td>`).join('')
-                    }
-                </tr>
-            `
-        })
-    }
+    // setBody(datas) {
+    //     const rowsHtml = datas.map( row => {
+    //         return `
+    //             <tr>
+    //                 ${
+    //                     row.map(text => `<td>${text}</td>`).join('')
+    //                 }
+    //             </tr>
+    //         `
+    //     })
+    // }
 
     splitRendering(data) {
         const tbody = document.createElement('tbody');
