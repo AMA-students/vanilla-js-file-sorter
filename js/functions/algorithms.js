@@ -64,24 +64,32 @@ const mergeSort = (arr) => {
 
 }
 
-function quicksort(array= [8,5,12,4,32,65,32], isAscending = true) {
+export function quicksort(options) {
+    const {array, isAscending, controlVar} = options
     if (array.length <= 1) {
       return array;
     }
-  
-    var pivot = array[0];
+
+    let pivot = array[0]
+    console.log(controlVar )
     
-    var left = []; 
-    var right = [];
-  
-    for (var i = 1; i < array.length; i++) {
+    const left = []; 
+    const right = [];
+    
+    
+    for (let i = 1; i < array.length; i++) {
+        // console.log(array[i])
       array[i] < pivot ? left.push(array[i]) : right.push(array[i]);
     }
-    console.log(`left: [${left}], right: [${right}], pivot: [${pivot}], result: [${quicksort(left).concat(pivot, quicksort(right))}]`)
-    return quicksort(left).concat(pivot, quicksort(right));
+
+    const quickSortLeft = {array: left, isAscending: isAscending, controlVar: controlVar}
+    const quickSorRight = {array: right, isAscending: isAscending, controlVar: controlVar}
+
+    return quicksort(quickSortLeft).concat(pivot, quicksort(quickSorRight));
 };
   
   var unsorted = [23, 45, 16, 37, 3, 99, 22];
-  var sorted = quicksort(unsorted);
+  var unsortedd = [[23], [45, 16], [37, 3, 99], [22]];
+  var sorted = quicksort({array:unsorted, isAscending:true, controlVar:null});
   
   console.log('Sorted array', sorted);

@@ -67,6 +67,7 @@ export default class {
                 if(stopped) return;
                 data.forEach(row => {
                     const tr = document.createElement('tr');
+                    console.log(row)
                     row.forEach( data => {
                         const td = document.createElement('td');
 
