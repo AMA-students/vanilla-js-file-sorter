@@ -1,55 +1,55 @@
-export const bubbleSort = ({ array = [0], controlVar = 0, isAscending = true }) => {
+const bubbleSort = ({ array = [0], controlVar = 0, isAscending = true }) => {
 
-    if (arr.length <= 1) return arr;
+    if (array.length <= 1) return array;
 
     let aux;
 
     if(controlVar) {
 
-        for(let x = 0; x < arr.length; x++) {
+        for(let x = 0; x < array.length; x++) {
         
-            for(let y = 0; y < arr.length; y++) {
+            for(let y = 0; y < array.length; y++) {
                 if(!isAscending) {
-                    if(arr[x][controlVar] > arr[y][controlVar]) {
-                        aux = arr[y]
-                        arr[y] = arr[x]
-                        arr[x] = aux
+                    if(array[x][controlVar] > array[y][controlVar]) {
+                        aux = array[y]
+                        array[y] = array[x]
+                        array[x] = aux
                     }
 
                 } else {
-                    if(arr[x][controlVar] < arr[y][controlVar]) {
-                        aux = arr[y]
-                        arr[y] = arr[x]
-                        arr[x] = aux
+                    if(array[x][controlVar] < array[y][controlVar]) {
+                        aux = array[y]
+                        array[y] = array[x]
+                        array[x] = aux
                     }
 
                 }
             }
         }
-        return arr
+        return array
     }
 
-    for(let x = 0; x < arr.length; x++) {
+    for(let x = 0; x < array.length; x++) {
         
-        for(let y = 0; y < arr.length; y++) {
+        for(let y = 0; y < array.length; y++) {
             if(!isAscending) {
-                if(arr[x] > arr[y]) {
-                    aux = arr[y]
-                    arr[y] = arr[x]
-                    arr[x] = aux
+                if(array[x] > array[y]) {
+                    aux = array[y]
+                    array[y] = array[x]
+                    array[x] = aux
                 }
             } else {
-                if(arr[x] < arr[y]) {
-                    aux = arr[y]
-                    arr[y] = arr[x]
-                    arr[x] = aux
+                if(array[x] < array[y]) {
+                    aux = array[y]
+                    array[y] = array[x]
+                    array[x] = aux
                 }
             }
         }
     }
 
     
-    return arr
+    return array
 }
 
 
@@ -63,7 +63,7 @@ const unsorted2 = [[45, 16],[23,42], [37, 3], [22,43]];
 const config = {
   array: unsortedd,
   isAscending: true,
-  controlVar: 1
+  controlVar: 0
 }
 
 const yeet = bubbleSort(config)
