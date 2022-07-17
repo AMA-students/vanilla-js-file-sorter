@@ -2,7 +2,8 @@
 import fileParse from './functions/getFile.js'
 import CSV from './classes/Csv.js';
 import STATUS from './classes/Status.js';
-import { bubbleSort, quicksort } from './functions/algorithms.js';
+import { bubbleSort} from './functions/algorithms.js';
+import quickSort from './functions/algo/quickSort.js';
 
 const form = document.querySelector("#getfile");
 const selectGroup = document.querySelector('#sort-select-group')
@@ -99,13 +100,19 @@ displayBtn.onclick = () => {
         return a[controlVar] - b[controlVar]
     })
     
+    const config = {
+        array: converted,
+        isAscending: true,
+        controlVar: controlVar
+    }
+
     // const algoParams = {array: converted, isAscending: true, controlVar: controlVar};
 
     // console.log(converted)
     // console.log(bubbleSort(converted, true, controlVar))
     // console.log(quicksort(converted, true, controlVar))
     // csv.update(parsedCsvFile.data[0], bubbleSort(converted, true, controlVar) );
-    csv.update(parsedCsvFile.data[0], sorted );
+    csv.update(parsedCsvFile.data[0], quickSort(config) );
 
     Status.Options.hide([selectGroup])
     Status.Options.disable([clearBtn, displayBtn, submitBtn, inputFile])
