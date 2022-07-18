@@ -11,8 +11,14 @@ const quickSort = ({ array = [0], controlVar = 0, isAscending = true }) => {
   // contains the elements that are > pivot
   const greater = [];
 
-  for (let i = 1; i < array.length; i++) {
-    array[i][controlVar] < pivot[controlVar] ? less.push(array[i]) : greater.push(array[i]);
+  if(controlVar) {
+    for (let i = 1; i < array.length; i++) {
+      array[i][controlVar] < pivot[controlVar] ? less.push(array[i]) : greater.push(array[i]);
+    }
+  } else {
+    for (let i = 1; i < array.length; i++) {
+      array[i] < pivot ? less.push(array[i]) : greater.push(array[i]);
+    }
   }
 
   const lessConfig = { array: less, controlVar: controlVar, isAscending: isAscending }
@@ -28,9 +34,9 @@ var unsortedd = [[23,42], [45, 16], [37, 3], [22,43]];
 const unsorted2 = [[45, 16],[23,42], [37, 3], [22,43]];
 
 const config = {
-  array: unsortedd,
+  array: unsorted,
   isAscending: true,
-  controlVar: 1
+  controlVar: null
 }
 
 const yeet = quickSort(config)

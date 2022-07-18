@@ -47,6 +47,7 @@ Status.onChooseFile();
 Status.Options.hide([selectGroup]);
 Status.Options.disable([stopBtn, clearBtn ,displayBtn]);
 
+
 //buttons on click
 
 // on submit
@@ -77,6 +78,7 @@ displayBtn.onclick = () => {
     const bodyData = removeUndefined(csvBody);
     const controlVar = select.selectedIndex;
 
+    
     // console.log(bodyData)
     const converted = bodyData.map( elem => {
         // console.log(elem[controlVar], isNaN(elem[controlVar]) )
@@ -112,13 +114,28 @@ displayBtn.onclick = () => {
     // console.log(bubbleSort(converted, true, controlVar))
     // console.log(quicksort(converted, true, controlVar))
     // csv.update(parsedCsvFile.data[0], bubbleSort(converted, true, controlVar) );
-    csv.update(parsedCsvFile.data[0], quickSort(config) );
+    // csv.update(parsedCsvFile.data[0], config.array );
+
+    // displayChart(myChart, config.array.map(elem => elem[controlVar]))
 
     Status.Options.hide([selectGroup])
     Status.Options.disable([clearBtn, displayBtn, submitBtn, inputFile])
     
     Status.Options.enable([stopBtn])
+
+
+    // document.querySelector('#update').onclick = () => {
+    //     // console.log(myChart.type)
+    //     // myChart.type = 'line'
+    //     // myChart.data.labels = 
+    //     // myChart.data.datasets[0].data = [100]
+    //     // myChart.update();
+    
+    //     displayChart(myChart, quickSort(config).map(elem => elem[controlVar]))
+    // }
 };
+
+
 
 // on clear
 clearBtn.onclick = () => {
@@ -129,4 +146,62 @@ clearBtn.onclick = () => {
     select.innerHTML = '';
 }
 
+
+
 const removeUndefined = data => data.filter(element => element !== undefined && element != '');
+
+const displayChart = (chart, array) => {
+    const labels = []
+    for(let i = 1; i < array.length + 1; i++) {
+        labels.push(i+ 1)
+    }
+    chart.data.datasets[0].data = array
+    chart.data.labels = labels
+    chart.update()
+}
+
+const updateChart = (chart, array) => {
+    // const labels = []
+    // for(let i = 1; i < array.length + 1; i++) {
+    //     labels.push(i+ 1)
+    // }
+    // chart.data.labels = labels
+    chart.data.datasets[0].data = array
+    chart.update()
+}
+
+// const actions = [
+//     {
+//       name: 'No decimation (default)',
+//       handler(chart) {
+//         chart.options.plugins.decimation.enabled = false;
+//         chart.update();
+//       }
+//     },
+//     {
+//       name: 'min-max decimation',
+//       handler(chart) {
+//         chart.options.plugins.decimation.algorithm = 'min-max';
+//         chart.options.plugins.decimation.enabled = true;
+//         chart.update();
+//       },
+//     },
+//     {
+//       name: 'LTTB decimation (50 samples)',
+//       handler(chart) {
+//         chart.options.plugins.decimation.algorithm = 'lttb';
+//         chart.options.plugins.decimation.enabled = true;
+//         chart.options.plugins.decimation.samples = 50;
+//         chart.update();
+//       }
+//     },
+//     {
+//       name: 'LTTB decimation (500 samples)',
+//       handler(chart) {
+//         chart.options.plugins.decimation.algorithm = 'lttb';
+//         chart.options.plugins.decimation.enabled = true;
+//         chart.options.plugins.decimation.samples = 500;
+//         chart.update();
+//       }
+//     }
+//   ];
