@@ -1,9 +1,13 @@
 // import '/style.css';
 import fileParse from './functions/getFile.js'
-import CSV from './classes/Csv.js';
+// import CSV from './classes/Csv.js';
+import CSV from './classes/Chart.js';
 import STATUS from './classes/Status.js';
 import { bubbleSort} from './functions/algorithms.js';
 import quickSort from './functions/algo/quickSort.js';
+// import { ctx, myChart } from './chart.js'
+import Animate from './classes/Animate.js';
+
 
 const form = document.querySelector("#getfile");
 const selectGroup = document.querySelector('#sort-select-group')
@@ -18,9 +22,11 @@ const stopBtn = document.querySelector('#stop')
 
 let parsedCsvFile;
 
+// class instance
 const Status = new STATUS(document.querySelector('#status'));
-
-const csv = new CSV(document.querySelector('table'))
+// const csv = new CSV(document.querySelector('table'))
+const csv = new CSV(document.querySelector('#chart'))
+const animate = new Animate(document.querySelector('#chart'))
 
 // status options
 const allBtns = [clearBtn, displayBtn, stopBtn, inputFile, submitBtn];
@@ -46,7 +52,6 @@ const onLoadingOptions = {
 Status.onChooseFile();
 Status.Options.hide([selectGroup]);
 Status.Options.disable([stopBtn, clearBtn ,displayBtn]);
-
 
 //buttons on click
 
@@ -114,25 +119,31 @@ displayBtn.onclick = () => {
     // console.log(bubbleSort(converted, true, controlVar))
     // console.log(quicksort(converted, true, controlVar))
     // csv.update(parsedCsvFile.data[0], bubbleSort(converted, true, controlVar) );
-    // csv.update(parsedCsvFile.data[0], config.array );
+    csv.update( config.array.map(elem => elem[controlVar]) );
 
-    // displayChart(myChart, config.array.map(elem => elem[controlVar]))
-
+    
     Status.Options.hide([selectGroup])
     Status.Options.disable([clearBtn, displayBtn, submitBtn, inputFile])
     
     Status.Options.enable([stopBtn])
-
-
-    // document.querySelector('#update').onclick = () => {
-    //     // console.log(myChart.type)
-    //     // myChart.type = 'line'
-    //     // myChart.data.labels = 
-    //     // myChart.data.datasets[0].data = [100]
-    //     // myChart.update();
     
-    //     displayChart(myChart, quickSort(config).map(elem => elem[controlVar]))
-    // }
+    // displayChart(myChart, config.array.map(elem => elem[controlVar]))
+    // let test = config.array.map(elem => elem[controlVar])
+    document.querySelector('#update').onclick = () => {
+        // console.log(myChart.type)
+        // myChart.type = 'line'
+        // myChart.data.labels = 
+        // myChart.data.datasets[0].data = [100]
+        // myChart.update();
+        // function switchPos(array, el1, el2) {
+        //     let aux = array[el1];
+        //     array[el1] = array[el2];
+        //     array[el2] = aux;
+        //     return array
+        // }
+        // updateChart(myChart, quickSort(config))
+        csv.update(quickSort(config).map(elem => elem[controlVar]))
+    }
 };
 
 
@@ -155,6 +166,12 @@ const displayChart = (chart, array) => {
     for(let i = 1; i < array.length + 1; i++) {
         labels.push(i+ 1)
     }
+    const colors = []
+    for(let i = 0; i < array.length; i++) {
+        colors.push('gray')
+    }
+    chart.data.datasets[0].backgroundColor = colors
+    chart.data.datasets[0].backgroundColor[100] = 'green'
     chart.data.datasets[0].data = array
     chart.data.labels = labels
     chart.update()
@@ -167,41 +184,8 @@ const updateChart = (chart, array) => {
     // }
     // chart.data.labels = labels
     chart.data.datasets[0].data = array
+    chart.data.datasets[0].backgroundColor[100] = "yellow"
+    chart.data.datasets[0].borderColor[100] = "yellow"
+    
     chart.update()
 }
-
-// const actions = [
-//     {
-//       name: 'No decimation (default)',
-//       handler(chart) {
-//         chart.options.plugins.decimation.enabled = false;
-//         chart.update();
-//       }
-//     },
-//     {
-//       name: 'min-max decimation',
-//       handler(chart) {
-//         chart.options.plugins.decimation.algorithm = 'min-max';
-//         chart.options.plugins.decimation.enabled = true;
-//         chart.update();
-//       },
-//     },
-//     {
-//       name: 'LTTB decimation (50 samples)',
-//       handler(chart) {
-//         chart.options.plugins.decimation.algorithm = 'lttb';
-//         chart.options.plugins.decimation.enabled = true;
-//         chart.options.plugins.decimation.samples = 50;
-//         chart.update();
-//       }
-//     },
-//     {
-//       name: 'LTTB decimation (500 samples)',
-//       handler(chart) {
-//         chart.options.plugins.decimation.algorithm = 'lttb';
-//         chart.options.plugins.decimation.enabled = true;
-//         chart.options.plugins.decimation.samples = 500;
-//         chart.update();
-//       }
-//     }
-//   ];
