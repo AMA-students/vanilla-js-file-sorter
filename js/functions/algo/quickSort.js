@@ -11,13 +11,27 @@ const quickSort = ({ array = [0], controlVar = 0, isAscending = true }) => {
   // contains the elements that are > pivot
   const greater = [];
 
-  if(controlVar) {
-    for (let i = 1; i < array.length; i++) {
-      array[i][controlVar] < pivot[controlVar] ? less.push(array[i]) : greater.push(array[i]);
+  if(isAscending) {
+    if(controlVar) {
+      for (let i = 1; i < array.length; i++) {
+        array[i][controlVar] < pivot[controlVar] ? less.push(array[i]) : greater.push(array[i]);
+      }
+    } else {
+      for (let i = 1; i < array.length; i++) {
+        array[i] < pivot ? less.push(array[i]) : greater.push(array[i]);
+      }
     }
-  } else {
-    for (let i = 1; i < array.length; i++) {
-      array[i] < pivot ? less.push(array[i]) : greater.push(array[i]);
+  }
+
+  if(!isAscending) {
+    if(controlVar) {
+      for (let i = 1; i < array.length; i++) {
+        array[i][controlVar] > pivot[controlVar] ? less.push(array[i]) : greater.push(array[i]);
+      }
+    } else {
+      for (let i = 1; i < array.length; i++) {
+        array[i] > pivot ? less.push(array[i]) : greater.push(array[i]);
+      }
     }
   }
 
