@@ -18,6 +18,14 @@ export default class {
         this.root = root;
     }
 
+    onDisplay(headerColumns = [], datas) {
+        this.update(headerColumns, datas)    
+    }
+
+    onUpdate(headerColumns = [], datas) {
+        this.update(headerColumns, datas)    
+    }
+
     update(headerColumns = [], datas) {
         this.clear();
         this.setHeader(headerColumns);
@@ -67,7 +75,7 @@ export default class {
                 if(stopped) return;
                 data.forEach(row => {
                     const tr = document.createElement('tr');
-                    console.log(row)
+                    // console.log(row)
                     row.forEach( data => {
                         const td = document.createElement('td');
 
