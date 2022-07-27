@@ -73,13 +73,12 @@ export default class {
                     bar.dataset.value = data;
 
                     if(!isNaN(data)){
-                        console.log({height, width, margin,isRow})
+                        // console.log({height, width, margin,isRow})
                         bar.style.height = height
                         bar.style.width = width
                         bar.style.backgroundColor = `gray`
                         bar.style[margin] = `5px`
-                        // bar.style.flex = '1'
-
+                        bar.classList.add('bar')
                     }
                     bars.appendChild(bar)
                 })    
