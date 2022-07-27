@@ -1,15 +1,22 @@
 // import '/style.css';
-import fileParse from './functions/getFile.js'
+
 // import CSV from './classes/Chart.js';
 import CSV from './classes/Csv.js';
 import STATUS from './classes/Status.js';
-import { bubbleSort} from './functions/algorithms.js';
-import quickSort from './functions/algo/quickSort.js';
+// import { bubbleSort} from './functions/algorithms.js';
 // import { ctx, myChart } from './chart.js'
-import chartTest from './prototypes/chart.test.js';
+// import chartTest from './prototypes/chart.test.js';
 import Animate from './classes/Animate.js';
-import Test from './prototypes/Test.js';
+// import Test from './prototypes/Test.js';
 
+// algorithms
+import quickSort from './functions/algo/quickSort.js';
+
+// side effect funtions
+import setDataPoints from './functions/sideEffectes/setDataPoints.js';
+
+// pure functions
+// import fileParse from './functions/getFile.js'
 
 const form = document.querySelector("#getfile");
 const selectGroup = document.querySelector('#sort-select-group')
