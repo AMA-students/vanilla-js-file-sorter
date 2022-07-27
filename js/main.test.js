@@ -1,12 +1,14 @@
 // import '/style.css';
 import fileParse from './functions/getFile.js'
-// import CSV from './classes/Csv.js';
+// import CSV from './classes/Chart.js';
 import CSV from './classes/Csv.js';
 import STATUS from './classes/Status.js';
 import { bubbleSort} from './functions/algorithms.js';
 import quickSort from './functions/algo/quickSort.js';
 // import { ctx, myChart } from './chart.js'
+import chartTest from './prototypes/chart.test.js';
 import Animate from './classes/Animate.js';
+import Test from './prototypes/Test.js';
 
 
 const form = document.querySelector("#getfile");
@@ -27,6 +29,12 @@ const Status = new STATUS(document.querySelector('#status'));
 const csv = new CSV(document.querySelector('table'))
 // const csv = new CSV(document.querySelector('#chart'))
 const animate = new Animate(document.querySelector('#chart'))
+
+// test class
+// const testChart = new chartTest()
+// const {ctx, myChart } = testChart.init()
+
+// const test = new Test(testChart);
 
 // status options
 const allBtns = [clearBtn, displayBtn, stopBtn, inputFile, submitBtn];
@@ -64,8 +72,13 @@ form.onsubmit = async e => {
     csv.clear();
     Status.onSetFile(firstFile.name, onSetFileOptions);
 
-    parsedCsvFile = await fileParse(firstFile.name);
-
+    Papa.parse(fileInput.files[0], {
+        complete: function(results) {
+            
+        }
+    });
+    parsedCsvFile = await fileParse(firstFile);
+    console.log(parsedCsvFile)
     const csvHeaders = parsedCsvFile.data[0].map(element => `<option>${element}</option>`);
 
     select.innerHTML = csvHeaders.join('');
@@ -113,54 +126,36 @@ displayBtn.onclick = () => {
         controlVar: controlVar
     }
 
-    // const algoParams = {array: converted, isAscending: true, controlVar: controlVar};
-
-    // console.log(converted)
-    // console.log(bubbleSort(converted, true, controlVar))
-    // console.log(quicksort(converted, true, controlVar))
-    // csv.update(parsedCsvFile.data[0], bubbleSort(converted, true, controlVar) );
-    csv.update( parsedCsvFile.data[0], config.array );
-
-    
     Status.Options.hide([selectGroup])
     Status.Options.disable([clearBtn, displayBtn, submitBtn, inputFile])
     
     Status.Options.enable([stopBtn])
-    
-    // displayChart(myChart, config.array.map(elem => elem[controlVar]))
-    // let test = config.array.map(elem => elem[controlVar])
-    document.querySelector('#update').onclick = () => {
-        // console.log(myChart.type)
-        // myChart.type = 'line'
-        // myChart.data.labels = 
-        // myChart.data.datasets[0].data = [100]
-        // myChart.update();
-        // function switchPos(array, el1, el2) {
-        //     let aux = array[el1];
-        //     array[el1] = array[el2];
-        //     array[el2] = aux;
-        //     return array
-        // }
-        // updateChart(myChart, quickSort(config))
-        // config.array.sort((a,b) => {
-        //     a[controlVar].after(b[controlVar]) 
-        //     return a[controlVar] - b[controlVar]
-        // })
-        
-        csv.update(parsedCsvFile.data[0], quickSort(config))
 
-        
+    //display unsorted table
+    csv.onDisplay( parsedCsvFile.data[0], config.array );
+
+    // on update
+    document.querySelector('#update').onclick = () => {
+
+        csv.onUpdate(parsedCsvFile.data[0], quickSort(config))
+
+        console.log('test')
 	    
         
-        // test
-        const downloadBtn = document.createElement('button')
-        downloadBtn.innerHTML = "download"
-        downloadBtn.after(document.querySelector('#update'))
-        document.querySelector('#update').after(displayBtn)
+        // test download button
+        // only works when csv table is rendered
+        if(!document.querySelector('.downloadBtn')){
+            const downloadBtn = document.createElement('button')
+            downloadBtn.classList.add('downloadBtn')
+            downloadBtn.innerHTML = "download"
+            downloadBtn.after(document.querySelector('#update'))
+            document.querySelector('#update').after(downloadBtn)
+        };
+        
         downloadBtn.onclick = () => {
             var html = document.querySelector("table").outerHTML;
             console.log(html, document.querySelectorAll("table tr"))
-            htmlToCSV(html, "students.csv");
+            // htmlToCSV(html, "students.csv");
         }
     }
 };
@@ -212,32 +207,3 @@ clearBtn.onclick = () => {
 
 
 const removeUndefined = data => data.filter(element => element !== undefined && element != '');
-
-const displayChart = (chart, array) => {
-    const labels = []
-    for(let i = 1; i < array.length + 1; i++) {
-        labels.push(i+ 1)
-    }
-    const colors = []
-    for(let i = 0; i < array.length; i++) {
-        colors.push('gray')
-    }
-    chart.data.datasets[0].backgroundColor = colors
-    chart.data.datasets[0].backgroundColor[100] = 'green'
-    chart.data.datasets[0].data = array
-    chart.data.labels = labels
-    chart.update()
-}
-
-const updateChart = (chart, array) => {
-    // const labels = []
-    // for(let i = 1; i < array.length + 1; i++) {
-    //     labels.push(i+ 1)
-    // }
-    // chart.data.labels = labels
-    chart.data.datasets[0].data = array
-    chart.data.datasets[0].backgroundColor[100] = "yellow"
-    chart.data.datasets[0].borderColor[100] = "yellow"
-    
-    chart.update()
-}
