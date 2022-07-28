@@ -29,8 +29,6 @@ const displayBtn = document.querySelector('#display')
 const clearBtn = document.querySelector('#clear')
 const stopBtn = document.querySelector('#stop')
 
-let results;
-
 // class instance
 const Status = new STATUS(document.querySelector('#status'));
 const csv = new CSV(document.querySelector('table'))
@@ -113,20 +111,20 @@ displayBtn.onclick = () => {
             const dataPointIndex = select.selectedIndex
             
             const converted = bodyData.map( elem => {
-                // console.log(elem[dataPointIndex], isNaN(elem[dataPointIndex]) )
+
                 if( !isNaN(elem[dataPointIndex]) ) {
                     elem[dataPointIndex] = parseFloat(elem[dataPointIndex])
                 }
-                // console.log(elem)
+
                 return elem
             })
 
             const convertedc = bodyData.map( elem => {
-                // console.log(elem[dataPointIndex], isNaN(elem[dataPointIndex]) )
+
                 if( isNaN(elem[dataPointIndex]) ) {
                     elem[dataPointIndex] = parseFloat(elem[dataPointIndex].replace(',', ''))
                 }
-                // console.log(elem)
+
                 return elem
             })
         
@@ -150,26 +148,28 @@ displayBtn.onclick = () => {
 
             // on update
             document.querySelector('#update').onclick = () => {
-
-                csv.onUpdate(results.data[0], quickSort(config))
+                console.log(quickSort(config))
+                csv.update(results.data[0], quickSort(config))
 
                 console.log('test')
                 
                 // test download button
                 // only works when csv table is rendered
-                if(!document.querySelector('.downloadBtn')){
-                    const downloadBtn = document.createElement('button')
-                    downloadBtn.classList.add('downloadBtn')
-                    downloadBtn.innerHTML = "download"
-                    downloadBtn.after(document.querySelector('#update'))
-                    document.querySelector('#update').after(downloadBtn)
-                };
-                
+
+                if(document.querySelector('.downloadBtn')) return;
+                const downloadBtn = document.createElement('button')
+                downloadBtn.classList.add('downloadBtn')
+                downloadBtn.innerHTML = "download"
+                downloadBtn.after(document.querySelector('#update'))
+                document.querySelector('#update').after(downloadBtn)
+
                 downloadBtn.onclick = () => {
                     var html = document.querySelector("table").outerHTML;
-                    console.log(html, document.querySelectorAll("table tr"))
+                    // console.log(html, document.querySelectorAll("table tr"))
                     // htmlToCSV(html, "students.csv");
                 }
+                
+                
             }
         }
     });
