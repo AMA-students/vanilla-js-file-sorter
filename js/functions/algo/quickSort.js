@@ -1,4 +1,4 @@
-const quickSort = ({ array = [0], controlVar = 0, isAscending = true }) => {
+const quickSort = ({ array = [0], dataPointIndex = 0, isAscending = true }) => {
 
   if (array.length <= 1) return array;
   
@@ -12,9 +12,9 @@ const quickSort = ({ array = [0], controlVar = 0, isAscending = true }) => {
   const greater = [];
 
   if(isAscending) {
-    if(controlVar) {
+    if(dataPointIndex) {
       for (let i = 1; i < array.length; i++) {
-        array[i][controlVar] < pivot[controlVar] ? less.push(array[i]) : greater.push(array[i]);
+        array[i][dataPointIndex] < pivot[dataPointIndex] ? less.push(array[i]) : greater.push(array[i]);
       }
     } else {
       for (let i = 1; i < array.length; i++) {
@@ -24,9 +24,9 @@ const quickSort = ({ array = [0], controlVar = 0, isAscending = true }) => {
   }
 
   if(!isAscending) {
-    if(controlVar) {
+    if(dataPointIndex) {
       for (let i = 1; i < array.length; i++) {
-        array[i][controlVar] > pivot[controlVar] ? less.push(array[i]) : greater.push(array[i]);
+        array[i][dataPointIndex] > pivot[dataPointIndex] ? less.push(array[i]) : greater.push(array[i]);
       }
     } else {
       for (let i = 1; i < array.length; i++) {
@@ -35,8 +35,8 @@ const quickSort = ({ array = [0], controlVar = 0, isAscending = true }) => {
     }
   }
 
-  const lessConfig = { array: less, controlVar: controlVar, isAscending: isAscending }
-  const greaterConfig = { array: greater, controlVar: controlVar, isAscending: isAscending }
+  const lessConfig = { array: less, dataPointIndex: dataPointIndex, isAscending: isAscending }
+  const greaterConfig = { array: greater, dataPointIndex: dataPointIndex, isAscending: isAscending }
   return quickSort(lessConfig).concat([pivot], quickSort(greaterConfig));
 }
 
@@ -50,7 +50,7 @@ const unsorted2 = [[45, 16],[23,42], [37, 3], [22,43]];
 const config = {
   array: unsorted,
   isAscending: true,
-  controlVar: null
+  dataPointIndex: null
 }
 
 const yeet = quickSort(config)
