@@ -29,7 +29,7 @@ const displayBtn = document.querySelector('#display')
 const clearBtn = document.querySelector('#clear')
 const stopBtn = document.querySelector('#stop')
 
-let parsedCsvFile;
+let results;
 
 // class instance
 const Status = new STATUS(document.querySelector('#status'));
@@ -68,12 +68,15 @@ Status.onChooseFile();
 Status.Options.hide([selectGroup]);
 Status.Options.disable([stopBtn, clearBtn ,displayBtn]);
 
+
+let firstFile;
+
 // buttons on click
 
 // on submit
 form.onsubmit = async e => {
     e.preventDefault();
-    const firstFile = inputFile.files[0];
+    firstFile = inputFile.files[0];
 
     if(!firstFile) return;
     csv.clear();
@@ -85,7 +88,7 @@ form.onsubmit = async e => {
         }
     });
 
-    parsedCsvFile = await fileParse(firstFile);
+    // results = await fileParse(firstFile);
 
     Status.Options.disable([stopBtn, clearBtn])
 
@@ -96,78 +99,87 @@ form.onsubmit = async e => {
 
 // on loading
 displayBtn.onclick = () => {
+
     Status.onLoading(onLoadingOptions);
-    
-    const csvBody = parsedCsvFile.data.slice(1);
-    const bodyData = removeUndefined(csvBody);
-    const controlVar = select.selectedIndex;
-    
-    // console.log(bodyData)
-    const converted = bodyData.map( elem => {
-        // console.log(elem[controlVar], isNaN(elem[controlVar]) )
-        if( !isNaN(elem[controlVar]) ) {
-            elem[controlVar] = parseFloat(elem[controlVar])
-        }
-        // console.log(elem)
-        return elem
-    })
 
-    const convertedc = bodyData.map( elem => {
-        // console.log(elem[controlVar], isNaN(elem[controlVar]) )
-        if( isNaN(elem[controlVar]) ) {
-            elem[controlVar] = parseFloat(elem[controlVar].replace(',', ''))
-        }
-        // console.log(elem)
-        return elem
-    })
+    Papa.parse(firstFile, {
+        worker: true,
+        // Header: true,
+        complete: function(results) {
+            const csvBody = results.data.slice(1)
 
-    const sorted = convertedc.sort( (a,b) => {
-        return a[controlVar] - b[controlVar]
-    })
-    
-    const config = {
-        array: converted,
-        isAscending: true,
-        controlVar: controlVar
-    }
+            const bodyData = removeUndefined(csvBody)
 
-    Status.Options.hide([selectGroup])
-    Status.Options.disable([clearBtn, displayBtn, submitBtn, inputFile])
-    
-    Status.Options.enable([stopBtn])
+            const dataPointIndex = select.selectedIndex
+            
+            const converted = bodyData.map( elem => {
+                // console.log(elem[dataPointIndex], isNaN(elem[dataPointIndex]) )
+                if( !isNaN(elem[dataPointIndex]) ) {
+                    elem[dataPointIndex] = parseFloat(elem[dataPointIndex])
+                }
+                // console.log(elem)
+                return elem
+            })
 
-    //display unsorted table
-    csv.onDisplay( parsedCsvFile.data[0], config.array );
-
-    // on update
-    document.querySelector('#update').onclick = () => {
-
-        csv.onUpdate(parsedCsvFile.data[0], quickSort(config))
-
-        console.log('test')
+            const convertedc = bodyData.map( elem => {
+                // console.log(elem[dataPointIndex], isNaN(elem[dataPointIndex]) )
+                if( isNaN(elem[dataPointIndex]) ) {
+                    elem[dataPointIndex] = parseFloat(elem[dataPointIndex].replace(',', ''))
+                }
+                // console.log(elem)
+                return elem
+            })
         
-        // test download button
-        // only works when csv table is rendered
-        if(!document.querySelector('.downloadBtn')){
-            const downloadBtn = document.createElement('button')
-            downloadBtn.classList.add('downloadBtn')
-            downloadBtn.innerHTML = "download"
-            downloadBtn.after(document.querySelector('#update'))
-            document.querySelector('#update').after(downloadBtn)
-        };
-        
-        downloadBtn.onclick = () => {
-            var html = document.querySelector("table").outerHTML;
-            console.log(html, document.querySelectorAll("table tr"))
-            // htmlToCSV(html, "students.csv");
+            const sorted = convertedc.sort( (a,b) => {
+                return a[dataPointIndex] - b[dataPointIndex]
+            })
+            
+            const config = {
+                array: converted,
+                isAscending: true,
+                dataPointIndex: dataPointIndex
+            }
+
+            Status.Options.hide([selectGroup])
+            Status.Options.disable([clearBtn, displayBtn, submitBtn, inputFile])
+            
+            Status.Options.enable([stopBtn])
+
+            //display unsorted table
+            csv.onDisplay( results.data[0], config.array );
+
+            // on update
+            document.querySelector('#update').onclick = () => {
+
+                csv.onUpdate(results.data[0], quickSort(config))
+
+                console.log('test')
+                
+                // test download button
+                // only works when csv table is rendered
+                if(!document.querySelector('.downloadBtn')){
+                    const downloadBtn = document.createElement('button')
+                    downloadBtn.classList.add('downloadBtn')
+                    downloadBtn.innerHTML = "download"
+                    downloadBtn.after(document.querySelector('#update'))
+                    document.querySelector('#update').after(downloadBtn)
+                };
+                
+                downloadBtn.onclick = () => {
+                    var html = document.querySelector("table").outerHTML;
+                    console.log(html, document.querySelectorAll("table tr"))
+                    // htmlToCSV(html, "students.csv");
+                }
+            }
         }
-    }
+    });
+    
 };
 
 function htmlToCSV(html, filename) {
 	var data = [];
 	var rows = document.querySelectorAll("table tr");
-    console.log()
+
 	for (var i = 0; i < rows.length; i++) {
 		var row = [], cols = rows[i].querySelectorAll("td, th");
 				
