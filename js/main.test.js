@@ -166,7 +166,7 @@ displayBtn.onclick = () => {
                 downloadBtn.onclick = () => {
                     var html = document.querySelector("table").outerHTML;
                     // console.log(html, document.querySelectorAll("table tr"))
-                    // htmlToCSV(html, "students.csv");
+                    htmlToCSV(html, "students.csv");
                 }
                 
                 
