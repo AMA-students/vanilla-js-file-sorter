@@ -213,6 +213,9 @@ function downloadCSVFile(csv, filename) {
 
 // on clear
 clearBtn.onclick = () => {
+    if(document.querySelector('.downloadBtn')) {
+        document.querySelector('.downloadBtn').remove()
+    }
     csv.clear();
     Status.onChooseFile(onChooseFileOptions);
     Status.Options.hide([selectGroup])
