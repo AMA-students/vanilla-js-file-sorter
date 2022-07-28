@@ -68,7 +68,7 @@ Status.onChooseFile();
 Status.Options.hide([selectGroup]);
 Status.Options.disable([stopBtn, clearBtn ,displayBtn]);
 
-//buttons on click
+// buttons on click
 
 // on submit
 form.onsubmit = async e => {
@@ -79,16 +79,14 @@ form.onsubmit = async e => {
     csv.clear();
     Status.onSetFile(firstFile.name, onSetFileOptions);
 
-    Papa.parse(fileInput.files[0], {
+    Papa.parse(firstFile, {
         complete: function(results) {
-            
+            setDataPoints(results, select);
         }
     });
-    parsedCsvFile = await fileParse(firstFile);
-    console.log(parsedCsvFile)
-    const csvHeaders = parsedCsvFile.data[0].map(element => `<option>${element}</option>`);
 
-    select.innerHTML = csvHeaders.join('');
+    parsedCsvFile = await fileParse(firstFile);
+
     Status.Options.disable([stopBtn, clearBtn])
 
     Status.Options.show([selectGroup])
@@ -99,10 +97,10 @@ form.onsubmit = async e => {
 // on loading
 displayBtn.onclick = () => {
     Status.onLoading(onLoadingOptions);
+    
     const csvBody = parsedCsvFile.data.slice(1);
     const bodyData = removeUndefined(csvBody);
     const controlVar = select.selectedIndex;
-
     
     // console.log(bodyData)
     const converted = bodyData.map( elem => {
@@ -147,7 +145,6 @@ displayBtn.onclick = () => {
         csv.onUpdate(parsedCsvFile.data[0], quickSort(config))
 
         console.log('test')
-	    
         
         // test download button
         // only works when csv table is rendered
@@ -210,7 +207,5 @@ clearBtn.onclick = () => {
     Status.Options.disable([clearBtn, stopBtn])
     select.innerHTML = '';
 }
-
-
 
 const removeUndefined = data => data.filter(element => element !== undefined && element != '');
