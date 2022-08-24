@@ -103,75 +103,7 @@ displayBtn.onclick = () => {
     Papa.parse(firstFile, {
         worker: true,
         // Header: true,
-        complete: function(results) {
-            const csvBody = results.data.slice(1)
-
-            const bodyData = removeUndefined(csvBody)
-
-            const dataPointIndex = select.selectedIndex
-            
-            const converted = bodyData.map( elem => {
-
-                if( !isNaN(elem[dataPointIndex]) ) {
-                    elem[dataPointIndex] = parseFloat(elem[dataPointIndex])
-                }
-
-                return elem
-            })
-
-            const convertedc = bodyData.map( elem => {
-
-                if( isNaN(elem[dataPointIndex]) ) {
-                    elem[dataPointIndex] = parseFloat(elem[dataPointIndex].replace(',', ''))
-                }
-
-                return elem
-            })
-        
-            const sorted = convertedc.sort( (a,b) => {
-                return a[dataPointIndex] - b[dataPointIndex]
-            })
-            
-            const config = {
-                array: converted,
-                isAscending: true,
-                dataPointIndex: dataPointIndex
-            }
-
-            Status.Options.hide([selectGroup])
-            Status.Options.disable([clearBtn, displayBtn, submitBtn, inputFile])
-            
-            Status.Options.enable([stopBtn])
-
-            //display unsorted table
-            csv.onDisplay( results.data[0], config.array );
-
-            // on update
-            document.querySelector('#update').onclick = () => {
-                console.log(quickSort(config))
-                csv.update(results.data[0], quickSort(config))
-
-                console.log('test')
-                
-                // test download button
-                // only works when csv table is rendered
-
-                if(document.querySelector('.downloadBtn')) return;
-                const downloadBtn = document.createElement('button')
-                downloadBtn.classList.add('downloadBtn')
-                downloadBtn.innerHTML = "download"
-                downloadBtn.after(document.querySelector('#update'))
-                document.querySelector('#update').after(downloadBtn)
-
-                downloadBtn.onclick = () => {
-                    var html = document.querySelector("table").outerHTML;
-                    // console.log(html, document.querySelectorAll("table tr"))
-                    htmlToCSV(html, "students.csv");
-                }
-                
-                
-            }
-        }
+        complete: results => onDisplay(results)
     });
     
 };
@@ -221,6 +153,74 @@ clearBtn.onclick = () => {
     Status.Options.hide([selectGroup])
     Status.Options.disable([clearBtn, stopBtn])
     select.innerHTML = '';
+}
+
+const onDisplay = results => {
+    const csvBody = results.data.slice(1)
+
+    const bodyData = removeUndefined(csvBody)
+
+    const dataPointIndex = select.selectedIndex
+    
+    const converted = bodyData.map( elem => {
+
+        if( !isNaN(elem[dataPointIndex]) ) {
+            elem[dataPointIndex] = parseFloat(elem[dataPointIndex])
+        }
+
+        return elem
+    })
+
+    const convertedc = bodyData.map( elem => {
+
+        if( isNaN(elem[dataPointIndex]) ) {
+            elem[dataPointIndex] = parseFloat(elem[dataPointIndex].replace(',', ''))
+        }
+
+        return elem
+    })
+
+    const sorted = convertedc.sort( (a,b) => {
+        return a[dataPointIndex] - b[dataPointIndex]
+    })
+    
+    const config = {
+        array: converted,
+        isAscending: true,
+        dataPointIndex: dataPointIndex
+    }
+
+    Status.Options.hide([selectGroup])
+    Status.Options.disable([clearBtn, displayBtn, submitBtn, inputFile])
+    
+    Status.Options.enable([stopBtn])
+
+    //display unsorted table
+    csv.onDisplay( results.data[0], config.array );
+
+    // on update
+    document.querySelector('#update').onclick = () => {
+        console.log(quickSort(config))
+        csv.update(results.data[0], quickSort(config))
+
+        console.log('test')
+        
+        // test download button
+        // only works when csv table is rendered
+
+        if(document.querySelector('.downloadBtn')) return;
+        const downloadBtn = document.createElement('button')
+        downloadBtn.classList.add('downloadBtn')
+        downloadBtn.innerHTML = "download"
+        downloadBtn.after(document.querySelector('#update'))
+        document.querySelector('#update').after(downloadBtn)
+
+        downloadBtn.onclick = () => {
+            var html = document.querySelector("table").outerHTML;
+            // console.log(html, document.querySelectorAll("table tr"))
+            htmlToCSV(html, "students.csv");
+        } 
+    }
 }
 
 const removeUndefined = data => data.filter(element => element !== undefined && element != '');
