@@ -18,6 +18,11 @@ export default class {
         this.root = root;
     }
 
+    onSummarize(headerColumns = [], datas) {
+        const obj = this.summarize(datas)
+        this.update(headerColumns, obj)
+    }
+
     onDisplay(headerColumns = [], datas) {
         this.update(headerColumns, datas)    
     }
@@ -29,7 +34,33 @@ export default class {
     update(headerColumns = [], datas) {
         this.clear();
         this.setHeader(headerColumns);
+        if(!Array.isArray(datas)) {
+            let {summarized, counter } = datas;
+            summarized = summarized.slice(0, summarized.length/2).concat('yeet', summarized.slice(summarized.length/2));
+
+            this.splitRendering(summarized, counter);
+            return
+        }
         this.splitRendering(datas);
+    }
+
+    summarize(datas) {
+        let counter = 0;
+        let summarized = datas.filter(elem => {
+            let actualLength = datas.length - 1
+            const LIMIT = 10
+            
+            let isEdgeElement = datas.indexOf(elem) < LIMIT || datas.indexOf(elem) > ( actualLength - LIMIT);
+
+            if(isEdgeElement) {
+                return isEdgeElement
+            }
+
+            counter += 1;
+        });
+
+        console.log(summarized)
+        return {summarized, counter}
     }
 
     clear() {
@@ -61,21 +92,26 @@ export default class {
     //         `
     //     })
     // }
-
-    splitRendering(data) {
+    
+    async splitRendering(data, counter = null) {
+        const MAX_ELEMENT_LIMIT = 5000;
         const tbody = document.createElement('tbody');
-        const renders = elementLimiter(data, 5000);
+        const renders = elementLimiter(data, MAX_ELEMENT_LIMIT);
         let renderedCounter = 1
         let stopped = false;
 
         renders.map( data => {
             
-            const renderTimeout = setTimeout(() => {
+            const renderTimeout = setTimeout(async () => {
                 console.log(stopped)            
                 if(stopped) return;
                 data.forEach(row => {
                     const tr = document.createElement('tr');
                     // console.log(row)
+                    if(!Array.isArray(row)) {
+                        console.log(counter)
+                        row = [counter]
+                    }
                     row.forEach( data => {
                         const td = document.createElement('td');
 
