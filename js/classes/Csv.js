@@ -128,9 +128,17 @@ export default class {
                 })    
 
                 if(renderedCounter !== renders.length) {
+                    // if(!document.querySelector('#progress').getAttribute('max')) {
+                    //     document.querySelector('#progress').max = renders.length;
+                    // }
+                    // document.querySelector('#progress').value = renderedCounter;
                     document.querySelector('#status').innerText = `Loading: ${renderedCounter++}/${renders.length}`
                 } else {
                     // when loading is done
+                    // if(!document.querySelector('#progress').getAttribute('max')) {
+                    //     document.querySelector('#progress').max = renders.length;
+                    // }
+                    // document.querySelector('#progress').value = renderedCounter;
                     document.querySelector('#status').innerText = `Loading: ${renderedCounter++}/${renders.length}`
                     setTimeout(()=> document.querySelector('#status').innerText = `Done`, 500)
                     Status.Options.enable([clearBtn, inputFile, submitBtn]);
@@ -150,9 +158,9 @@ export default class {
     
 };
 
-const arr = []
-for(let i = 0; i < 100; i++) {
-    arr.push(i)
-}
+// const arr = []
+// for(let i = 0; i < 100; i++) {
+//     arr.push(i)
+// }
 
-console.log(elementLimiter(arr, 45))
+// console.log(elementLimiter(arr, 45))

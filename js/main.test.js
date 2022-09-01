@@ -28,6 +28,7 @@ const submitBtn = document.querySelector("#submit");
 const displayBtn = document.querySelector('#display')
 const clearBtn = document.querySelector('#clear')
 const stopBtn = document.querySelector('#stop')
+const downloadBtn = document.querySelector('#download')
 
 // class instance
 const Status = new STATUS(document.querySelector('#status'));
@@ -202,23 +203,14 @@ const onDisplay = results => {
     document.querySelector('#update').onclick = () => {
         console.log(quickSort(config))
         csv.update(results.data[0], quickSort(config))
-
-        console.log('test')
-        
+                
         // test download button
         // only works when csv table is rendered
-
         if(document.querySelector('.downloadBtn')) return;
-        const downloadBtn = document.createElement('button')
-        downloadBtn.classList.add('downloadBtn')
-        downloadBtn.innerHTML = "download"
-        downloadBtn.after(document.querySelector('#update'))
-        document.querySelector('#update').after(downloadBtn)
 
         downloadBtn.onclick = () => {
             var html = document.querySelector("table").outerHTML;
-            // console.log(html, document.querySelectorAll("table tr"))
-            htmlToCSV(html, "students.csv");
+            htmlToCSV(html, `Sorted-by-${select.value}-${firstFile.name}`);
         } 
     }
 }
