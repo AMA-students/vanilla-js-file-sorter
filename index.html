@@ -11,10 +11,10 @@
     <script src="/js/modules/chart.js"></script>
   </head>
   <body>
-    <button id="stop">stop</button>
+    <button id="stop" class="btn">stop</button>
     <form action="/" method="get" id="getfile">
-      <input type="file" name="file" id="file" multiple>
-      <button type="submit" id="submit">submit</button>
+      <input type="file" name="file" id="file">
+      <button type="submit" id="submit" class="btn">submit</button>
     </form>
 
     <div id="sort-select-group">
@@ -22,21 +22,23 @@
       <select name="sort-select" id="select"></select>
     </div>
 
-    <button id="display">display</button>
-    <button id="clear">clear</button>
-    <button id="update">update</button>
+    <button id="display" class="btn">display</button>
+    <button id="clear" class="btn">clear</button>
+    <button id="update" class="btn">update</button>
     <h1 id="status">Choose your file</h1>
+    <!-- <progress id="progress">file</progress> -->
     <table></table>
 
-    <!-- <div style="width:600px; height:400px">
-      <canvas id="myChart" width="400" height="400"></canvas>
-    </div> -->
-
     <div style="width:600px; height:400px">
-      <h2>chart</h2>
-      <div id="chart" width="400" height="400"></div>
+      <canvas id="myChart" width="400" height="400"></canvas>
     </div>
 
+    <!-- <div style="width:600px; height:400px">
+      <h2>chart</h2>
+      <div id="chart" width="400" height="400"></div>
+    </div> -->
+
+    <!-- <script src="/js/chart.js"></script> -->
     <!-- <script src="/js/chart.js"></script> -->
     <!-- <script src="/js/functions/algo/bubbleSort.js"></script> -->
   </body>

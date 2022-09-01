@@ -7,6 +7,12 @@
   margin-top: 60px;
 } */
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 table {
   border-collapse: collapse;
   border-radius: 5px;
@@ -30,4 +36,19 @@ td {
 
 tr:nth-child(even) {
   background: #eeeeee;
+}
+
+.btn {
+  padding: 5px 10px;
+  background: #009578;
+  color: white;
+  cursor: pointer;
+  border: none;
+}
+
+.disabled {
+  cursor: not-allowed;
+  background: gray;
+  border: 2px solid black;
+  border: none;
 }
