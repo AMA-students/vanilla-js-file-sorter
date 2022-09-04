@@ -49,6 +49,4 @@ tr:nth-child(even) {
 .disabled {
   cursor: not-allowed;
   background: gray;
-  border: 2px solid black;
-  border: none;
 }
