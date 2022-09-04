@@ -23,12 +23,15 @@ const selectGroup = document.querySelector('#sort-select-group')
 const select = document.querySelector('#select');
 
 //buttons
-const inputFile = document.querySelector("#file");
-const submitBtn = document.querySelector("#submit");
-const displayBtn = document.querySelector('#display')
-const clearBtn = document.querySelector('#clear')
-const stopBtn = document.querySelector('#stop')
-const downloadBtn = document.querySelector('#download')
+import {
+    clearBtn,
+    displayBtn,
+    stopBtn,
+    inputFile,
+    submitBtn,
+    downloadBtn,
+    allBtns
+} from './buttons.js';
 
 // class instance
 const Status = new STATUS(document.querySelector('#status'));
@@ -43,7 +46,7 @@ const animate = new Animate(document.querySelector('#chart'))
 // const test = new Test(testChart);
 
 // status options
-const allBtns = [clearBtn, displayBtn, stopBtn, inputFile, submitBtn];
+// const allBtns = [clearBtn, displayBtn, stopBtn, inputFile, submitBtn];
 
 const onChooseFileOptions = {
     hideBtn:[clearBtn, displayBtn, stopBtn],
