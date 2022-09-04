@@ -201,10 +201,12 @@ const onDisplay = results => {
     csv.onSummarize( results.data[0], config.array );
 
     // on update
-    document.querySelector('#update').onclick = onUpdate(results)
+    document.querySelector('#update').onclick = () => {
+        onUpdate(results, config)
+    }
 }
 
-const onUpdate = (results) => {
+const onUpdate = (results, config) => {
     console.log(quickSort(config))
     csv.update(results.data[0], quickSort(config))
             
