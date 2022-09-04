@@ -197,7 +197,7 @@ const onDisplay = results => {
     Status.Options.hide([selectGroup])
     Status.Options.disable([clearBtn, displayBtn, submitBtn, inputFile])
     
-    Status.Options.enable([stopBtn])
+    Status.Options.enable([stopBtn, updateBtn])
 
     //display unsorted table
     // csv.onDisplay( results.data[0], config.array );
