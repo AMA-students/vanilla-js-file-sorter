@@ -68,7 +68,7 @@ const onLoadingOptions = {
 
 Status.onChooseFile();
 Status.Options.hide([selectGroup]);
-Status.Options.disable([stopBtn, clearBtn ,displayBtn]);
+Status.Options.disable([stopBtn, clearBtn ,displayBtn, updateBtn, downloadBtn]);
 
 
 let firstFile;
