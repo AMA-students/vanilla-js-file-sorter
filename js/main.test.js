@@ -197,22 +197,25 @@ const onDisplay = results => {
     Status.Options.enable([stopBtn])
 
     //display unsorted table
-    csv.onDisplay( results.data[0], config.array );
+    // csv.onDisplay( results.data[0], config.array );
+    csv.onSummarize( results.data[0], config.array );
 
     // on update
-    document.querySelector('#update').onclick = () => {
-        console.log(quickSort(config))
-        csv.update(results.data[0], quickSort(config))
-                
-        // test download button
-        // only works when csv table is rendered
-        if(document.querySelector('.downloadBtn')) return;
+    document.querySelector('#update').onclick = onUpdate(results)
+}
 
-        downloadBtn.onclick = () => {
-            var html = document.querySelector("table").outerHTML;
-            htmlToCSV(html, `Sorted-by-${select.value}-${firstFile.name}`);
-        } 
-    }
+const onUpdate = (results) => {
+    console.log(quickSort(config))
+    csv.update(results.data[0], quickSort(config))
+            
+    // test download button
+    // only works when csv table is rendered
+    if(document.querySelector('.downloadBtn')) return;
+
+    downloadBtn.onclick = () => {
+        var html = document.querySelector("table").outerHTML;
+        htmlToCSV(html, `Sorted-by-${select.value}-${firstFile.name}`);
+    } 
 }
 
 const removeUndefined = data => data.filter(element => element !== undefined && element != '');
