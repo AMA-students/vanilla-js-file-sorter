@@ -38,12 +38,14 @@ export default class {
         disable: function(elements) {
             elements.map(element => {
                 element.disabled = true;
+                element.classList.add('disabled')
             })
             
         },
         enable: function(elements) {
             elements.map(element => {
                 element.disabled = false;
+                element.classList.remove('disabled')
             })
         },
 
