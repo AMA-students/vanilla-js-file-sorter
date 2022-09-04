@@ -4,6 +4,7 @@ const submitBtn = document.querySelector("#submit");
 const displayBtn = document.querySelector('#display')
 const clearBtn = document.querySelector('#clear')
 const stopBtn = document.querySelector('#stop')
+const updateBtn = document.querySelector('#update')
 const downloadBtn = document.querySelector('#download')
 
 const allBtns = [clearBtn, displayBtn, stopBtn, inputFile, submitBtn];
@@ -14,6 +15,7 @@ export {
     stopBtn,
     inputFile,
     submitBtn,
+    updateBtn,
     downloadBtn,
     allBtns
 }

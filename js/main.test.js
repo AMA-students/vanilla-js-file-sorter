@@ -29,8 +29,8 @@ import {
     stopBtn,
     inputFile,
     submitBtn,
-    downloadBtn,
-    allBtns
+    updateBtn,
+    downloadBtn
 } from './buttons.js';
 
 // class instance
@@ -204,7 +204,7 @@ const onDisplay = results => {
     csv.onSummarize( results.data[0], config.array );
 
     // on update
-    document.querySelector('#update').onclick = () => {
+    updateBtn.onclick = () => {
         onUpdate(results, config)
     }
 }
