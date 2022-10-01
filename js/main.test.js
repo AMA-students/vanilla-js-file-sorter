@@ -1,19 +1,14 @@
-// import '/style.css';
-
-// import CSV from './classes/Chart.js';
 import CSV from './classes/Csv.js';
 import STATUS from './classes/Status.js';
-// import { bubbleSort} from './functions/algorithms.js';
-// import { ctx, myChart } from './chart.js'
-// import chartTest from './prototypes/chart.test.js';
 import Animate from './classes/Animate.js';
-// import Test from './prototypes/Test.js';
+
 
 // algorithms
 import quickSort from './functions/algo/quickSort.js';
 
 // side effect funtions
 import setDataPoints from './functions/sideEffectes/setDataPoints.js';
+import htmlToCSV, {test, downloadCSVFile } from './functions/sideEffectes/htmlToCSV.js';
 
 // pure functions
 // import fileParse from './functions/getFile.js'
@@ -39,14 +34,7 @@ const csv = new CSV(document.querySelector('table'))
 // const csv = new CSV(document.querySelector('#chart'))
 const animate = new Animate(document.querySelector('#chart'))
 
-// test class
-// const testChart = new chartTest()
-// const {ctx, myChart } = testChart.init()
 
-// const test = new Test(testChart);
-
-// status options
-// const allBtns = [clearBtn, displayBtn, stopBtn, inputFile, submitBtn];
 
 const onChooseFileOptions = {
     hideBtn:[clearBtn, displayBtn, stopBtn],
@@ -112,41 +100,6 @@ displayBtn.onclick = () => {
     
 };
 
-function htmlToCSV(html, filename) {
-	var data = [];
-	var rows = document.querySelectorAll("table tr");
-
-	for (var i = 0; i < rows.length; i++) {
-		var row = [], cols = rows[i].querySelectorAll("td, th");
-				
-		for (var j = 0; j < cols.length; j++) {
-            row.push(cols[j].innerText);
-        }
-		        
-		data.push(row.join(",")); 		
-	}
-    console.log(rows)
-	downloadCSVFile(data.join("\n"), filename);
-}
-
-function downloadCSVFile(csv, filename) {
-	var csv_file, download_link;
-
-	csv_file = new Blob([csv], {type: "text/csv"});
-
-	download_link = document.createElement("a");
-
-	download_link.download = filename;
-
-	download_link.href = window.URL.createObjectURL(csv_file);
-
-	download_link.style.display = "none";
-
-	document.body.appendChild(download_link);
-
-	download_link.click();
-}
-
 // on clear
 clearBtn.onclick = () => {
     if(document.querySelector('.downloadBtn')) {
@@ -206,12 +159,14 @@ const onDisplay = results => {
     // on update
     updateBtn.onclick = () => {
         onUpdate(results, config)
+        Status.Options.enable([downloadBtn]);
     }
 }
 
 const onUpdate = (results, config) => {
     console.log(quickSort(config))
-    csv.update(results.data[0], quickSort(config))
+    let sorted = quickSort(config)
+    csv.summarize(results.data[0], sorted)
             
     // test download button
     // only works when csv table is rendered
@@ -219,7 +174,8 @@ const onUpdate = (results, config) => {
 
     downloadBtn.onclick = () => {
         var html = document.querySelector("table").outerHTML;
-        htmlToCSV(html, `Sorted-by-${select.value}-${firstFile.name}`);
+        console.log(results.data[0].join(","))
+        test(results.data[0],sorted, `Sorted-by-${select.value}-${firstFile.name}`, downloadCSVFile);
     } 
 }
 
