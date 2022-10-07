@@ -128,14 +128,37 @@ export default class {
             
             const renderTimeout = setTimeout(async () => {
                 console.log(stopped)            
+
                 if(stopped) return;
+
+                let rowsLength = null;
+
                 data.forEach(row => {
+
+                    if(!rowsLength) {
+                        rowsLength = row.length;
+                    }
+
                     const tr = document.createElement('tr');
-                    // console.log(row)
+                    
+                    // if the row is not an array, it
                     if(!Array.isArray(row)) {
                         console.log(counter)
-                        row = [counter]
+                        if(rowsLength) {
+
+                            let padding = [];
+
+                            for(let i = 0; i < rowsLength; i++) {
+                                padding[i] = "";
+                            }
+
+                            // adding padding to the table
+                            row = padding.slice(0, padding.length/2).concat([`... ${counter}x ...`], 
+                            padding.slice( (padding.length/2) + 1 ));
+                            tr.style.fontSize = "25px"
+                        }
                     }
+
                     row.forEach( data => {
                         const td = document.createElement('td');
 
