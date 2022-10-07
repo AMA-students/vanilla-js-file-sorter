@@ -32,10 +32,20 @@ export default class {
     }
 
     update(headerColumns = [], datas) {
+        console.log(this)
+
+        // clear the table before displaying the new table
         this.clear();
+
         this.setHeader(headerColumns);
+
+        //for summarize
         if(!Array.isArray(datas)) {
             let {summarized, counter } = datas;
+
+            /* 
+                summurized is equal to the first half of itself + the concat + its other half
+            */
             summarized = summarized.slice(0, summarized.length/2).concat('yeet', summarized.slice(summarized.length/2));
 
             this.splitRendering(summarized, counter);
@@ -45,11 +55,25 @@ export default class {
     }
 
     summarize(datas) {
+
+
         let counter = 0;
+
         let summarized = datas.filter(elem => {
-            let actualLength = datas.length - 1
+
+            // the actual length of the datas, not by its index
+            let actualLength = datas.length - 1;
+
+            /* 
+                the maximum rows to be rendered in each end of the dataset
+                ex. 
+                if the dataset is = [1,2,3,4,5,6,7,8,9,10] and the limit is = 2, 
+                it will only take the first 2 elements from the endpoints(the first two elements and the last two elements) of 
+                the dataset, which is = [1,2,9,10]
+            */
             const LIMIT = 10
             
+            // get the elements that belongs to the edge and is within the limit
             let isEdgeElement = datas.indexOf(elem) < LIMIT || datas.indexOf(elem) > ( actualLength - LIMIT);
 
             if(isEdgeElement) {
