@@ -30,7 +30,8 @@ import {
   inputFile,
   submitBtn,
   updateBtn,
-  downloadBtn
+  downloadBtn,
+  settingsBtn
 } from './js/buttons.js';
 
 // predefined options
