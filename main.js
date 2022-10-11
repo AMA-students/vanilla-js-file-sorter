@@ -34,6 +34,8 @@ import {
   settingsBtn
 } from './js/buttons.js';
 
+const modal = document.querySelector('.modal');
+
 // predefined options
 const onChooseFileOptions = {
   hideBtn:[clearBtn, displayBtn, stopBtn],
@@ -71,6 +73,11 @@ const displayMethod = (...args) => {
 let selectedFile;
 
 // buttons on click
+
+settingsBtn.onclick = () => {
+  modal.classList.toggle('hidden')
+}
+
 
 // on submit state
 form.onsubmit = async e => {
