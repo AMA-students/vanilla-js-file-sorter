@@ -1,18 +1,17 @@
 import { realValParser } from "../../classes/state.js"
 
-let index = 0;
-
 const quickSort = (array, dataPointIndex) => {
-
-    index++
-
-    console.log(index, array)
-
+    
     let isAscending = true;
 
+    // console.log(array)
+
+    // convert the string datatype numbers into numbers datatype to get its real value for sorting
     let realValues = array.map(rowOfData => {
-        return rowOfData[dataPointIndex]
+        return realValParser(rowOfData[dataPointIndex]).realVal
     })
+
+    // console.log(realValues)
 
     if (array.length <= 1) return array;
     
@@ -53,8 +52,8 @@ const quickSort = (array, dataPointIndex) => {
     dataPointIndex: null
   }
   
-  const yeet = quickSort(unsorted2, 1)
+//   const yeet = quickSort(unsorted2, 1)
   
-  console.log('Sorted by quickSortTest', yeet);
+//   console.log('Sorted by quickSortTest', yeet);
   
   export default quickSort;
