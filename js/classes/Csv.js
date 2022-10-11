@@ -34,7 +34,7 @@ export default class {
     }
 
     update(headerColumns = [], datas) {
-        console.log(this)
+        // console.log(this)
 
         // clear the table before displaying the new table
         this.clear();
@@ -48,8 +48,9 @@ export default class {
             /* 
                 summurized is equal to the first half of itself + the concat + its other half
             */
-            summarized = summarized.slice(0, summarized.length/2).concat('yeet', summarized.slice(summarized.length/2));
 
+            summarized = summarized.slice(0, summarized.length/2).concat("", summarized.slice(summarized.length/2));
+            // console.log(summarized)
             this.splitRendering(summarized, counter);
             return
         }
@@ -75,17 +76,21 @@ export default class {
             */
             const LIMIT = 10
             
-            // get the elements that belongs to the edge and is within the limit
+            /*
+                get the element that belongs to the edge and is within the limit
+                element is an edge element if the index of the element is < LIMIT or 
+                if the index of the element is > (actualLength - LIMIT)
+            */
+
             let isEdgeElement = datas.indexOf(elem) < LIMIT || datas.indexOf(elem) > ( actualLength - LIMIT);
 
-            if(isEdgeElement) {
-                return isEdgeElement
-            }
+            // return the element if it is an edge element
+            if(isEdgeElement) return true;
 
             counter += 1;
         });
 
-        console.log(summarized)
+        // console.log(summarized)
         return {summarized, counter}
     }
 
@@ -170,7 +175,6 @@ export default class {
                             td.innerText = data;
                         }
                         tr.appendChild(td)
-
                     })
 
                     this.root.appendChild(tr)
@@ -206,10 +210,3 @@ export default class {
     };
     
 };
-
-// const arr = []
-// for(let i = 0; i < 100; i++) {
-//     arr.push(i)
-// }
-
-// console.log(elementLimiter(arr, 45))
