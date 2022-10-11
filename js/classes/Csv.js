@@ -1,4 +1,5 @@
 import elementLimiter from "../functions/elementLimiter.js";
+import { removeUndefined } from "./utility.js";
 import STATUS from './Status.js';
 
 const Status = new STATUS(document.querySelector('#status'));
@@ -19,6 +20,7 @@ export default class {
     }
 
     onSummarize(headerColumns = [], datas) {
+        datas = removeUndefined(datas);
         const obj = this.summarize(datas)
         this.update(headerColumns, obj)
     }
