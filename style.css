@@ -73,6 +73,23 @@ tr:nth-child(even) {
   background-color: rgba(0, 0, 0, 0.096);
 }
 
+/* settings */
+
+.settings-article {
+  padding: 15px;
+  color: white;
+  text-align: center;
+}
+
+.settings-label {
+  color: inherit;
+}
+
+.settings-selection {
+  padding: 5px;
+  display: inline-block;
+}
+
 .hidden {
   display: none;
 }
