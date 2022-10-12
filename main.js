@@ -36,6 +36,8 @@ import {
 
 const modal = document.querySelector('.modal');
 
+const settingsCover = document.querySelector('#settings-cover');
+
 // predefined options
 const onChooseFileOptions = {
   hideBtn:[clearBtn, displayBtn, stopBtn],
@@ -75,9 +77,16 @@ let selectedFile;
 // buttons on click
 
 settingsBtn.onclick = () => {
-  modal.classList.toggle('hidden')
+  // modal.classList.toggle('hidden')
+  settingsCover.classList.toggle('hidden')
 }
 
+settingsCover.onclick = (e) => {
+
+  if(e.target.id !== "settings-cover") return;
+  settingsCover.classList.toggle('hidden')
+  
+}
 
 // on submit state
 form.onsubmit = async e => {
