@@ -17,6 +17,105 @@ const  realValParser = (value) => {
     }
 }
 
+const isStringWithoutNum = (value) => {
+    const hasNumber = /\d/.test(value);
+
+    if(hasNumber) return false;
+    
+    return typeof(value) === "string";
+}
+
+const stringStartsWithNumber = value => {
+    if(typeof(value) !== 'string') return console.error(`this function expects a string as an argument`);
+
+
+    // check the first char if it's a number
+    const firstChar = value.charAt(0);
+
+    // check if the firstChar is a number
+    return !isNaN(parseFloat(firstChar))
+}
+
+/* 
+    let startsWithNumber, containsSymbols
+
+    if isStringWithoutNum === true, 
+    => startsWith number = false, containsSymbols ?
+*/
+
+const hasComma = value => {
+    if(typeof value !== 'string') {
+        return console.error(`this function expects a string as an argument`);
+    }
+
+    return value.includes(',');
+}
+
+const isStringNumWithComma = (value) => {
+
+    /*
+        checks the value if it is a number in a form of a string, and if
+        the value contains a comma
+
+        examples of numbers in a form of a string and contains a comma:
+        => "1,700", "2,000"
+    */
+
+    // check if string doesn't have a number
+    if(isStringWithoutNum(value)) return false;
+
+    // checks if string doesn't have a comma. If it has, proceed. If it doesn't, return false
+    if(!hasComma(value)) {
+        console.error(`this string: "${value}" doesn't have a comma`);
+        return false;
+    }
+
+    const removedComma = value.replace(/,/g, '');
+
+    // checks if the string removed with comma converts to a valid number, proceed if yes, return false if no.
+    if(parseFloat(removedComma) === NaN) {
+        return false;
+    }
+    
+}
+
+const  parseStringNumWithComma = (value) => {
+
+    if(typeof value !== 'string') {
+        console.error(`this function expects a string as an argument. ${value} is a typeOf:${typeof value}`);
+        return null;
+    }
+
+    /*
+        check if string hasComma
+        check if string only contains numbers
+        check if string is convertable to a valid number
+    */
+
+    /*
+        parse the numbers that are in string datatypes and has a comma
+        ex. "1,700" will be parsed into 1700
+    */
+
+    // check if string doesn't have a comma. Return false if true;
+    if(!hasComma(value)) {
+        console.error(`this string: "${value}" doesn't have a comma`);
+        return false;
+    }
+
+    const removedComma = value.replace(/,/g, '');
+
+    const onlyNumbers = /^[0-9]+$/.test(removedComma);
+
+    // check if string only contains numbers. If false, return false. If true, proceed.
+    if(!onlyNumbers) {
+        console.error(`this string: "${removedComma}" should only include numbers`);
+        return false;
+    }
+
+    return parseFloat(removedComma);
+}
+
 const classifier = (data) => {
 
     const dataClassification = {
