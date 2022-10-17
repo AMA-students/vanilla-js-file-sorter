@@ -83,6 +83,11 @@ tr:nth-child(even) {
 
 .settings-label {
   color: inherit;
+  cursor: pointer;
+}
+
+.settings-radio {
+  cursor: pointer;
 }
 
 .settings-selection {
