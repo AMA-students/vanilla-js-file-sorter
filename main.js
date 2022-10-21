@@ -24,19 +24,19 @@ const Status = new STATUS(document.querySelector('#status'));
 
 //buttons
 import {
-  clearBtn,
-  displayBtn,
   stopBtn,
+  clearBtn,
   inputFile,
   submitBtn,
   updateBtn,
+  displayBtn,
+  settingsBtn,
   downloadBtn,
-  settingsBtn
 } from './js/buttons.js';
 
 import { 
   testParser, 
-  realValues, 
+  getRealValues, 
   removeUndefined, 
   arrayStringToNumber, 
 } from './js/classes/utility.js';

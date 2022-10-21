@@ -22,7 +22,7 @@ const  arrayStringToNumber = (array, dataPointIndex) => {
     return parsedArray;
 }
 
-const realValues = (array, dataPointIndex) => {
+const getRealValues = (array, dataPointIndex) => {
 
     if(!array) {
         console.error(`array is not defined`);
@@ -34,6 +34,15 @@ const realValues = (array, dataPointIndex) => {
     }
 
     return array.map( rowOfData => rowOfData[dataPointIndex].realVal);
+}
+
+const getRealValue = (rowOfData, dataPointIndex) => {
+
+    if(dataPointIndex === undefined) {
+        console.warn(`dataPointIndex is undefined`);
+    }
+
+    return rowOfData[dataPointIndex].realVal;
 }
 
 const stringToNumber = (value) => {
@@ -164,7 +173,7 @@ const DatasetClassifier = (dataset) => {
     let hasNum, hasString;
     hasNum = dataset.some( data => !isNaN(data));
     hasString = dataset.some( data => typeof(data) === 'string');
-    
+
     const datasetClassification = {
 
         dataset: dataset,
@@ -218,7 +227,8 @@ let testParser = (array, dataPointIndex = null) => {
 export {
 
     testParser,
-    realValues,
+    getRealValue,
+    getRealValues,
     stringToNumber,
     removeUndefined,
     arrayStringToNumber,
