@@ -33,7 +33,13 @@ import {
   downloadBtn,
   settingsBtn
 } from './js/buttons.js';
-import { arrayStringToNumber, realValues, removeUndefined, testParser } from './js/classes/utility.js';
+
+import { 
+  testParser, 
+  realValues, 
+  removeUndefined, 
+  arrayStringToNumber, 
+} from './js/classes/utility.js';
 
 const modal = document.querySelector('.modal');
 
@@ -93,13 +99,9 @@ settingsCover.onclick = (e) => {
 form.onsubmit = async e => {
 
   e.preventDefault();
-
   selectedFile = inputFile.files[0];
-
   if(!selectedFile) return;
-
   csv.clear();
-
   Status.onSetFile(selectedFile.name, onSetFileOptions);
 
   Papa.parse(selectedFile, {
@@ -111,32 +113,25 @@ form.onsubmit = async e => {
   });
 
   // results = await fileParse(selectedFile);
-
   Status.Options.disable([stopBtn, clearBtn])
-
   Status.Options.show([selectGroup])
-
   Status.Options.enable([displayBtn])
-  
   form.reset();
+
 }
 
 // displayBtn initiate's the loading state
 displayBtn.onclick = () => {
+
   Status.onLoading(onLoadingOptions);
 
   Papa.parse(selectedFile, {
     worker: true,
-
     // Header: true,
-
     complete: results => {
 
-      
       const headerColumn = results.data[0];
-      
       const csvBody = results.data.slice(1)
-
       const bodyData = removeUndefined(csvBody)
 
       // addToConfig -> settings for what algorithm to use
@@ -147,7 +142,6 @@ displayBtn.onclick = () => {
       }
 
       let testStringToNum = arrayStringToNumber(bodyData, select.selectedIndex)
-      
       console.log(testStringToNum)
       console.log(realValues(testStringToNum, select.selectedIndex))
       
@@ -160,15 +154,18 @@ displayBtn.onclick = () => {
         onUpdate(headerColumn, csvBody)
         Status.Options.enable([downloadBtn]);
       }
+
     }
 
   });
+
 };
 
 // on clear
 clearBtn.onclick = () => {
+
   if(document.querySelector('.downloadBtn')) {
-      document.querySelector('.downloadBtn').remove()
+    document.querySelector('.downloadBtn').remove()
   }
 
   csv.clear();
@@ -176,6 +173,7 @@ clearBtn.onclick = () => {
   Status.Options.hide([selectGroup])
   Status.Options.disable([clearBtn, stopBtn])
   select.innerHTML = '';
+
 }
 
 const onUpdate = (headerColumn, csvBody) => {
@@ -187,17 +185,17 @@ const onUpdate = (headerColumn, csvBody) => {
   let sorted = sortingAlgorithm(csvBody, select.selectedIndex);
   console.log(sorted)
   displayMethod(headerColumn, sorted)
-
-
           
   // test download button
   if(document.querySelector('.downloadBtn')) return;
 
   downloadBtn.onclick = () => {
+
     var html = document.querySelector("table").outerHTML;
     // console.log(results.data[0].join(","))
     // test(results.data[0],sorted, `Sorted-by-${select.value}-${firstFile.name}`, downloadCSVFile);
-
     test(headerColumn, sorted, `Sorted-by-${select.value}-${selectedFile.name}`, downloadCSVFile);
+
   } 
+
 }
