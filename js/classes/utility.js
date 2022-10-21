@@ -10,7 +10,34 @@ export default class {
 
 const removeUndefined = data => data.filter(element => element !== undefined && element != '');
 
-const  realValParser = (value) => {
+// stringsToNumbers
+
+const  arrayStringToNumber = (array, dataPointIndex) => {
+
+    let parsedArray = array.map( rowOfData => {
+        rowOfData[dataPointIndex] = stringToNumber(rowOfData[dataPointIndex])
+        return rowOfData;
+    })
+
+    return parsedArray;
+}
+
+const realValues = (array, dataPointIndex) => {
+
+    if(!array) {
+        console.error(`array is not defined`);
+        return null
+    }
+
+    if(dataPointIndex === undefined) {
+        console.warn(`dataPointIndex is undefined`);
+    }
+
+    return array.map( rowOfData => rowOfData[dataPointIndex].realVal);
+}
+
+const stringToNumber = (value) => {
+
     return {
         original: value, 
         realVal: !isNaN(value) ? parseFloat(value): value
@@ -18,21 +45,22 @@ const  realValParser = (value) => {
 }
 
 const isStringWithoutNum = (value) => {
-    const hasNumber = /\d/.test(value);
 
+    const hasNumber = /\d/.test(value);
     if(hasNumber) return false;
     
     return typeof(value) === "string";
 }
 
 const stringStartsWithNumber = value => {
-    if(typeof(value) !== 'string') return console.error(`this function expects a string as an argument`);
 
+    if(typeof(value) !== 'string') return console.error(`this function expects a string as an argument`);
 
     // check the first char if it's a number
     const firstChar = value.charAt(0);
 
     // check if the firstChar is a number
+    
     return !isNaN(parseFloat(firstChar))
 }
 
@@ -44,6 +72,7 @@ const stringStartsWithNumber = value => {
 */
 
 const hasComma = value => {
+
     if(typeof value !== 'string') {
         return console.error(`this function expects a string as an argument`);
     }
@@ -104,7 +133,6 @@ const  parseStringNumWithComma = (value) => {
     }
 
     const removedComma = value.replace(/,/g, '');
-
     const onlyNumbers = /^[0-9]+$/.test(removedComma);
 
     // check if string only contains numbers. If false, return false. If true, proceed.
@@ -121,13 +149,9 @@ const classifier = (data) => {
     const dataClassification = {
 
         data: data,
-
         dataType: typeof(data),
-
         isNan: isNaN(data),
-
         isNum: !isNaN(data),
-
         isFinite: isFinite(data)
         
     }
@@ -138,26 +162,19 @@ const classifier = (data) => {
 const DatasetClassifier = (dataset) => {
 
     let hasNum, hasString;
-
     hasNum = dataset.some( data => !isNaN(data));
-
     hasString = dataset.some( data => typeof(data) === 'string');
-
+    
     const datasetClassification = {
 
         dataset: dataset,
-
         hasNum: hasNum,
-
         hasString: hasString,
 
         
         // dataType: typeof(dataset),
-
         // isNan: isNaN(dataset),
-
         // isNum: !isNaN(dataset),
-
         // isFinite: isFinite(dataset)
         
     }
@@ -165,9 +182,45 @@ const DatasetClassifier = (dataset) => {
     return datasetClassification;
 }
 
-console.log( classifier("yeet12354"))
+// 
+let testArray = ['03','3',"1",'2', "09", '10', '11', '20'];
+
+const alphanumericComparator = (a,b) => {
+
+    let collator = new Intl.Collator(undefined, {
+
+        numeric: true,
+        sensitivity: 'base'
+
+    });
+
+    let greater = collator.compare(a,b);
+
+    return 
+}
+
+let testParser = (array, dataPointIndex = null) => {
+
+    console.log('testparser')
+    if(array.length <= 1) return;
+    let parsed = array.map( rowOfData => {
+        return stringToNumber(rowOfData[dataPointIndex])
+    })
+
+    console.log(parsed)
+
+}
+
+// strings
+
+// pure numbers
 
 export {
-    realValParser,
-    removeUndefined
+
+    testParser,
+    realValues,
+    stringToNumber,
+    removeUndefined,
+    arrayStringToNumber,
+
 }
