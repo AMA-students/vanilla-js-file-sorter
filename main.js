@@ -151,7 +151,7 @@ displayBtn.onclick = () => {
       Status.Options.enable([stopBtn, updateBtn])
 
       updateBtn.onclick = () => {
-        onUpdate(headerColumn, csvBody)
+        onUpdate(headerColumn, bodyData)
         Status.Options.enable([downloadBtn]);
       }
 
