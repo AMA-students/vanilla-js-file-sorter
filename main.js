@@ -33,6 +33,7 @@ import {
   downloadBtn,
   settingsBtn
 } from './js/buttons.js';
+import { arrayStringToNumber, realValues, removeUndefined, testParser } from './js/classes/utility.js';
 
 const modal = document.querySelector('.modal');
 
@@ -130,21 +131,25 @@ displayBtn.onclick = () => {
     // Header: true,
 
     complete: results => {
-      const removeUndefined = data => data.filter(element => element !== undefined && element != '');
 
       
       const headerColumn = results.data[0];
       
       const csvBody = results.data.slice(1)
 
-      const bodyData = removeUndefined(csvBody)  
+      const bodyData = removeUndefined(csvBody)
 
       // addToConfig -> settings for what algorithm to use
-      displayMethod(headerColumn, csvBody)
+      displayMethod(headerColumn, bodyData)
 
       const algorithmConfig = {
 
       }
+
+      let testStringToNum = arrayStringToNumber(bodyData, select.selectedIndex)
+      
+      console.log(testStringToNum)
+      console.log(realValues(testStringToNum, select.selectedIndex))
       
       // button state handling
       Status.Options.hide([selectGroup])
