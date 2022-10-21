@@ -143,7 +143,7 @@ displayBtn.onclick = () => {
 
       let testStringToNum = arrayStringToNumber(bodyData, select.selectedIndex)
       console.log(testStringToNum)
-      console.log(realValues(testStringToNum, select.selectedIndex))
+      console.log(getRealValues(testStringToNum, select.selectedIndex))
       
       // button state handling
       Status.Options.hide([selectGroup])
