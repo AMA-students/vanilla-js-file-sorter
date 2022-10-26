@@ -5,7 +5,7 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>data file sorter</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles/style.min.css">
     <!-- <script type="module" src="js/main.test.js"></script> -->
     <script type="module" src="main.js"></script>
     <script src="/js/modules/papaparse.js"></script>
@@ -20,12 +20,12 @@
         <article class="settings-article">
           <h3>sorting method</h3>
           <div class="settings-selection">
-            <input type="radio" name="sorting-method" id="bubble-sort">
+            <input type="radio" name="sorting-method" id="bubble-sort" class="settings-radio" value="bubble-sort">
             <label for="bubble-sort" class="settings-label">bubble sort</label>
           </div>
 
           <div class="settings-selection">
-            <input type="radio" name="sorting-method" id="quick-sort" value="quick-sort">
+            <input type="radio" name="sorting-method" id="quick-sort" class="settings-radio" value="quick-sort">
             <label for="quick-sort" class="settings-label">quick sort</label>
           </div>
         </article>
@@ -46,9 +46,9 @@
     <button id="clear" class="btn">clear</button>
     <button id="update" class="btn">update</button>
     <button id="download" class="btn">download</button>
-    <h1 id="status">Choose your file</h1>
+    <h1 id="status" class="text-center">Choose your file</h1>
     <!-- <progress id="progress">file</progress> -->
-    <table></table>
+    <table class="MH-auto"></table>
 
     <div style="width:600px; height:400px">
       <canvas id="myChart" width="400" height="400"></canvas>
