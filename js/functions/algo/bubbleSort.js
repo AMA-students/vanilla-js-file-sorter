@@ -1,23 +1,32 @@
-const bubbleSort = ({ array = [0], controlVar = 0, isAscending = true }) => {
+import { stringToNumber } from "../../classes/utility.js";
+
+const bubbleSort = (array, dataPointIndex) => {
 
     if (array.length <= 1) return array;
 
+    let isAscending = true;
+
     let aux;
 
-    if(controlVar) {
+    if(dataPointIndex) {
 
         for(let x = 0; x < array.length; x++) {
-        
+
+            const currentX = stringToNumber(array[x][dataPointIndex]).realVal;
+
             for(let y = 0; y < array.length; y++) {
+
+                const currentY = stringToNumber(array[y][dataPointIndex]).realVal;
+
                 if(!isAscending) {
-                    if(array[x][controlVar] > array[y][controlVar]) {
+                    if( currentX > currentY ) {
                         aux = array[y]
                         array[y] = array[x]
                         array[x] = aux
                     }
 
                 } else {
-                    if(array[x][controlVar] < array[y][controlVar]) {
+                    if(currentX < currentY) {
                         aux = array[y]
                         array[y] = array[x]
                         array[x] = aux
