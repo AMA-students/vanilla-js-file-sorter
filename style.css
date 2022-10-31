@@ -47,6 +47,8 @@ tr:nth-child(even) {
   border: none;
 }
 
+
+
 .disabled {
   cursor: not-allowed;
   background: gray;
@@ -81,19 +83,22 @@ tr:nth-child(even) {
   text-align: center;
 }
 
-.settings-label {
-  color: inherit;
+.settings-radio:hover,
+.settings-label:hover
+{
   cursor: pointer;
+  color:#009578;
 }
 
-.settings-radio {
-  cursor: pointer;
+.settings-label {
+  color: inherit;
 }
 
 .settings-selection {
   padding: 5px;
   display: inline-block;
 }
+
 
 .hidden {
   display: none;
