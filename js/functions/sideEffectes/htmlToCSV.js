@@ -15,7 +15,7 @@ export default function htmlToCSV(html, filename) {
 	downloadCSVFile(data.join("\n"), filename);
 }
 
-export function test(headers,arr, filename) {
+export function arrayToCsv(headers,arr, filename) {
 	var data = [];
 	var rows = arr;
 
