@@ -223,18 +223,42 @@ const DatasetClassifier = (dataset) => {
 // 
 let testArray = ['03','3',"1",'2', "09", '10', '11', '20'];
 
-const alphanumericComparator = (a,b) => {
+const alphanumericComparator = (a, b, option ) => {
 
-    let collator = new Intl.Collator(undefined, {
+    let someUndefined = (a === undefined || a === null) || (b === undefined || b === null);
 
-        numeric: true,
-        sensitivity: 'base'
+    if(someUndefined) {
+        console.error(`compared to an undefined`);
+        return null;
+    }
 
-    });
+    if( !option ) option = { numeric: true, sensitivity: 'base' };
+    const collator = new Intl.Collator(undefined, option);
 
-    let greater = collator.compare(a,b);
+    // string based
+    // const results = {
+    //     "1": "greater",
+    //     "-1": "less",
+    //     "0": "equal"
+    // }
 
-    return 
+    // inverse
+    // const results = {
+    //     "1": false,
+    //     "-1": true,
+    //     "0": true
+    // }
+
+    // default
+    const results = {
+        "1": true,
+        "-1": false,
+        "0": false
+    }
+
+    const result = collator.compare(a, b);
+
+    return results[result];
 }
 
 let testParser = (array, dataPointIndex = null) => {
@@ -261,5 +285,6 @@ export {
     stringToNumber,
     removeUndefined,
     arrayStringToNumber,
+    alphanumericComparator
 
 }
