@@ -124,7 +124,7 @@ form.onsubmit = async e => {
   });
 
   // results = await fileParse(selectedFile);
-  Status.Options.disable([stopBtn, clearBtn])
+  Status.Options.disable([stopBtn, clearBtn, updateBtn, downloadBtn])
   Status.Options.show([selectGroup])
   Status.Options.enable([displayBtn])
   form.reset();
@@ -143,26 +143,32 @@ displayBtn.onclick = () => {
 
       const headerColumn = results.data[0];
       const csvBody = results.data.slice(1)
-      const bodyData = removeUndefined(csvBody)
+      const dataBody = removeUndefined(csvBody)
 
+      
       // addToConfig -> settings for what algorithm to use
-      displayMethod(headerColumn, bodyData)
+      displayMethod(headerColumn, dataBody)
 
       const algorithmConfig = {
 
       }
 
-      let testStringToNum = arrayStringToNumber(bodyData, select.selectedIndex)
-      console.log(testStringToNum)
-      console.log(getRealValues(testStringToNum, select.selectedIndex))
+      // let testStringToNum = arrayStringToNumber(dataBody, select.selectedIndex)
+      // console.log(testStringToNum)
+      // console.log(getRealValues(testStringToNum, select.selectedIndex).sort((a,b) => a - b))
+      // console.log(getRealValues(testStringToNum, select.selectedIndex).filter(elem => elem < 1))
       
+      // console.log(dataBody)
+      // arrayToCsv(headerColumn, dataBody, `Sorted-by-${select.value}-${selectedFile.name}`, );
+
       // button state handling
       Status.Options.hide([selectGroup])
       Status.Options.disable([clearBtn, displayBtn, submitBtn, inputFile])
       Status.Options.enable([stopBtn, updateBtn])
-
-      updateBtn.onclick = () => {
-        onUpdate(headerColumn, bodyData)
+      
+      updateBtn.onclick = async () => {
+        Status.Options.disable([displayBtn, updateBtn]);
+        onUpdate(headerColumn, dataBody)
         Status.Options.enable([downloadBtn]);
       }
 
