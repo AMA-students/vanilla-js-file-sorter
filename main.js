@@ -75,10 +75,19 @@ Status.Options.disable([stopBtn, clearBtn, displayBtn, updateBtn, downloadBtn]);
 
 const sortingAlgorithm = (...args) => {
   return quickSort(...args)
+  // return bubbleSort(...args)
 };
 
+// addToConfig -> settings for the maximum limit before non summarized display
+const MAX_ELEMENT_LIMIT = 10000
+
 const displayMethod = (...args) => {
-  csv.onSummarize(...args)
+  if(args[1].length > MAX_ELEMENT_LIMIT) {
+    csv.onSummarize(...args)
+    return
+  }
+
+  csv.onDisplay(...args)
 }
 
 let selectedFile;
@@ -173,21 +182,23 @@ clearBtn.onclick = () => {
   csv.clear();
   Status.onChooseFile(onChooseFileOptions);
   Status.Options.hide([selectGroup])
-  Status.Options.disable([clearBtn, stopBtn])
+  Status.Options.disable([clearBtn, stopBtn, updateBtn, downloadBtn])
   select.innerHTML = '';
 
 }
 
-const onUpdate = (headerColumn, csvBody) => {
+const onUpdate = (headerColumn, dataBody) => {
 
-  // console.log(convertedBodyData)
+  // console.log(converteddataBody)
   // console.log(quickSort(config))
   // let sorted = quickSort(config)
   // csv.summarize(results.data[0], sorted)
-  let sorted = sortingAlgorithm(csvBody, select.selectedIndex);
-  console.log(sorted)
+  console.time('algorithm')
+  let sorted = sortingAlgorithm(dataBody, select.selectedIndex);
+  console.timeEnd('algorithm')
+  // console.log(sorted)
   displayMethod(headerColumn, sorted)
-          
+  
   // test download button
   if(document.querySelector('.downloadBtn')) return;
 
