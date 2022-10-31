@@ -1,0 +1,23 @@
+.settings {
+    &-article {
+        padding: 15px;
+        color: white;
+        text-align: center;
+    }
+    
+    &-label:hover,
+    &-radio:hover,
+    &-radio:hover + &-label {
+        cursor: pointer;
+        color:$dark-green;
+    }
+
+    &-label {
+        color: inherit;
+    }
+
+    &-selection {
+        padding: 5px;
+        display: inline-block;
+    }
+}
