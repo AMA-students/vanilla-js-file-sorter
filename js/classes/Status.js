@@ -55,7 +55,7 @@ export default class {
             if(coverExist) return;
             const cover = document.createElement('div');
             cover.classList.add('cover')
-            console.log(element)
+            // console.log(element)
             element.style.position = 'relative';
             cover.style.position = 'absolute';
             cover.style.top = '0'

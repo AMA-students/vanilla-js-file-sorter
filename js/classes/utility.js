@@ -8,11 +8,20 @@ export default class {
     }    
 }
 
+// consoles
+const warnNoDataPointIndex = () => {
+    console.warn(`the dataPointIndex is undefined`);
+}
+
 const removeUndefined = data => data.filter(element => element !== undefined && element != '');
 
 // stringsToNumbers
 
 const  arrayStringToNumber = (array, dataPointIndex) => {
+
+    /*
+        converts the string elements of the array to a valid number if it is convertable
+    */
 
     let parsedArray = array.map( rowOfData => {
         rowOfData[dataPointIndex] = stringToNumber(rowOfData[dataPointIndex])
@@ -24,6 +33,11 @@ const  arrayStringToNumber = (array, dataPointIndex) => {
 
 const getRealValues = (array, dataPointIndex) => {
 
+    /*
+        returns an array containing the extracted real value of the data from
+        the data that has been parsed by arrayStringToNumber()
+    */
+
     if(!array) {
         console.error(`array is not defined`);
         return null
@@ -33,10 +47,15 @@ const getRealValues = (array, dataPointIndex) => {
         console.warn(`dataPointIndex is undefined`);
     }
 
-    return array.map( rowOfData => rowOfData[dataPointIndex].realVal);
+    return array.map( rowOfData => getRealValue(rowOfData, dataPointIndex));
 }
 
 const getRealValue = (rowOfData, dataPointIndex) => {
+
+    /*
+        returns the extracted real value of the data from the data object 
+        that has been parsed from stringToNumber()
+    */
 
     if(dataPointIndex === undefined) {
         console.warn(`dataPointIndex is undefined`);
@@ -47,9 +66,16 @@ const getRealValue = (rowOfData, dataPointIndex) => {
 
 const stringToNumber = (value) => {
 
+    /*
+        takes a string and stores its original value to an object and converts
+        the original value to a valid number if it is convertable and then
+        stores it in an object as realVal
+    */
+
     return {
         original: value, 
-        realVal: !isNaN(value) ? parseFloat(value): value
+        // realVal: !isNaN(value) ? parseFloat(value): value,
+        realVal: isStringNumWithComma(value) ? parseStringNumWithComma(value) : (parseFloat(value) || value)
     }
 }
 
@@ -82,9 +108,9 @@ const stringStartsWithNumber = value => {
 
 const hasComma = value => {
 
-    if(typeof value !== 'string') {
-        return console.error(`this function expects a string as an argument`);
-    }
+    // if(typeof value !== 'string') {
+    //     return console.error(`this function expects a string as an argument`);
+    // }
 
     return value.includes(',');
 }
@@ -104,7 +130,7 @@ const isStringNumWithComma = (value) => {
 
     // checks if string doesn't have a comma. If it has, proceed. If it doesn't, return false
     if(!hasComma(value)) {
-        console.error(`this string: "${value}" doesn't have a comma`);
+        // console.error(`this string: "${value}" doesn't have a comma`);
         return false;
     }
 
@@ -114,7 +140,8 @@ const isStringNumWithComma = (value) => {
     if(parseFloat(removedComma) === NaN) {
         return false;
     }
-    
+
+    return true;
 }
 
 const  parseStringNumWithComma = (value) => {

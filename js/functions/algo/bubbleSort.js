@@ -52,20 +52,20 @@ const bubbleSort = ({ array = [0], controlVar = 0, isAscending = true }) => {
     return array
 }
 
-
+export default bubbleSort;
 
 // tests
 
-var unsorted = [23, 45, 16, 37, 3, 99, 22];
-var unsortedd = [[23,42], [45, 16], [37, 3], [22,43]];
-const unsorted2 = [[45, 16],[23,42], [37, 3], [22,43]];
+// var unsorted = [23, 45, 16, 37, 3, 99, 22];
+// var unsortedd = [[23,42], [45, 16], [37, 3], [22,43]];
+// const unsorted2 = [[45, 16],[23,42], [37, 3], [22,43]];
 
-const config = {
-  array: unsortedd,
-  isAscending: true,
-  controlVar: 0
-}
+// const config = {
+//   array: unsortedd,
+//   isAscending: true,
+//   dataPointIndex: 0
+// }
 
-const yeet = bubbleSort(config)
+// const yeet = bubbleSort(config)
 
-console.log('Sorted by bubbleSort', yeet);
+// console.log('Sorted by bubbleSort', yeet);
