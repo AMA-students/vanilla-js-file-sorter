@@ -8,9 +8,9 @@ export default class {
 
         const csvBody = results.data.slice(1)
     
-        const bodyData = removeUndefined(csvBody)
+        const dataBody = removeUndefined(csvBody)
         
-        return quickSort(bodyData, dataPointIndex)
+        return quickSort(dataBody, dataPointIndex)
     }
 
 }
