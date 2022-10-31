@@ -212,9 +212,9 @@ const onUpdate = (headerColumn, dataBody) => {
 
     var html = document.querySelector("table").outerHTML;
     // console.log(results.data[0].join(","))
-    // test(results.data[0],sorted, `Sorted-by-${select.value}-${firstFile.name}`, downloadCSVFile);
-    test(headerColumn, sorted, `Sorted-by-${select.value}-${selectedFile.name}`, downloadCSVFile);
+    // arrayToCsv(results.data[0],sorted, `Sorted-by-${select.value}-${firstFile.name}`, downloadCSVFile);
+    arrayToCsv(headerColumn, sorted, `Sorted-by-${select.value}-${selectedFile.name}`, downloadCSVFile);
 
   } 
-
+  console.log(3);
 }
