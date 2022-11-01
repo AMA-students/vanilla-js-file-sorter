@@ -1,0 +1,43 @@
+/* #app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+} */
+
+// colors
+$dark-green: #006b56;
+$green: #009578;
+$light-green: #00a382;
+
+// colors -- button
+$clr-primary-btn:$green;
+$clr-primary-btn-hov:$dark-green;
+
+// text
+$primary-font: "Quicksand", sans-serif;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: $primary-font;
+}
+  
+// table 
+@import "components/table";
+  
+// buttons
+@import "components/btn";
+  
+
+// modal
+@import "components/modal";
+  
+/* settings */
+@import "components/settings";
+
+// utility
+@import "utility";

@@ -1,0 +1,36 @@
+.settings {
+    &-article {
+        padding: 15px;
+        color: white;
+        text-align: center;
+    }
+
+    &-radio {
+        display: none;
+    }
+
+    &-label {
+        padding: 10px 15px;
+        transition: background 0.3s ;
+        background-color: $green;
+    }
+    
+    &-label:not(:last-of-type) {
+        border-right: 1px solid $dark-green;
+    }
+
+    &-radio:checked + &-label {
+        background-color: $dark-green;
+    }
+
+    &-label {
+        color: inherit;
+    }
+
+    &-selection {
+        display: inline-flex;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.50);
+    }
+}

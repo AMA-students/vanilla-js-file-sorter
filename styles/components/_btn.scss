@@ -1,0 +1,11 @@
+.btn {
+    padding: 5px 10px;
+    background: $clr-primary-btn;
+    color: white;
+    cursor: pointer;
+    border: none;
+
+    &:hover:not(.disabled) {
+        background: $clr-primary-btn-hov;
+    }
+}

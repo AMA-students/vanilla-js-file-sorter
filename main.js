@@ -3,11 +3,13 @@ import STATUS from './js/classes/Status.js';
 import State from './js/classes/state.js';
 
 // algorithms
-import quickSort from './js/functions/algo/quickSort.test.js';
+// import quickSort from './js/functions/algo/quickSort.test.js';
+import quickSort from './js/functions/algo/quickSort.test copy.js';
+import bubbleSort from './js/functions/algo/bubbleSort.js';
 
 // side effect funtions
 import setDataPoints from './js/functions/sideEffectes/setDataPoints.js';
-import htmlToCSV, {test, downloadCSVFile } from './js/functions/sideEffectes/htmlToCSV.js';
+import htmlToCSV, {arrayToCsv, downloadCSVFile } from './js/functions/sideEffectes/htmlToCSV.js';
 
 // pure functions
 // import onDisplay from './js/functions/sideEffectes/onDisplay.js';
@@ -24,15 +26,22 @@ const Status = new STATUS(document.querySelector('#status'));
 
 //buttons
 import {
-  clearBtn,
-  displayBtn,
   stopBtn,
+  clearBtn,
   inputFile,
   submitBtn,
   updateBtn,
+  displayBtn,
+  settingsBtn,
   downloadBtn,
-  settingsBtn
 } from './js/buttons.js';
+
+import { 
+  testParser, 
+  getRealValues, 
+  removeUndefined, 
+  arrayStringToNumber, 
+} from './js/classes/utility.js';
 
 const modal = document.querySelector('.modal');
 
@@ -66,10 +75,19 @@ Status.Options.disable([stopBtn, clearBtn, displayBtn, updateBtn, downloadBtn]);
 
 const sortingAlgorithm = (...args) => {
   return quickSort(...args)
+  // return bubbleSort(...args)
 };
 
+// addToConfig -> settings for the maximum limit before non summarized display
+const MAX_ELEMENT_LIMIT = 10000
+
 const displayMethod = (...args) => {
-  csv.onSummarize(...args)
+  if(args[1].length > MAX_ELEMENT_LIMIT) {
+    csv.onSummarize(...args)
+    return
+  }
+
+  csv.onDisplay(...args)
 }
 
 let selectedFile;
@@ -92,13 +110,9 @@ settingsCover.onclick = (e) => {
 form.onsubmit = async e => {
 
   e.preventDefault();
-
   selectedFile = inputFile.files[0];
-
   if(!selectedFile) return;
-
   csv.clear();
-
   Status.onSetFile(selectedFile.name, onSetFileOptions);
 
   Papa.parse(selectedFile, {
@@ -110,89 +124,97 @@ form.onsubmit = async e => {
   });
 
   // results = await fileParse(selectedFile);
-
-  Status.Options.disable([stopBtn, clearBtn])
-
+  Status.Options.disable([stopBtn, clearBtn, updateBtn, downloadBtn])
   Status.Options.show([selectGroup])
-
   Status.Options.enable([displayBtn])
-  
   form.reset();
+
 }
 
 // displayBtn initiate's the loading state
 displayBtn.onclick = () => {
+
   Status.onLoading(onLoadingOptions);
 
   Papa.parse(selectedFile, {
     worker: true,
-
     // Header: true,
-
     complete: results => {
-      const removeUndefined = data => data.filter(element => element !== undefined && element != '');
 
-      
       const headerColumn = results.data[0];
-      
       const csvBody = results.data.slice(1)
+      const dataBody = removeUndefined(csvBody)
 
-      const bodyData = removeUndefined(csvBody)  
-
+      
       // addToConfig -> settings for what algorithm to use
-      displayMethod(headerColumn, csvBody)
+      displayMethod(headerColumn, dataBody)
 
       const algorithmConfig = {
 
       }
+
+      // let testStringToNum = arrayStringToNumber(dataBody, select.selectedIndex)
+      // console.log(testStringToNum)
+      // console.log(getRealValues(testStringToNum, select.selectedIndex).sort((a,b) => a - b))
+      // console.log(getRealValues(testStringToNum, select.selectedIndex).filter(elem => elem < 1))
       
+      // console.log(dataBody)
+      // arrayToCsv(headerColumn, dataBody, `Sorted-by-${select.value}-${selectedFile.name}`, );
+
       // button state handling
       Status.Options.hide([selectGroup])
       Status.Options.disable([clearBtn, displayBtn, submitBtn, inputFile])
       Status.Options.enable([stopBtn, updateBtn])
-
-      updateBtn.onclick = () => {
-        onUpdate(headerColumn, csvBody)
+      
+      updateBtn.onclick = async () => {
+        Status.Options.disable([displayBtn, updateBtn]);
+        onUpdate(headerColumn, dataBody)
         Status.Options.enable([downloadBtn]);
       }
+
     }
 
   });
+
 };
 
 // on clear
 clearBtn.onclick = () => {
+
   if(document.querySelector('.downloadBtn')) {
-      document.querySelector('.downloadBtn').remove()
+    document.querySelector('.downloadBtn').remove()
   }
 
   csv.clear();
   Status.onChooseFile(onChooseFileOptions);
   Status.Options.hide([selectGroup])
-  Status.Options.disable([clearBtn, stopBtn])
+  Status.Options.disable([clearBtn, stopBtn, updateBtn, downloadBtn])
   select.innerHTML = '';
+
 }
 
-const onUpdate = (headerColumn, csvBody) => {
+const onUpdate = (headerColumn, dataBody) => {
 
-  // console.log(convertedBodyData)
+  // console.log(converteddataBody)
   // console.log(quickSort(config))
   // let sorted = quickSort(config)
   // csv.summarize(results.data[0], sorted)
-  let sorted = sortingAlgorithm(csvBody, select.selectedIndex);
-  console.log(sorted)
+  console.time('algorithm')
+  let sorted = sortingAlgorithm(dataBody, select.selectedIndex);
+  console.timeEnd('algorithm')
+  // console.log(sorted)
   displayMethod(headerColumn, sorted)
-
-
-          
+  
   // test download button
   if(document.querySelector('.downloadBtn')) return;
 
   downloadBtn.onclick = () => {
+
     var html = document.querySelector("table").outerHTML;
     // console.log(results.data[0].join(","))
-    // test(results.data[0],sorted, `Sorted-by-${select.value}-${firstFile.name}`, downloadCSVFile);
+    // arrayToCsv(results.data[0],sorted, `Sorted-by-${select.value}-${firstFile.name}`, downloadCSVFile);
+    arrayToCsv(headerColumn, sorted, `Sorted-by-${select.value}-${selectedFile.name}`, downloadCSVFile);
 
-    test(headerColumn, sorted, `Sorted-by-${select.value}-${selectedFile.name}`, downloadCSVFile);
   } 
+  console.log(3);
 }

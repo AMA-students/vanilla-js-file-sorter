@@ -1,4 +1,4 @@
-import { realValParser } from "../../classes/state.js"
+import { stringToNumber } from "../../classes/utility.js";
 
 const quickSort = (array, dataPointIndex) => {
     
@@ -8,7 +8,7 @@ const quickSort = (array, dataPointIndex) => {
 
     // convert the string datatype numbers into numbers datatype to get its real value for sorting
     let realValues = array.map(rowOfData => {
-        return realValParser(rowOfData[dataPointIndex]).realVal
+        return stringToNumber(rowOfData[dataPointIndex]).realVal
     })
 
     // console.log(realValues)

@@ -15,7 +15,7 @@ export default function htmlToCSV(html, filename) {
 	downloadCSVFile(data.join("\n"), filename);
 }
 
-export function test(headers,arr, filename) {
+export function arrayToCsv(headers,arr, filename) {
 	var data = [];
 	var rows = arr;
 
@@ -25,10 +25,19 @@ export function test(headers,arr, filename) {
 		let row = [], cols = rows[i]
 
 		for(let j = 0; j < cols.length; j++) {
+
+			// encases the data in qoutes if it includes ","
+			if(cols[j].includes(",")) {
+				row.push(`"${cols[j]}"`)
+
+				continue;
+			}
+
 			row.push(cols[j]);
 		}
-		data.push(row.join(","));
+		data.push(row);
 	}
+
 	downloadCSVFile(data.join("\n"), filename);
 }
 
