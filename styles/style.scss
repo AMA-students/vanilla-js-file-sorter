@@ -8,12 +8,13 @@
 } */
 
 // colors
-$dark-green: #009578;
+$dark-green: #006b56;
+$green: #009578;
 $light-green: #00a382;
 
 // colors -- button
-$clr-primary-btn:$dark-green;
-$clr-primary-btn-hov:$light-green;
+$clr-primary-btn:$green;
+$clr-primary-btn-hov:$dark-green;
 
 // text
 $primary-font: "Quicksand", sans-serif;
