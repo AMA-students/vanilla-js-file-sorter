@@ -4,12 +4,23 @@
         color: white;
         text-align: center;
     }
+
+    &-radio {
+        display: none;
+    }
+
+    &-label {
+        padding: 10px 15px;
+        transition: background 0.3s ;
+        background-color: $green;
+    }
     
-    &-label:hover,
-    &-radio:hover,
-    &-radio:hover + &-label {
-        cursor: pointer;
-        color:$dark-green;
+    &-label:not(:last-of-type) {
+        border-right: 1px solid $dark-green;
+    }
+
+    &-radio:checked + &-label {
+        background-color: $dark-green;
     }
 
     &-label {
@@ -17,7 +28,9 @@
     }
 
     &-selection {
-        padding: 5px;
-        display: inline-block;
+        display: inline-flex;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.50);
     }
 }
