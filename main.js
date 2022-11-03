@@ -126,7 +126,7 @@ form.onsubmit = async e => {
 
   // results = await fileParse(selectedFile);
   Status.Options.disable([stopBtn, clearBtn, updateBtn, downloadBtn])
-  Status.Options.show([selectGroup])
+  // Status.Options.show([selectGroup])
   Status.Options.enable([displayBtn])
   form.reset();
 
@@ -166,8 +166,9 @@ displayBtn.onclick = () => {
       Status.Options.hide([selectGroup])
       Status.Options.disable([clearBtn, displayBtn, submitBtn, inputFile])
       Status.Options.enable([stopBtn, updateBtn])
-      
+      Status.Options.show([selectGroup])
       updateBtn.onclick = async () => {
+        Status.Options.hide([selectGroup])
         Status.Options.disable([displayBtn, updateBtn]);
         onUpdate(headerColumn, dataBody)
         Status.Options.enable([downloadBtn]);
