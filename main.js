@@ -42,6 +42,7 @@ import {
   removeUndefined, 
   arrayStringToNumber, 
 } from './js/classes/utility.js';
+import mergeSortTest from './js/functions/algo/mergeSort.js';
 
 const modal = document.querySelector('.modal');
 
