@@ -227,7 +227,7 @@ const onUpdate = (headerColumn, dataBody) => {
   displayMethod(headerColumn, sorted)
   setTimeout( () => {
     document.querySelectorAll(`table td:nth-child(${select.selectedIndex + 1})`).forEach( elem => {
-      elem.classList.add('border-side');
+      elem.classList.add('highlight');
     })
   }, 2000)
   // test download button
