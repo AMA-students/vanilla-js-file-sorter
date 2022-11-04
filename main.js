@@ -74,9 +74,28 @@ Status.Options.disable([stopBtn, clearBtn, displayBtn, updateBtn, downloadBtn]);
 
 // configs
 
-const sortingAlgorithm = (...args) => {
-  return quickSort(...args)
+const sortingAlgorithm = (algo, args) => {
+
+  // const [dataBody, dataPointIndex] = args
+
+  const algos = {
+
+    quickSort: (...args) => quickSort(...args),
+    bubbleSort: (...args) => bubbleSort(...args),
+    mergeSortTest: (...args) => mergeSortTest(...args),
+
+    test: (...args) => {
+      console.log(...args)
+    }
+    
+  }
+
+  // return quickSort(...args)
+  // return mergeSortTest(...args)
   // return bubbleSort(...args)
+
+  return algos[algo](...args)
+
 };
 
 // addToConfig -> settings for the maximum limit before non summarized display
@@ -202,11 +221,15 @@ const onUpdate = (headerColumn, dataBody) => {
   // let sorted = quickSort(config)
   // csv.summarize(results.data[0], sorted)
   console.time('algorithm')
-  let sorted = sortingAlgorithm(dataBody, select.selectedIndex);
+  let sorted = sortingAlgorithm( 'quickSort',[dataBody, select.selectedIndex]);
   console.timeEnd('algorithm')
-  // console.log(sorted)
+  console.log(sorted)
   displayMethod(headerColumn, sorted)
-  
+  setTimeout( () => {
+    document.querySelectorAll(`table td:nth-child(${select.selectedIndex + 1})`).forEach( elem => {
+      elem.classList.add('border-side');
+    })
+  }, 2000)
   // test download button
   if(document.querySelector('.downloadBtn')) return;
 
