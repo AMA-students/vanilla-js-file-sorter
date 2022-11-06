@@ -21,17 +21,35 @@ export default class {
 
     Options = {
         hide: function(elements) {
+
             elements.map(element => {
-                element.style.transition = "all 2s";
-                element.style.opacity = '0';
+                
+                if(element.classList.contains('hide')) return;
+
+                element.classList.add('hide');
+
+                if(element.classList.contains('show')) {
+                    element.classList.remove('show');
+                }
+
                 this.cover(element);
+
             })
         },
         show: function(elements) {
+
             elements.map(element => {
-                element.style.transition = "all 2s";
-                element.style.opacity = '1';
+
+                if(element.classList.contains('show')) return;
+
+                element.classList.add('show');
+
+                if(element.classList.contains('hide')) {
+                    element.classList.remove('hide');
+                }
+
                 this.uncover(element)
+
             })
         },
 
