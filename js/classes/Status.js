@@ -12,7 +12,7 @@ export default class {
                 return;
             }
 
-            if(this.Options[key]) return;
+            if(!this.Options[key]) return;
 
             this.Options[key](value)
         })
