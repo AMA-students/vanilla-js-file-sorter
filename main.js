@@ -129,6 +129,10 @@ settingsCover.onclick = (e) => {
 // on submit state
 form.onsubmit = async e => {
 
+  Status.Options.disable([submitBtn])
+  
+  if(!inputFile.files[0]) return;
+
   e.preventDefault();
   selectedFile = inputFile.files[0];
   if(!selectedFile) return;
@@ -153,6 +157,8 @@ form.onsubmit = async e => {
 
 // displayBtn initiate's the loading state
 displayBtn.onclick = () => {
+
+  if(!selectedFile) return;
 
   Status.onLoading(onLoadingOptions);
 
