@@ -186,11 +186,14 @@ displayBtn.onclick = () => {
       Status.Options.disable([clearBtn, displayBtn, submitBtn, inputFile])
       Status.Options.enable([stopBtn, updateBtn])
       Status.Options.show([selectGroup])
-      updateBtn.onclick = async () => {
+
+      updateBtn.onclick = () => {
+
         Status.Options.hide([selectGroup])
         Status.Options.disable([displayBtn, updateBtn]);
         onUpdate(headerColumn, dataBody)
         Status.Options.enable([downloadBtn]);
+
       }
 
     }
