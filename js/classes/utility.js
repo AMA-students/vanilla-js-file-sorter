@@ -273,6 +273,10 @@ let testParser = (array, dataPointIndex = null) => {
 
 }
 
+const getCheckedRadio = (radioName) => {
+    return document.querySelector(`input[name=${radioName}]:checked`);
+}
+
 // strings
 
 // pure numbers
@@ -283,6 +287,7 @@ export {
     getRealValue,
     getRealValues,
     stringToNumber,
+    getCheckedRadio,
     removeUndefined,
     arrayStringToNumber,
     alphanumericComparator

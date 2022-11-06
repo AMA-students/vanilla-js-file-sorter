@@ -42,6 +42,7 @@ import {
   removeUndefined, 
   arrayStringToNumber, 
 } from './js/classes/utility.js';
+import mergeSortTest from './js/functions/algo/mergeSort.js';
 
 const modal = document.querySelector('.modal');
 
@@ -67,15 +68,40 @@ const onLoadingOptions = {
 }
 
 // initial state
-Status.onChooseFile();
-Status.Options.hide([selectGroup]);
-Status.Options.disable([stopBtn, clearBtn, displayBtn, updateBtn, downloadBtn]);
+const testConfig = {
+  setStatusText: 'test config',
+  hide: [selectGroup],
+  disable: [stopBtn, clearBtn, displayBtn, updateBtn, downloadBtn, submitBtn]
+}
+
+Status.setStatus(testConfig)
+// Status.Options.hide([selectGroup]);
+// Status.Options.disable([stopBtn, clearBtn, displayBtn, updateBtn, downloadBtn, submitBtn]);
 
 // configs
 
-const sortingAlgorithm = (...args) => {
-  return quickSort(...args)
+const sortingAlgorithm = (algo, args) => {
+
+  // const [dataBody, dataPointIndex] = args
+
+  const algos = {
+
+    quickSort: (...args) => quickSort(...args),
+    bubbleSort: (...args) => bubbleSort(...args),
+    mergeSortTest: (...args) => mergeSortTest(...args),
+
+    test: (...args) => {
+      console.log(...args)
+    }
+    
+  }
+
+  // return quickSort(...args)
+  // return mergeSortTest(...args)
   // return bubbleSort(...args)
+
+  return algos[algo](...args)
+
 };
 
 // addToConfig -> settings for the maximum limit before non summarized display
@@ -106,8 +132,23 @@ settingsCover.onclick = (e) => {
   
 }
 
+inputFile.addEventListener('change', (e)=> {
+  console.log(e.target.value, e.target.value === "")
+  if(e.target.value === '') {
+    console.log('yeet')
+    Status.Options.disable([submitBtn])
+    return;
+  }
+
+  Status.Options.enable([submitBtn])
+})
+
 // on submit state
 form.onsubmit = async e => {
+
+  Status.Options.disable([submitBtn])
+  
+  if(!inputFile.files[0]) return;
 
   e.preventDefault();
   selectedFile = inputFile.files[0];
@@ -125,7 +166,7 @@ form.onsubmit = async e => {
 
   // results = await fileParse(selectedFile);
   Status.Options.disable([stopBtn, clearBtn, updateBtn, downloadBtn])
-  Status.Options.show([selectGroup])
+  // Status.Options.show([selectGroup])
   Status.Options.enable([displayBtn])
   form.reset();
 
@@ -133,6 +174,8 @@ form.onsubmit = async e => {
 
 // displayBtn initiate's the loading state
 displayBtn.onclick = () => {
+
+  if(!selectedFile) return;
 
   Status.onLoading(onLoadingOptions);
 
@@ -165,11 +208,15 @@ displayBtn.onclick = () => {
       Status.Options.hide([selectGroup])
       Status.Options.disable([clearBtn, displayBtn, submitBtn, inputFile])
       Status.Options.enable([stopBtn, updateBtn])
-      
-      updateBtn.onclick = async () => {
+      Status.Options.show([selectGroup])
+
+      updateBtn.onclick = () => {
+
+        Status.Options.hide([selectGroup])
         Status.Options.disable([displayBtn, updateBtn]);
         onUpdate(headerColumn, dataBody)
         Status.Options.enable([downloadBtn]);
+
       }
 
     }
@@ -200,11 +247,20 @@ const onUpdate = (headerColumn, dataBody) => {
   // let sorted = quickSort(config)
   // csv.summarize(results.data[0], sorted)
   console.time('algorithm')
-  let sorted = sortingAlgorithm(dataBody, select.selectedIndex);
+  let sorted = sortingAlgorithm( 'quickSort',[dataBody, select.selectedIndex]);
   console.timeEnd('algorithm')
-  // console.log(sorted)
+  console.log(sorted)
   displayMethod(headerColumn, sorted)
-  
+  setTimeout( () => {
+    document.querySelectorAll(`table :nth-child(${select.selectedIndex + 1}):not(tr):not(thead)`).forEach( elem => {
+      if(elem.tagName === 'TH') {
+        elem.classList.add('outline');
+        return;
+      }
+      elem.classList.add('highlight');
+      elem.classList.add('outline');
+    })
+  }, 2000)
   // test download button
   if(document.querySelector('.downloadBtn')) return;
 

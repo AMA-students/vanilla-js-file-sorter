@@ -1,18 +1,45 @@
 export default class {
-    constructor(root) {
-        this.root = root;
+    constructor(statusTextDisplayer) {
+        this.statusTextDisplayer = statusTextDisplayer;
     }
 
-    onChooseFile() {
+    setStatus(config) {
+
+        Object.entries(config).forEach( ([key, value]) => {
+
+            if(this[key]){
+                this[key](value)
+                return;
+            }
+
+            if(this.Options[key]) return;
+
+            this.Options[key](value)
+        })
+
+    }
+
+    setStatusText(statusText) {
+        this.statusTextDisplayer.innerText = statusText;
+    }
+
+    onChooseFile(callBack) {
         this.root.innerText = 'Choose your file';
+
+        if(!callBack) return 
+        callBack();
     }
 
-    onLoading() {
+    onLoading(callBack) {
         this.root.innerText = 'Loading...';
+        if(!callBack) return 
+        callBack();
     }
 
-    onDone() {
+    onDone(callBack) {
         this.root.innerText = 'Done';
+        if(!callBack) return 
+        callBack();
     }
 
     onSetFile(fileName) {
@@ -21,17 +48,35 @@ export default class {
 
     Options = {
         hide: function(elements) {
+
             elements.map(element => {
-                element.style.transition = "all 2s";
-                element.style.opacity = '0';
+                
+                if(element.classList.contains('hide')) return;
+
+                element.classList.add('hide');
+
+                if(element.classList.contains('show')) {
+                    element.classList.remove('show');
+                }
+
                 this.cover(element);
+
             })
         },
         show: function(elements) {
+
             elements.map(element => {
-                element.style.transition = "all 2s";
-                element.style.opacity = '1';
+
+                if(element.classList.contains('show')) return;
+
+                element.classList.add('show');
+
+                if(element.classList.contains('hide')) {
+                    element.classList.remove('hide');
+                }
+
                 this.uncover(element)
+
             })
         },
 
