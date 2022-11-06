@@ -235,8 +235,13 @@ const onUpdate = (headerColumn, dataBody) => {
   console.log(sorted)
   displayMethod(headerColumn, sorted)
   setTimeout( () => {
-    document.querySelectorAll(`table td:nth-child(${select.selectedIndex + 1})`).forEach( elem => {
+    document.querySelectorAll(`table :nth-child(${select.selectedIndex + 1}):not(tr):not(thead)`).forEach( elem => {
+      if(elem.tagName === 'TH') {
+        elem.classList.add('outline');
+        return;
+      }
       elem.classList.add('highlight');
+      elem.classList.add('outline');
     })
   }, 2000)
   // test download button
