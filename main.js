@@ -68,9 +68,15 @@ const onLoadingOptions = {
 }
 
 // initial state
-Status.onChooseFile();
-Status.Options.hide([selectGroup]);
-Status.Options.disable([stopBtn, clearBtn, displayBtn, updateBtn, downloadBtn]);
+const testConfig = {
+  setStatusText: 'test config',
+  hide: [selectGroup],
+  disable: [stopBtn, clearBtn, displayBtn, updateBtn, downloadBtn, submitBtn]
+}
+
+Status.setStatus(testConfig)
+// Status.Options.hide([selectGroup]);
+// Status.Options.disable([stopBtn, clearBtn, displayBtn, updateBtn, downloadBtn, submitBtn]);
 
 // configs
 
