@@ -132,6 +132,17 @@ settingsCover.onclick = (e) => {
   
 }
 
+inputFile.addEventListener('change', (e)=> {
+  console.log(e.target.value, e.target.value === "")
+  if(e.target.value === '') {
+    console.log('yeet')
+    Status.Options.disable([submitBtn])
+    return;
+  }
+
+  Status.Options.enable([submitBtn])
+})
+
 // on submit state
 form.onsubmit = async e => {
 
