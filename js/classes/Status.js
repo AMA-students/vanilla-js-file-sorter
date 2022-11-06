@@ -1,18 +1,45 @@
 export default class {
-    constructor(root) {
-        this.root = root;
+    constructor(statusTextDisplayer) {
+        this.statusTextDisplayer = statusTextDisplayer;
     }
 
-    onChooseFile() {
+    setStatus(config) {
+
+        Object.entries(config).forEach( ([key, value]) => {
+
+            if(this[key]){
+                this[key](value)
+                return;
+            }
+
+            if(this.Options[key]) return;
+
+            this.Options[key](value)
+        })
+
+    }
+
+    setStatusText(statusText) {
+        this.statusTextDisplayer.innerText = statusText;
+    }
+
+    onChooseFile(callBack) {
         this.root.innerText = 'Choose your file';
+
+        if(!callBack) return 
+        callBack();
     }
 
-    onLoading() {
+    onLoading(callBack) {
         this.root.innerText = 'Loading...';
+        if(!callBack) return 
+        callBack();
     }
 
-    onDone() {
+    onDone(callBack) {
         this.root.innerText = 'Done';
+        if(!callBack) return 
+        callBack();
     }
 
     onSetFile(fileName) {
