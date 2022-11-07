@@ -73,13 +73,13 @@ const onLoadingOptions = {
 }
 
 // initial state
-const testConfig = {
-  setStatusText: 'test config',
+const statusConfigOnInitial = {
+  setStatusText: 'Choose your file',
   hide: [selectGroup],
   disable: [stopBtn, clearBtn, displayBtn, updateBtn, downloadBtn, submitBtn]
 }
 
-Status.setStatus(testConfig)
+Status.setStatus(statusConfigOnInitial)
 // Status.Options.hide([selectGroup]);
 // Status.Options.disable([stopBtn, clearBtn, displayBtn, updateBtn, downloadBtn, submitBtn]);
 
