@@ -39,8 +39,6 @@ import {
   arrayStringToNumber, 
 } from './js/classes/utility.js';
 
-const modal = document.querySelector('.modal');
-
 const settingsCover = document.querySelector('#settings-cover');
 
 // initial state
@@ -51,14 +49,8 @@ const statusConfigOnInitial = {
 }
 
 Status.setStatus(statusConfigOnInitial)
-// Status.Options.hide([selectGroup]);
-// Status.Options.disable([stopBtn, clearBtn, displayBtn, updateBtn, downloadBtn, submitBtn]);
-
-// configs
 
 const sortingAlgorithm = (algo, args) => {
-
-  // const [dataBody, dataPointIndex] = args
 
   const algos = {
 
@@ -71,10 +63,6 @@ const sortingAlgorithm = (algo, args) => {
     }
     
   }
-
-  // return quickSort(...args)
-  // return mergeSortTest(...args)
-  // return bubbleSort(...args)
 
   return algos[algo](...args)
 
@@ -97,7 +85,6 @@ let selectedFile;
 // buttons on click
 
 settingsBtn.onclick = () => {
-  // modal.classList.toggle('hidden')
   settingsCover.classList.toggle('hidden')
 }
 
@@ -168,6 +155,7 @@ displayBtn.onclick = () => {
   Papa.parse(selectedFile, {
     worker: true,
     // Header: true,
+
     complete: results => {
 
       const headerColumn = results.data[0];
@@ -198,9 +186,11 @@ displayBtn.onclick = () => {
 };
 
 const statusConfigOnClear = {
+
   setStatusText: "Choose your file",
   hide: [selectGroup],
   disable: [clearBtn, stopBtn, updateBtn, downloadBtn],
+
 }
 
 // on clear
@@ -218,15 +208,12 @@ clearBtn.onclick = () => {
 
 const onUpdate = (headerColumn, dataBody) => {
 
-  // console.log(converteddataBody)
-  // console.log(quickSort(config))
-  // let sorted = quickSort(config)
-  // csv.summarize(results.data[0], sorted)
   console.time('algorithm')
   let sorted = sortingAlgorithm( 'quickSort',[dataBody, select.selectedIndex]);
   console.timeEnd('algorithm')
   console.log(sorted)
   displayMethod(headerColumn, sorted)
+
   setTimeout( () => {
     document.querySelectorAll(`table :nth-child(${select.selectedIndex + 1}):not(tr):not(thead)`).forEach( elem => {
       if(elem.tagName === 'TH') {
@@ -237,14 +224,13 @@ const onUpdate = (headerColumn, dataBody) => {
       elem.classList.add('outline');
     })
   }, 2000)
+
   // test download button
   if(document.querySelector('.downloadBtn')) return;
 
   downloadBtn.onclick = () => {
 
     var html = document.querySelector("table").outerHTML;
-    // console.log(results.data[0].join(","))
-    // arrayToCsv(results.data[0],sorted, `Sorted-by-${select.value}-${firstFile.name}`, downloadCSVFile);
     arrayToCsv(headerColumn, sorted, `Sorted-by-${select.value}-${selectedFile.name}`, downloadCSVFile);
 
   } 
