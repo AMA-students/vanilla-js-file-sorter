@@ -13,7 +13,7 @@ export default class {
             }
 
             if(!this.Options[key]) {
-                console.warn(`The key: ${key} is not recognized. Check if it's a valid property`);
+                console.warn("%cThe key: " + `%c${key}` + " %cis not recognized. Check if it's a valid property", "color: warn", "color: yellow", "color: warn");
                 return;
             }
 
