@@ -26,29 +26,6 @@ export default class {
         this.statusTextDisplayer.innerText = statusText;
     }
 
-    onChooseFile(callBack) {
-        this.root.innerText = 'Choose your file';
-
-        if(!callBack) return 
-        callBack();
-    }
-
-    onLoading(callBack) {
-        this.root.innerText = 'Loading...';
-        if(!callBack) return 
-        callBack();
-    }
-
-    onDone(callBack) {
-        this.root.innerText = 'Done';
-        if(!callBack) return 
-        callBack();
-    }
-
-    onSetFile(fileName) {
-        this.root.innerText = fileName;
-    }
-
     Options = {
         hide: function(elements) {
 
