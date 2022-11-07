@@ -43,30 +43,6 @@ const modal = document.querySelector('.modal');
 
 const settingsCover = document.querySelector('#settings-cover');
 
-// predefined options
-const onChooseFileOptions = {
-  hideBtn:[clearBtn, displayBtn, stopBtn],
-}
-
-const onSubmitStatusConfig = {
-  disable: [stopBtn, clearBtn, updateBtn, downloadBtn],
-  enable: [displayBtn]
-}
-
-const onDoneOptions = {
-  hideBtn:[displayBtn, stopBtn],
-  showBtn: [clearBtn]
-}
-
-const onSetFileOptions = {
-  hideBtn:[clearBtn, stopBtn],
-  showBtn: [displayBtn, selectGroup]
-}
-
-const onLoadingOptions = {
-  hideBtn:[clearBtn, displayBtn]
-}
-
 // initial state
 const statusConfigOnInitial = {
   setStatusText: 'Choose your file',
