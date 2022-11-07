@@ -53,6 +53,11 @@ const onChooseFileOptions = {
   hideBtn:[clearBtn, displayBtn, stopBtn],
 }
 
+const onSubmitStatusConfig = {
+  disable: [stopBtn, clearBtn, updateBtn, downloadBtn],
+  enable: [displayBtn]
+}
+
 const onDoneOptions = {
   hideBtn:[displayBtn, stopBtn],
   showBtn: [clearBtn]
@@ -154,7 +159,6 @@ form.onsubmit = async e => {
   selectedFile = inputFile.files[0];
   if(!selectedFile) return;
   csv.clear();
-  Status.onSetFile(selectedFile.name, onSetFileOptions);
 
   Papa.parse(selectedFile, {
 
@@ -164,10 +168,11 @@ form.onsubmit = async e => {
 
   });
 
-  // results = await fileParse(selectedFile);
-  Status.Options.disable([stopBtn, clearBtn, updateBtn, downloadBtn])
-  // Status.Options.show([selectGroup])
-  Status.Options.enable([displayBtn])
+  Status.setStatus({
+    ...onSubmitStatusConfig,
+    setStatusText: selectedFile.name
+  });
+
   form.reset();
 
 }
