@@ -206,13 +206,18 @@ displayBtn.onclick = () => {
       // addToConfig -> settings for what algorithm to use
       displayMethod(headerColumn, dataBody)
 
+      const statusConfigOnUpdate = {
+
+        setStatusText: "sorting...",
+        hide: [selectGroup],
+        enable: [downloadBtn],
+        disable: [displayBtn, updateBtn],
+
+      }
+
       updateBtn.onclick = () => {
-
-        Status.Options.hide([selectGroup])
-        Status.Options.disable([displayBtn, updateBtn]);
         onUpdate(headerColumn, dataBody)
-        Status.Options.enable([downloadBtn]);
-
+        Status.setStatus(statusConfigOnUpdate)
       }
 
     }
@@ -220,6 +225,12 @@ displayBtn.onclick = () => {
   });
 
 };
+
+const statusConfigOnClear = {
+  setStatusText: "Choose your file",
+  hide: [selectGroup],
+  disable: [clearBtn, stopBtn, updateBtn, downloadBtn],
+}
 
 // on clear
 clearBtn.onclick = () => {
@@ -229,9 +240,7 @@ clearBtn.onclick = () => {
   }
 
   csv.clear();
-  Status.onChooseFile(onChooseFileOptions);
-  Status.Options.hide([selectGroup])
-  Status.Options.disable([clearBtn, stopBtn, updateBtn, downloadBtn])
+  Status.setStatus(statusConfigOnClear)
   select.innerHTML = '';
 
 }
