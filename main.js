@@ -4,6 +4,7 @@ import State from './js/classes/state.js';
 
 // algorithms
 import quickSort from './js/functions/algo/quickSort.test copy.js';
+import mergeSortTest from './js/functions/algo/mergeSort.js';
 import bubbleSort from './js/functions/algo/bubbleSort.js';
 
 // side effect funtions
@@ -37,7 +38,6 @@ import {
   removeUndefined, 
   arrayStringToNumber, 
 } from './js/classes/utility.js';
-import mergeSortTest from './js/functions/algo/mergeSort.js';
 
 const modal = document.querySelector('.modal');
 
