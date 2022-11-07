@@ -12,7 +12,10 @@ export default class {
                 return;
             }
 
-            if(!this.Options[key]) return;
+            if(!this.Options[key]) {
+                console.warn(`The key: ${key} is not recognized. Check if it's a valid property`);
+                return;
+            }
 
             this.Options[key](value)
         })
