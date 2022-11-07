@@ -3,17 +3,12 @@ import STATUS from './js/classes/Status.js';
 import State from './js/classes/state.js';
 
 // algorithms
-// import quickSort from './js/functions/algo/quickSort.test.js';
 import quickSort from './js/functions/algo/quickSort.test copy.js';
 import bubbleSort from './js/functions/algo/bubbleSort.js';
 
 // side effect funtions
 import setDataPoints from './js/functions/sideEffectes/setDataPoints.js';
 import htmlToCSV, {arrayToCsv, downloadCSVFile } from './js/functions/sideEffectes/htmlToCSV.js';
-
-// pure functions
-// import onDisplay from './js/functions/sideEffectes/onDisplay.js';
-// import { realValParser } from './js/functions/parsing/numbers.js';
 
 const form = document.querySelector("#getfile");
 const selectGroup = document.querySelector('#sort-select-group')
