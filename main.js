@@ -177,12 +177,22 @@ form.onsubmit = async e => {
 
 }
 
+const onDisplayStatusConfig = {
+
+  setStatusText: 'Loading...',
+  show: [selectGroup],
+  hide: [selectGroup],
+  enable: [stopBtn, updateBtn],
+  disable: [clearBtn, displayBtn, submitBtn, inputFile],
+
+}
+
 // displayBtn initiate's the loading state
 displayBtn.onclick = () => {
 
   if(!selectedFile) return;
 
-  Status.onLoading(onLoadingOptions);
+  Status.setStatus(onDisplayStatusConfig);
 
   Papa.parse(selectedFile, {
     worker: true,
@@ -193,27 +203,8 @@ displayBtn.onclick = () => {
       const csvBody = results.data.slice(1)
       const dataBody = removeUndefined(csvBody)
 
-      
       // addToConfig -> settings for what algorithm to use
       displayMethod(headerColumn, dataBody)
-
-      const algorithmConfig = {
-
-      }
-
-      // let testStringToNum = arrayStringToNumber(dataBody, select.selectedIndex)
-      // console.log(testStringToNum)
-      // console.log(getRealValues(testStringToNum, select.selectedIndex).sort((a,b) => a - b))
-      // console.log(getRealValues(testStringToNum, select.selectedIndex).filter(elem => elem < 1))
-      
-      // console.log(dataBody)
-      // arrayToCsv(headerColumn, dataBody, `Sorted-by-${select.value}-${selectedFile.name}`, );
-
-      // button state handling
-      Status.Options.hide([selectGroup])
-      Status.Options.disable([clearBtn, displayBtn, submitBtn, inputFile])
-      Status.Options.enable([stopBtn, updateBtn])
-      Status.Options.show([selectGroup])
 
       updateBtn.onclick = () => {
 
