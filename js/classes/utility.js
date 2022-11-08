@@ -222,7 +222,7 @@ let testArray = ['03','3',"1",'2', "09", '10', '11', '20'];
 
 const alphanumericComparator = (a, b, option ) => {
 
-    let someUndefined = (a === undefined || a === null) || (b === undefined || b === null);
+    let someUndefined = (a == null || b == null);
 
     if(someUndefined) {
         console.error(`compared to an undefined`);
