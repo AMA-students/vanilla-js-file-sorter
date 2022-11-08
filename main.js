@@ -3,6 +3,7 @@ import STATUS from './js/classes/Status.js';
 import State from './js/classes/state.js';
 
 // algorithms
+import { selectionSortCSV as selectionSort } from './js/functions/algo/selectionSort.js';
 import quickSort from './js/functions/algo/quickSort.test copy.js';
 import mergeSortTest from './js/functions/algo/mergeSort.js';
 import bubbleSort from './js/functions/algo/bubbleSort.js';
@@ -57,6 +58,7 @@ const sortingAlgorithm = (algo, args) => {
     quickSort: (...args) => quickSort(...args),
     bubbleSort: (...args) => bubbleSort(...args),
     mergeSortTest: (...args) => mergeSortTest(...args),
+    selectionSort: (...args) => selectionSort(...args),
 
     test: (...args) => {
       console.log(...args)
@@ -212,9 +214,10 @@ clearBtn.onclick = () => {
 }
 
 const onUpdate = (headerColumn, dataBody) => {
-
+  const algorithmName = 'selectionSort'
+  // const algorithmName = 'mergeSortTest'
   console.time('algorithm')
-  let sorted = sortingAlgorithm( 'quickSort',[dataBody, select.selectedIndex]);
+  let sorted = sortingAlgorithm( algorithmName,[dataBody, select.selectedIndex]);
   console.timeEnd('algorithm')
   console.log(sorted)
   displayMethod(headerColumn, sorted)
