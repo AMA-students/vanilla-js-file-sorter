@@ -169,20 +169,10 @@ displayBtn.onclick = () => {
       const dataBody = removeUndefined(csvBody)
 
       // addToConfig -> settings for what algorithm to use
-      displayMethod(headerColumn, dataBody)
-
-      const statusConfigOnUpdate = {
-
-        setStatusText: "sorting...",
-        hide: [selectGroup],
-        enable: [downloadBtn],
-        disable: [displayBtn, updateBtn],
-
-      }
+      displayMethod(headerColumn, dataBody)      
 
       updateBtn.onclick = () => {
         onUpdate(headerColumn, dataBody)
-        Status.setStatus(statusConfigOnUpdate)
       }
 
     }
@@ -212,8 +202,26 @@ clearBtn.onclick = () => {
 
 }
 
+const statusConfigOnUpdate = {
+
+  setStatusText: "sorting...",
+  hide: [selectGroup],
+  enable: [downloadBtn],
+  disable: [displayBtn, updateBtn],
+
+}
+
 const onUpdate = (headerColumn, dataBody) => {
-  const algorithmName = 'selectionSort'
+  // const algorithmName = 'quickSort'
+  // let algorithmName;
+
+  if(!document.querySelector('input[name=sorting-method]:checked')) {
+
+    Status.setStatusText('Please select a sorting method from the settings first');
+    return;
+  }
+
+  const algorithmName = document.querySelector('input[name=sorting-method]:checked').value;
   // const algorithmName = 'mergeSortTest'
   console.time('algorithm')
   let sorted = sortingAlgorithm( algorithmName,[dataBody, select.selectedIndex]);
@@ -241,5 +249,6 @@ const onUpdate = (headerColumn, dataBody) => {
     arrayToCsv(headerColumn, sorted, `Sorted-by-${select.value}-${selectedFile.name}`, downloadCSVFile);
 
   } 
+  Status.setStatus(statusConfigOnUpdate)
   console.log(3);
 }
