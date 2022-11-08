@@ -75,7 +75,7 @@ const stringToNumber = (value) => {
     return {
         original: value, 
         // realVal: !isNaN(value) ? parseFloat(value): value,
-        realVal: isStringNumWithComma(value) ? parseStringNumWithComma(value) : (parseFloat(value) || value)
+        realVal: isStringNumWithComma(value) ? parseStringNumWithComma(value) : (Number(value) || value)
     }
 }
 
@@ -137,9 +137,7 @@ const isStringNumWithComma = (value) => {
     const removedComma = value.replace(/,/g, '');
 
     // checks if the string removed with comma converts to a valid number, proceed if yes, return false if no.
-    if(parseFloat(removedComma) === NaN) {
-        return false;
-    }
+    if(isNaN(removedComma)) return false;
 
     return true;
 }
@@ -170,7 +168,6 @@ const  parseStringNumWithComma = (value) => {
 
     const removedComma = value.replace(/,/g, '');
     const onlyNumbers = /^[0-9]+$/.test(removedComma);
-    const hasMinus = removedComma.includes('-');
     const hasPositive = removedComma.includes('+');
 
     // check if string only contains numbers. If false, return false. If true, proceed.
@@ -179,7 +176,7 @@ const  parseStringNumWithComma = (value) => {
         return false;
     }
 
-    return parseFloat(removedComma);
+    return Number(removedComma);
 }
 
 const classifier = (data) => {
@@ -225,7 +222,7 @@ let testArray = ['03','3',"1",'2', "09", '10', '11', '20'];
 
 const alphanumericComparator = (a, b, option ) => {
 
-    let someUndefined = (a === undefined || a === null) || (b === undefined || b === null);
+    let someUndefined = (a == null || b == null);
 
     if(someUndefined) {
         console.error(`compared to an undefined`);

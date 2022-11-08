@@ -12,7 +12,10 @@ export default class {
                 return;
             }
 
-            if(this.Options[key]) return;
+            if(!this.Options[key]) {
+                console.warn("%cThe key: " + `%c${key}` + " %cis not recognized. Check if it's a valid property", "color: warn", "color: yellow", "color: warn");
+                return;
+            }
 
             this.Options[key](value)
         })
@@ -21,29 +24,6 @@ export default class {
 
     setStatusText(statusText) {
         this.statusTextDisplayer.innerText = statusText;
-    }
-
-    onChooseFile(callBack) {
-        this.root.innerText = 'Choose your file';
-
-        if(!callBack) return 
-        callBack();
-    }
-
-    onLoading(callBack) {
-        this.root.innerText = 'Loading...';
-        if(!callBack) return 
-        callBack();
-    }
-
-    onDone(callBack) {
-        this.root.innerText = 'Done';
-        if(!callBack) return 
-        callBack();
-    }
-
-    onSetFile(fileName) {
-        this.root.innerText = fileName;
     }
 
     Options = {

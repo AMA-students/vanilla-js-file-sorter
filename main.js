@@ -3,17 +3,14 @@ import STATUS from './js/classes/Status.js';
 import State from './js/classes/state.js';
 
 // algorithms
-// import quickSort from './js/functions/algo/quickSort.test.js';
+import { selectionSortCSV as selectionSort } from './js/functions/algo/selectionSort.js';
 import quickSort from './js/functions/algo/quickSort.test copy.js';
+import mergeSortTest from './js/functions/algo/mergeSort.js';
 import bubbleSort from './js/functions/algo/bubbleSort.js';
 
 // side effect funtions
 import setDataPoints from './js/functions/sideEffectes/setDataPoints.js';
 import htmlToCSV, {arrayToCsv, downloadCSVFile } from './js/functions/sideEffectes/htmlToCSV.js';
-
-// pure functions
-// import onDisplay from './js/functions/sideEffectes/onDisplay.js';
-// import { realValParser } from './js/functions/parsing/numbers.js';
 
 const form = document.querySelector("#getfile");
 const selectGroup = document.querySelector('#sort-select-group')
@@ -42,63 +39,32 @@ import {
   removeUndefined, 
   arrayStringToNumber, 
 } from './js/classes/utility.js';
-import mergeSortTest from './js/functions/algo/mergeSort.js';
-
-const modal = document.querySelector('.modal');
 
 const settingsCover = document.querySelector('#settings-cover');
 
-// predefined options
-const onChooseFileOptions = {
-  hideBtn:[clearBtn, displayBtn, stopBtn],
-}
-
-const onDoneOptions = {
-  hideBtn:[displayBtn, stopBtn],
-  showBtn: [clearBtn]
-}
-
-const onSetFileOptions = {
-  hideBtn:[clearBtn, stopBtn],
-  showBtn: [displayBtn, selectGroup]
-}
-
-const onLoadingOptions = {
-  hideBtn:[clearBtn, displayBtn]
-}
-
 // initial state
-const testConfig = {
-  setStatusText: 'test config',
+const statusConfigOnInitial = {
+  setStatusText: 'Choose your file',
   hide: [selectGroup],
   disable: [stopBtn, clearBtn, displayBtn, updateBtn, downloadBtn, submitBtn]
 }
 
-Status.setStatus(testConfig)
-// Status.Options.hide([selectGroup]);
-// Status.Options.disable([stopBtn, clearBtn, displayBtn, updateBtn, downloadBtn, submitBtn]);
-
-// configs
+Status.setStatus(statusConfigOnInitial)
 
 const sortingAlgorithm = (algo, args) => {
-
-  // const [dataBody, dataPointIndex] = args
 
   const algos = {
 
     quickSort: (...args) => quickSort(...args),
     bubbleSort: (...args) => bubbleSort(...args),
     mergeSortTest: (...args) => mergeSortTest(...args),
+    selectionSort: (...args) => selectionSort(...args),
 
     test: (...args) => {
       console.log(...args)
     }
     
   }
-
-  // return quickSort(...args)
-  // return mergeSortTest(...args)
-  // return bubbleSort(...args)
 
   return algos[algo](...args)
 
@@ -121,7 +87,6 @@ let selectedFile;
 // buttons on click
 
 settingsBtn.onclick = () => {
-  // modal.classList.toggle('hidden')
   settingsCover.classList.toggle('hidden')
 }
 
@@ -143,6 +108,11 @@ inputFile.addEventListener('change', (e)=> {
   Status.Options.enable([submitBtn])
 })
 
+const statusConfigOnSubmit = {
+  disable: [stopBtn, clearBtn, updateBtn, downloadBtn],
+  enable: [displayBtn]
+}
+
 // on submit state
 form.onsubmit = async e => {
 
@@ -154,7 +124,6 @@ form.onsubmit = async e => {
   selectedFile = inputFile.files[0];
   if(!selectedFile) return;
   csv.clear();
-  Status.onSetFile(selectedFile.name, onSetFileOptions);
 
   Papa.parse(selectedFile, {
 
@@ -164,11 +133,21 @@ form.onsubmit = async e => {
 
   });
 
-  // results = await fileParse(selectedFile);
-  Status.Options.disable([stopBtn, clearBtn, updateBtn, downloadBtn])
-  // Status.Options.show([selectGroup])
-  Status.Options.enable([displayBtn])
+  Status.setStatus({
+    ...statusConfigOnSubmit,
+    setStatusText: selectedFile.name
+  });
+
   form.reset();
+
+}
+
+const statusConfigOnDisplay = {
+
+  setStatusText: 'Loading...',
+  show: [selectGroup],
+  enable: [stopBtn, updateBtn],
+  disable: [clearBtn, displayBtn, submitBtn, inputFile],
 
 }
 
@@ -177,46 +156,23 @@ displayBtn.onclick = () => {
 
   if(!selectedFile) return;
 
-  Status.onLoading(onLoadingOptions);
+  Status.setStatus(statusConfigOnDisplay);
 
   Papa.parse(selectedFile, {
     worker: true,
     // Header: true,
+
     complete: results => {
 
       const headerColumn = results.data[0];
       const csvBody = results.data.slice(1)
       const dataBody = removeUndefined(csvBody)
 
-      
       // addToConfig -> settings for what algorithm to use
-      displayMethod(headerColumn, dataBody)
-
-      const algorithmConfig = {
-
-      }
-
-      // let testStringToNum = arrayStringToNumber(dataBody, select.selectedIndex)
-      // console.log(testStringToNum)
-      // console.log(getRealValues(testStringToNum, select.selectedIndex).sort((a,b) => a - b))
-      // console.log(getRealValues(testStringToNum, select.selectedIndex).filter(elem => elem < 1))
-      
-      // console.log(dataBody)
-      // arrayToCsv(headerColumn, dataBody, `Sorted-by-${select.value}-${selectedFile.name}`, );
-
-      // button state handling
-      Status.Options.hide([selectGroup])
-      Status.Options.disable([clearBtn, displayBtn, submitBtn, inputFile])
-      Status.Options.enable([stopBtn, updateBtn])
-      Status.Options.show([selectGroup])
+      displayMethod(headerColumn, dataBody)      
 
       updateBtn.onclick = () => {
-
-        Status.Options.hide([selectGroup])
-        Status.Options.disable([displayBtn, updateBtn]);
         onUpdate(headerColumn, dataBody)
-        Status.Options.enable([downloadBtn]);
-
       }
 
     }
@@ -224,6 +180,14 @@ displayBtn.onclick = () => {
   });
 
 };
+
+const statusConfigOnClear = {
+
+  setStatusText: "Choose your file",
+  hide: [selectGroup],
+  disable: [clearBtn, stopBtn, updateBtn, downloadBtn],
+
+}
 
 // on clear
 clearBtn.onclick = () => {
@@ -233,24 +197,38 @@ clearBtn.onclick = () => {
   }
 
   csv.clear();
-  Status.onChooseFile(onChooseFileOptions);
-  Status.Options.hide([selectGroup])
-  Status.Options.disable([clearBtn, stopBtn, updateBtn, downloadBtn])
+  Status.setStatus(statusConfigOnClear)
   select.innerHTML = '';
 
 }
 
-const onUpdate = (headerColumn, dataBody) => {
+const statusConfigOnUpdate = {
 
-  // console.log(converteddataBody)
-  // console.log(quickSort(config))
-  // let sorted = quickSort(config)
-  // csv.summarize(results.data[0], sorted)
+  setStatusText: "sorting...",
+  hide: [selectGroup],
+  enable: [downloadBtn],
+  disable: [displayBtn, updateBtn],
+
+}
+
+const onUpdate = (headerColumn, dataBody) => {
+  // const algorithmName = 'quickSort'
+  // let algorithmName;
+
+  if(!document.querySelector('input[name=sorting-method]:checked')) {
+
+    Status.setStatusText('Please select a sorting method from the settings first');
+    return;
+  }
+
+  const algorithmName = document.querySelector('input[name=sorting-method]:checked').value;
+  // const algorithmName = 'mergeSortTest'
   console.time('algorithm')
-  let sorted = sortingAlgorithm( 'quickSort',[dataBody, select.selectedIndex]);
+  let sorted = sortingAlgorithm( algorithmName,[dataBody, select.selectedIndex]);
   console.timeEnd('algorithm')
   console.log(sorted)
   displayMethod(headerColumn, sorted)
+
   setTimeout( () => {
     document.querySelectorAll(`table :nth-child(${select.selectedIndex + 1}):not(tr):not(thead)`).forEach( elem => {
       if(elem.tagName === 'TH') {
@@ -261,16 +239,16 @@ const onUpdate = (headerColumn, dataBody) => {
       elem.classList.add('outline');
     })
   }, 2000)
+
   // test download button
   if(document.querySelector('.downloadBtn')) return;
 
   downloadBtn.onclick = () => {
 
     var html = document.querySelector("table").outerHTML;
-    // console.log(results.data[0].join(","))
-    // arrayToCsv(results.data[0],sorted, `Sorted-by-${select.value}-${firstFile.name}`, downloadCSVFile);
     arrayToCsv(headerColumn, sorted, `Sorted-by-${select.value}-${selectedFile.name}`, downloadCSVFile);
 
   } 
+  Status.setStatus(statusConfigOnUpdate)
   console.log(3);
 }
