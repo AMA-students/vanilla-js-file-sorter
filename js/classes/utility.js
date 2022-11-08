@@ -176,7 +176,7 @@ const  parseStringNumWithComma = (value) => {
         return false;
     }
 
-    return parseFloat(removedComma);
+    return Number(removedComma);
 }
 
 const classifier = (data) => {
