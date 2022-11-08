@@ -168,7 +168,6 @@ const  parseStringNumWithComma = (value) => {
 
     const removedComma = value.replace(/,/g, '');
     const onlyNumbers = /^[0-9]+$/.test(removedComma);
-    const hasMinus = removedComma.includes('-');
     const hasPositive = removedComma.includes('+');
 
     // check if string only contains numbers. If false, return false. If true, proceed.
