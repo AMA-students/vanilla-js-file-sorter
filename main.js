@@ -146,7 +146,6 @@ const onDisplayStatusConfig = {
 
   setStatusText: 'Loading...',
   show: [selectGroup],
-  hide: [selectGroup],
   enable: [stopBtn, updateBtn],
   disable: [clearBtn, displayBtn, submitBtn, inputFile],
 
