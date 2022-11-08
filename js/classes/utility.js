@@ -137,9 +137,7 @@ const isStringNumWithComma = (value) => {
     const removedComma = value.replace(/,/g, '');
 
     // checks if the string removed with comma converts to a valid number, proceed if yes, return false if no.
-    if(parseFloat(removedComma) === NaN) {
-        return false;
-    }
+    if(isNaN(removedComma)) return false;
 
     return true;
 }
