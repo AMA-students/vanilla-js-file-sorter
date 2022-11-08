@@ -108,7 +108,7 @@ inputFile.addEventListener('change', (e)=> {
   Status.Options.enable([submitBtn])
 })
 
-const onSubmitStatusConfig = {
+const statusConfigOnSubmit = {
   disable: [stopBtn, clearBtn, updateBtn, downloadBtn],
   enable: [displayBtn]
 }
@@ -134,7 +134,7 @@ form.onsubmit = async e => {
   });
 
   Status.setStatus({
-    ...onSubmitStatusConfig,
+    ...statusConfigOnSubmit,
     setStatusText: selectedFile.name
   });
 
@@ -142,7 +142,7 @@ form.onsubmit = async e => {
 
 }
 
-const onDisplayStatusConfig = {
+const statusConfigOnDisplay = {
 
   setStatusText: 'Loading...',
   show: [selectGroup],
@@ -156,7 +156,7 @@ displayBtn.onclick = () => {
 
   if(!selectedFile) return;
 
-  Status.setStatus(onDisplayStatusConfig);
+  Status.setStatus(statusConfigOnDisplay);
 
   Papa.parse(selectedFile, {
     worker: true,
