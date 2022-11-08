@@ -75,7 +75,7 @@ const stringToNumber = (value) => {
     return {
         original: value, 
         // realVal: !isNaN(value) ? parseFloat(value): value,
-        realVal: isStringNumWithComma(value) ? parseStringNumWithComma(value) : (parseFloat(value) || value)
+        realVal: isStringNumWithComma(value) ? parseStringNumWithComma(value) : (Number(value) || value)
     }
 }
 
