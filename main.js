@@ -106,6 +106,11 @@ inputFile.addEventListener('change', (e)=> {
   Status.Options.enable([submitBtn])
 })
 
+const onSubmitStatusConfig = {
+  disable: [stopBtn, clearBtn, updateBtn, downloadBtn],
+  enable: [displayBtn]
+}
+
 // on submit state
 form.onsubmit = async e => {
 
