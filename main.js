@@ -223,6 +223,9 @@ const onUpdate = (headerColumn, dataBody) => {
 
   const algorithmName = document.querySelector('input[name=sorting-method]:checked').value;
   // const algorithmName = 'mergeSortTest'
+
+  Status.setStatus(statusConfigOnUpdate)
+  
   console.time('algorithm')
   let sorted = sortingAlgorithm( algorithmName,[dataBody, select.selectedIndex]);
   console.timeEnd('algorithm')
@@ -249,6 +252,6 @@ const onUpdate = (headerColumn, dataBody) => {
     arrayToCsv(headerColumn, sorted, `Sorted-by-${select.value}-${selectedFile.name}`, downloadCSVFile);
 
   } 
-  Status.setStatus(statusConfigOnUpdate)
+
   console.log(3);
 }
