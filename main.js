@@ -233,7 +233,9 @@ const onUpdate = (headerColumn, dataBody) => {
   displayMethod(headerColumn, sorted)
 
   setTimeout( () => {
-    document.querySelectorAll(`table :nth-child(${select.selectedIndex + 1}):not(tr):not(thead)`).forEach( elem => {
+    const sortedColumn = document.querySelectorAll(`table :nth-child(${select.selectedIndex + 1}):not(tr):not(thead)`);
+
+    sortedColumn.forEach( elem => {
       if(elem.tagName === 'TH') {
         elem.classList.add('outline');
         return;
