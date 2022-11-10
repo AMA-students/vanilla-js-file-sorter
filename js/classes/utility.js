@@ -220,7 +220,7 @@ const DatasetClassifier = (dataset) => {
 // 
 let testArray = ['03','3',"1",'2', "09", '10', '11', '20'];
 
-const alphanumericComparator = (a, b, option ) => {
+const alphanumericComparator = (a, b, collator) => {
 
     let someUndefined = (a == null || b == null);
 
@@ -229,8 +229,10 @@ const alphanumericComparator = (a, b, option ) => {
         return null;
     }
 
-    if( !option ) option = { numeric: true, sensitivity: 'base' };
-    const collator = new Intl.Collator(undefined, option);
+    if(!collator) {
+        const option = { numeric: true, sensitivity: 'base' };
+        collator = new Intl.Collator(undefined, option);
+    }
 
     // string based
     // const results = {
