@@ -97,4 +97,7 @@ function mergeSort2(array, dataPointIndex) {
 	return merge2(mergeSort2(left, dataPointIndex),mergeSort2(array, dataPointIndex), dataPointIndex)
 }
 
-export default mergeSortTest;
+export {
+    mergeSort,
+    mergeSortTest
+}
