@@ -5,7 +5,7 @@ import State from './js/classes/state.js';
 // algorithms
 import { selectionSortCSV as selectionSort } from './js/functions/algo/selectionSort.js';
 import quickSort from './js/functions/algo/quickSort.test copy.js';
-import mergeSortTest from './js/functions/algo/mergeSort.js';
+import { mergeSortTest as mergeSort } from './js/functions/algo/mergeSort.js';
 import bubbleSort from './js/functions/algo/bubbleSort.js';
 
 // side effect funtions
@@ -57,7 +57,7 @@ const sortingAlgorithm = (algo, args) => {
 
     quickSort: (...args) => quickSort(...args),
     bubbleSort: (...args) => bubbleSort(...args),
-    mergeSortTest: (...args) => mergeSortTest(...args),
+    mergeSort: (...args) => mergeSort(...args),
     selectionSort: (...args) => selectionSort(...args),
 
     test: (...args) => {
