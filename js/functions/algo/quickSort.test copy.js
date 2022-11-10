@@ -15,6 +15,9 @@ const quickSort = (array, dataPointIndex) => {
   // contains the elements that are > pivot
   const greater = [];
 
+  const option = { numeric: true, sensitivity: 'base' };
+  const collator = new Intl.Collator(undefined, option);
+
   if(isAscending) {
     for (let i = 1; i < array.length; i++) {
 
@@ -23,11 +26,11 @@ const quickSort = (array, dataPointIndex) => {
 
       if(typeof(leftValue) === 'string' || typeof(rightValue) === 'string') {
 
-        // console.log(`leftValue: ${leftValue}, rightValue: ${rightValue}, greater?: ${alphanumericComparator(rightValue, leftValue)}`)
-        alphanumericComparator(rightValue, leftValue)  ? less.push(array[i]) : greater.push(array[i]);
+        alphanumericComparator(rightValue, leftValue, collator)  ? less.push(array[i]) : greater.push(array[i]);
 
         continue;
       }
+
 
       leftValue < rightValue ? less.push(array[i]) : greater.push(array[i]);
       
