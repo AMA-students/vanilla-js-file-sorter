@@ -22,7 +22,6 @@ const bubbleSort = (array, dataPointIndex) => {
                 const currentY = stringToNumber(array[y][dataPointIndex]).realVal;
 
                 if(typeof(currentY) === 'string' || typeof(currentX) === 'string') {
-                    // console.log(`${currentY} > ${currentX} : ${currentY > currentX} ?`)
                     if(alphanumericComparator(currentY, currentX, collator)) {
                         aux = array[y]
                         array[y] = array[x]
