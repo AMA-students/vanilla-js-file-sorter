@@ -44,7 +44,7 @@ const quickSort = (array, dataPointIndex) => {
 
       if(typeof(leftValue) === 'string' || typeof(rightValue) === 'string') {
 
-        alphanumericComparator(leftValue, rightValue)  ? less.push(array[i]) : greater.push(array[i]);
+        alphanumericComparator(leftValue, rightValue, collator)  ? less.push(array[i]) : greater.push(array[i]);
 
         continue;
       }
