@@ -18,28 +18,7 @@ const quickSort = (array, dataPointIndex) => {
   const option = { numeric: true, sensitivity: 'base' };
   const collator = new Intl.Collator(undefined, option);
 
-  if(isAscending) {
-    for (let i = 1; i < array.length; i++) {
-
-      let leftValue = array[i][dataPointIndex]
-      let rightValue = pivot[dataPointIndex]
-
-      if(typeof(leftValue) === 'string' || typeof(rightValue) === 'string') {
-        leftValue = stringToNumber(array[i][dataPointIndex]).realVal;
-        rightValue = stringToNumber(pivot[dataPointIndex]).realVal;
-
-        alphanumericComparator(rightValue, leftValue, collator)  ? less.push(array[i]) : greater.push(array[i]);
-
-        continue;
-      }
-      
-      
-      console.log(`${leftValue} > ${rightValue} ? : ${leftValue > rightValue}`)
-      leftValue < rightValue ? less.push(array[i]) : greater.push(array[i]);
-      
-    }
-  }
-
+  // only run when !isAscending
   if(!isAscending) {
     for (let i = 1; i < array.length; i++) {
       const leftValue = stringToNumber(array[i][dataPointIndex]).realVal;
@@ -54,6 +33,28 @@ const quickSort = (array, dataPointIndex) => {
 
       leftValue > rightValue ? less.push(array[i]) : greater.push(array[i]);
     }
+
+    return quickSort(less, dataPointIndex).concat([pivot], quickSort(greater, dataPointIndex));
+  }
+
+  // default
+  for (let i = 1; i < array.length; i++) {
+
+    let leftValue = array[i][dataPointIndex]
+    let rightValue = pivot[dataPointIndex]
+
+    if(typeof(leftValue) === 'string' || typeof(rightValue) === 'string') {
+      leftValue = stringToNumber(array[i][dataPointIndex]).realVal;
+      rightValue = stringToNumber(pivot[dataPointIndex]).realVal;
+
+      alphanumericComparator(rightValue, leftValue, collator)  ? less.push(array[i]) : greater.push(array[i]);
+
+      continue;
+    }
+    
+    // console.log(`${leftValue} > ${rightValue} ? : ${leftValue > rightValue}`)
+    leftValue < rightValue ? less.push(array[i]) : greater.push(array[i]);
+    
   }
 
   return quickSort(less, dataPointIndex).concat([pivot], quickSort(greater, dataPointIndex));
