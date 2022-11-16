@@ -21,17 +21,20 @@ const quickSort = (array, dataPointIndex) => {
   if(isAscending) {
     for (let i = 1; i < array.length; i++) {
 
-      const leftValue = stringToNumber(array[i][dataPointIndex]).realVal;
-      const rightValue = stringToNumber(pivot[dataPointIndex]).realVal;
+      let leftValue = array[i][dataPointIndex]
+      let rightValue = pivot[dataPointIndex]
 
       if(typeof(leftValue) === 'string' || typeof(rightValue) === 'string') {
+        leftValue = stringToNumber(array[i][dataPointIndex]).realVal;
+        rightValue = stringToNumber(pivot[dataPointIndex]).realVal;
 
         alphanumericComparator(rightValue, leftValue, collator)  ? less.push(array[i]) : greater.push(array[i]);
 
         continue;
       }
-
-
+      
+      
+      console.log(`${leftValue} > ${rightValue} ? : ${leftValue > rightValue}`)
       leftValue < rightValue ? less.push(array[i]) : greater.push(array[i]);
       
     }
