@@ -87,6 +87,20 @@ const isStringWithoutNum = (value) => {
     return typeof(value) === "string";
 }
 
+const isValidNumberButWithCommaValidator = (value1, value2) => {
+    
+    value1 = /^[0-9]+(?=,[0-9]+$|,+$)/.test(value1) ? value1.replace(/,/g, '') : value1 
+    value2 = /^[0-9]+(?=,[0-9]+$|,+$)/.test(value2) ? value1.replace(/,/g, '') : value2
+  
+    value1 = Number(value1) ? Number(value1) : value1 
+    value2 = Number(value2) ? Number(value2) : value2
+    
+    return [
+      value2,
+      value1
+    ]
+}
+
 const stringStartsWithNumber = value => {
 
     if(typeof(value) !== 'string') return console.error(`this function expects a string as an argument`);
@@ -289,6 +303,7 @@ export {
     getCheckedRadio,
     removeUndefined,
     arrayStringToNumber,
-    alphanumericComparator
+    alphanumericComparator,
+    isValidNumberButWithCommaValidator
 
 }
