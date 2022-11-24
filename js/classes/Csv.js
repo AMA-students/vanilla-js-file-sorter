@@ -126,7 +126,7 @@ export default class {
     
     async splitRendering(data, counter = null) {
         const MAX_ELEMENT_LIMIT = 5000;
-        const tbody = document.createElement('tbody');
+
         const renders = elementLimiter(data, MAX_ELEMENT_LIMIT);
         let renderedCounter = 1
         let stopped = false;
@@ -134,7 +134,6 @@ export default class {
         renders.map( data => {
             
             const renderTimeout = setTimeout(async () => {
-                console.log(stopped)            
 
                 if(stopped) return;
 
@@ -150,7 +149,6 @@ export default class {
                     
                     // if the row is not an array, it
                     if(!Array.isArray(row)) {
-                        console.log(counter)
                         if(rowsLength) {
 
                             let padding = [];
