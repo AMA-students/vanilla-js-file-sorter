@@ -239,7 +239,7 @@ const alphanumericComparator = (a, b, collator) => {
     let someUndefined = (a == null || b == null);
 
     if(someUndefined) {
-        console.error(`compared to an undefined`);
+        console.error(`compared to an undefined a:${a} b:${b}`);
         return null;
     }
 
