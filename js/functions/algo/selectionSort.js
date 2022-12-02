@@ -22,10 +22,22 @@ function selectionSortCSV(arr, dataPointIndex) {
     // base lowest
     let lowest = i
 
+    const option = { numeric: true, sensitivity: 'base' };
+    const collator = new Intl.Collator(undefined, option);
+
     // for loop for determining the actual lowest
     for (let j = i + 1; j < arr.length; j++) {
       const currentValue = stringToNumber(arr[j][dataPointIndex]).realVal;
       const currentLowest = stringToNumber(arr[lowest][dataPointIndex]).realVal;
+
+      if(typeof(currentValue) === 'string' || typeof(currentLowest) === 'string') {
+
+        if(alphanumericComparator(currentLowest, currentValue, collator)) {
+          lowest = j
+        }
+
+        continue;
+      }
 
       if ( currentValue < currentLowest ) {
         lowest = j

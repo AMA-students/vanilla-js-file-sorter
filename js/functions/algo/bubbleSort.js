@@ -1,4 +1,4 @@
-import { stringToNumber } from "../../classes/utility.js";
+import { stringToNumber, alphanumericComparator } from "../../classes/utility.js";
 
 const bubbleSort = (array, dataPointIndex) => {
 
@@ -8,30 +8,33 @@ const bubbleSort = (array, dataPointIndex) => {
 
     let aux;
 
+    const option = { numeric: true, sensitivity: 'base' };
+    const collator = new Intl.Collator(undefined, option);
+
     if(dataPointIndex) {
 
         for(let x = 0; x < array.length; x++) {
 
-            const currentX = stringToNumber(array[x][dataPointIndex]).realVal;
-
+            
             for(let y = 0; y < array.length; y++) {
 
+                const currentX = stringToNumber(array[x][dataPointIndex]).realVal;
                 const currentY = stringToNumber(array[y][dataPointIndex]).realVal;
 
-                if(!isAscending) {
-                    if( currentX > currentY ) {
+                if(typeof(currentY) === 'string' || typeof(currentX) === 'string') {
+                    if(alphanumericComparator(currentY, currentX, collator)) {
                         aux = array[y]
                         array[y] = array[x]
                         array[x] = aux
                     }
+            
+                    continue;
+                }
 
-                } else {
-                    if(currentX < currentY) {
-                        aux = array[y]
-                        array[y] = array[x]
-                        array[x] = aux
-                    }
-
+                if( currentX < currentY ) {
+                    aux = array[y]
+                    array[y] = array[x]
+                    array[x] = aux
                 }
             }
         }

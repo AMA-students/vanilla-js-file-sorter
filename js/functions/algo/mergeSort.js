@@ -32,6 +32,10 @@ function mergeSort(array) {
 
 function mergeTest(left, right, dataPointIndex) {
     let arr = []
+
+    const option = { numeric: true, sensitivity: 'base' };
+    const collator = new Intl.Collator(undefined, option);
+
     // Break out of loop if any one of the array gets empty
     while (left.length && right.length) {
         // Pick the smaller among the smallest element of left and right sub arrays 
@@ -44,11 +48,11 @@ function mergeTest(left, right, dataPointIndex) {
         // }
 		
 		if( typeof(leftValue) === 'string' || typeof(rightValue) === 'string' ) {
-			alphanumericComparator(rightValue, leftValue) ?  arr.push(left.shift()) : arr.push(right.shift());
+			alphanumericComparator(rightValue, leftValue, collator) ?  arr.push(left.shift()) : arr.push(right.shift());
 			continue;
 		}
 
-		alphanumericComparator(rightValue, leftValue) ?  arr.push(left.shift()) : arr.push(right.shift());
+		leftValue < rightValue ?  arr.push(left.shift()) : arr.push(right.shift());
     }
     
     // Concatenating the leftover elements
@@ -97,4 +101,7 @@ function mergeSort2(array, dataPointIndex) {
 	return merge2(mergeSort2(left, dataPointIndex),mergeSort2(array, dataPointIndex), dataPointIndex)
 }
 
-export default mergeSortTest;
+export {
+    mergeSort,
+    mergeSortTest
+}

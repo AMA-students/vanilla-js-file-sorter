@@ -15,25 +15,10 @@ const quickSort = (array, dataPointIndex) => {
   // contains the elements that are > pivot
   const greater = [];
 
-  if(isAscending) {
-    for (let i = 1; i < array.length; i++) {
+  const option = { numeric: true, sensitivity: 'base' };
+  const collator = new Intl.Collator(undefined, option);
 
-      const leftValue = stringToNumber(array[i][dataPointIndex]).realVal;
-      const rightValue = stringToNumber(pivot[dataPointIndex]).realVal;
-
-      if(typeof(leftValue) === 'string' || typeof(rightValue) === 'string') {
-
-        // console.log(`leftValue: ${leftValue}, rightValue: ${rightValue}, greater?: ${alphanumericComparator(rightValue, leftValue)}`)
-        alphanumericComparator(rightValue, leftValue)  ? less.push(array[i]) : greater.push(array[i]);
-
-        continue;
-      }
-
-      leftValue < rightValue ? less.push(array[i]) : greater.push(array[i]);
-      
-    }
-  }
-
+  // only run when !isAscending
   if(!isAscending) {
     for (let i = 1; i < array.length; i++) {
       const leftValue = stringToNumber(array[i][dataPointIndex]).realVal;
@@ -41,13 +26,35 @@ const quickSort = (array, dataPointIndex) => {
 
       if(typeof(leftValue) === 'string' || typeof(rightValue) === 'string') {
 
-        alphanumericComparator(leftValue, rightValue)  ? less.push(array[i]) : greater.push(array[i]);
+        alphanumericComparator(leftValue, rightValue, collator)  ? less.push(array[i]) : greater.push(array[i]);
 
         continue;
       }
 
       leftValue > rightValue ? less.push(array[i]) : greater.push(array[i]);
     }
+
+    return quickSort(less, dataPointIndex).concat([pivot], quickSort(greater, dataPointIndex));
+  }
+
+  // default
+  for (let i = 1; i < array.length; i++) {
+
+    let leftValue = array[i][dataPointIndex]
+    let rightValue = pivot[dataPointIndex]
+
+    if(typeof(leftValue) === 'string' || typeof(rightValue) === 'string') {
+      leftValue = stringToNumber(array[i][dataPointIndex]).realVal;
+      rightValue = stringToNumber(pivot[dataPointIndex]).realVal;
+
+      alphanumericComparator(rightValue, leftValue, collator)  ? less.push(array[i]) : greater.push(array[i]);
+
+      continue;
+    }
+    
+    // console.log(`${leftValue} > ${rightValue} ? : ${leftValue > rightValue}`)
+    leftValue < rightValue ? less.push(array[i]) : greater.push(array[i]);
+    
   }
 
   return quickSort(less, dataPointIndex).concat([pivot], quickSort(greater, dataPointIndex));

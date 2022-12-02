@@ -5,7 +5,7 @@ import State from './js/classes/state.js';
 // algorithms
 import { selectionSortCSV as selectionSort } from './js/functions/algo/selectionSort.js';
 import quickSort from './js/functions/algo/quickSort.test copy.js';
-import mergeSortTest from './js/functions/algo/mergeSort.js';
+import { mergeSortTest as mergeSort } from './js/functions/algo/mergeSort.js';
 import bubbleSort from './js/functions/algo/bubbleSort.js';
 
 // side effect funtions
@@ -57,7 +57,7 @@ const sortingAlgorithm = (algo, args) => {
 
     quickSort: (...args) => quickSort(...args),
     bubbleSort: (...args) => bubbleSort(...args),
-    mergeSortTest: (...args) => mergeSortTest(...args),
+    mergeSort: (...args) => mergeSort(...args),
     selectionSort: (...args) => selectionSort(...args),
 
     test: (...args) => {
@@ -223,6 +223,9 @@ const onUpdate = (headerColumn, dataBody) => {
 
   const algorithmName = document.querySelector('input[name=sorting-method]:checked').value;
   // const algorithmName = 'mergeSortTest'
+
+  Status.setStatus(statusConfigOnUpdate)
+  
   console.time('algorithm')
   let sorted = sortingAlgorithm( algorithmName,[dataBody, select.selectedIndex]);
   console.timeEnd('algorithm')
@@ -230,7 +233,9 @@ const onUpdate = (headerColumn, dataBody) => {
   displayMethod(headerColumn, sorted)
 
   setTimeout( () => {
-    document.querySelectorAll(`table :nth-child(${select.selectedIndex + 1}):not(tr):not(thead)`).forEach( elem => {
+    const sortedColumn = document.querySelectorAll(`table :nth-child(${select.selectedIndex + 1}):not(tr):not(thead)`);
+
+    sortedColumn.forEach( elem => {
       if(elem.tagName === 'TH') {
         elem.classList.add('outline');
         return;
@@ -249,6 +254,6 @@ const onUpdate = (headerColumn, dataBody) => {
     arrayToCsv(headerColumn, sorted, `Sorted-by-${select.value}-${selectedFile.name}`, downloadCSVFile);
 
   } 
-  Status.setStatus(statusConfigOnUpdate)
+
   console.log(3);
 }
