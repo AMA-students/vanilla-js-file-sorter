@@ -88,14 +88,20 @@ const isStringWithoutNum = (value) => {
 }
 
 const isValidNumberButWithCommaValidator = (value1, value2) => {
+    let originalValue1 = value1
+    let originalValue2 = value2
+
     value1 = value1.toString()
     value2 = value2.toString()
 
-    value1 = /(^|^-|^\+)[0-9,]+$/.test(value1) ? value1.replaceAll(/,/g, '') : value1 
-    value2 = /(^|^-|^\+)[0-9,]+$/.test(value2) ? value2.replaceAll(/,/g, '') : value2
-  
-    value1 = !isNaN(Number(value1)) ? Number(value1) : value1 
-    value2 = !isNaN(Number(value2)) ? Number(value2) : value2
+    value1 = /(^|^-|^\+)[0-9,.]+$/.test(value1) ? value1.replaceAll(/,/g, '') : value1 
+    value2 = /(^|^-|^\+)[0-9,.]+$/.test(value2) ? value2.replaceAll(/,/g, '') : value2
+
+    value1 = value1 === '' ? originalValue1 : value1
+    value2 = value2 === '' ? originalValue2 : value2
+
+    value1 = (!isNaN(Number(value1)) && value1 !== "") ? Number(value1) : value1 
+    value2 = (!isNaN(Number(value2)) && value2 !== "") ? Number(value2) : value2
     
     return [
         value1,
