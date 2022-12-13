@@ -58,13 +58,14 @@ const fileParse = async (text, splitter) => {
 //     // csv.onUpdate([], [...arr].sort((a,b)=> Number(a[3][1]) - Number(b[3][1])))
 // })
 
-fileParse('./31.csv','\n').then(data => {
+fileParse('./test2.csv','\n').then(data => {
     let arr = []
     data.forEach( row => arr.push(row) )
     arr = removeUndefined(arr);
 
     // csv grouper
     let unpolishedCSV = arr.map( rowChar => {
+        const CSVColumnValues = /(?<=^|,)(("[^"]*")|([^,]*))(?=$|,)/g
         /*
             rowChar === each line of the csv file
             rowChar.replaceAll(/[\r]/ig,"") === rowChar without \r
@@ -77,15 +78,18 @@ fileParse('./31.csv','\n').then(data => {
             (?=$|,) === positive lookahead for the end of the string or a (,)
 
         */
-        return rowChar.replaceAll(/[\r]/ig,"").match(/(?<=^|,)(("[^"]*")|([^,]*))(?=$|,)/g)
+        return rowChar.replaceAll(/[\r]/ig,"").match(CSVColumnValues)
     })
 
     // doubleqoute remover
     let polishedCSV = unpolishedCSV.map(elem => {
+        
+        const qouted = /(?<=")([^\n]+)(?=[^"]\\|")/gi
+        
         return elem.map(el => {
-            if(el.match(/(?<=")([^\n]+)(?=[^"]\\|")/gi)) {
+            if(el.match(qouted)) {
                 // remove (\") that surounds the string
-                el = el.match(/(?<=")([^\n]+)(?=[^"]\\|")/gi)[0];
+                el = el.match(qouted)[0];
             }
             return el;
         })
