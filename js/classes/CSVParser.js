@@ -58,7 +58,8 @@ const fileParse = async (text, splitter) => {
 //     // csv.onUpdate([], [...arr].sort((a,b)=> Number(a[3][1]) - Number(b[3][1])))
 // })
 
-fileParse('./test2.csv','\n').then(data => {
+
+const CSVParser = data => {
     let arr = []
     data.forEach( row => arr.push(row) )
     arr = removeUndefined(arr);
@@ -83,7 +84,7 @@ fileParse('./test2.csv','\n').then(data => {
 
     // doubleqoute remover
     let polishedCSV = unpolishedCSV.map(elem => {
-        
+
         const qouted = /(?<=")([^\n]+)(?=[^"]\\|")/gi
         
         return elem.map(el => {
@@ -102,4 +103,6 @@ fileParse('./test2.csv','\n').then(data => {
     csv.onSummarize(polishedCSV[0], polishedCSV.slice(1))
     // csv.onSummarize(polishedCSV[0], mergeSort(polishedCSV.slice(1), 1))
     return polishedCSV
-})
+}
+
+fileParse('./test2.csv','\n').then(data => CSVParser(data))
