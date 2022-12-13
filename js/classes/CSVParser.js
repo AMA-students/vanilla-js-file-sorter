@@ -58,40 +58,46 @@ const fileParse = async (text, splitter) => {
 //     // csv.onUpdate([], [...arr].sort((a,b)=> Number(a[3][1]) - Number(b[3][1])))
 // })
 
-fileParse('./37K.csv','\n').then(data => {
+fileParse('./31.csv','\n').then(data => {
     let arr = []
     data.forEach( row => arr.push(row) )
     arr = removeUndefined(arr);
 
-    let test = arr.map( rowChar => {
+    // csv grouper
+    let unpolishedCSV = arr.map( rowChar => {
+        /*
+            rowChar === each line of the csv file
+            rowChar.replaceAll(/[\r]/ig,"") === rowChar without \r
 
-        // console.log(rowChar.match(/(?<=")([^\n]+)(?=[^"]\\|")/gi))
+            /(?<=^|,)(("[^"]*")|([^,]*))(?=$|,)/ => 
+            (?<=^|,)  === positive lookbehind for the start of each line or (,)
+            ("[^"]*") === group1 === get any one or more char that doesn't have (") but is in the middle of ("")
+            ([^,]*) === group2 === get any one or more char that doesn't have (,)
+            (("[^"]*")|([^,]*)) === (group1 | group2) === get group1 or group2
+            (?=$|,) === positive lookahead for the end of the string or a (,)
+
+        */
         return rowChar.replaceAll(/[\r]/ig,"").match(/(?<=^|,)(("[^"]*")|([^,]*))(?=$|,)/g)
-        // return rowChar.replaceAll(`\"`,"").match(/(?<=^|,)(("[^"]*")|([^,]*))(?=$|,)/g)
     })
 
-    let test2 = test.map(elem => {
+    // doubleqoute remover
+    let polishedCSV = unpolishedCSV.map(elem => {
         return elem.map(el => {
             if(el.match(/(?<=")([^\n]+)(?=[^"]\\|")/gi)) {
-                // console.log(el.match(/(?<=")([^\n]+)(?=[^"]\\|")/gi)[0])
+                // remove (\") that surounds the string
                 el = el.match(/(?<=")([^\n]+)(?=[^"]\\|")/gi)[0];
             }
             return el;
         })
-        // if(elem[8].match(/(?<=")([^\n]+)(?=[^"]\\|")/gi)){
-        //     elem[8] = elem[8].match(/(?<=")([^\n]+)(?=[^"]\\|")/gi)[0]
-        // }
-
-        // return elem
+        
     })
 
-    // console.log(test[1])
-    // console.log(test2[1])
-    // console.log(test[1][8])
-    // csv.onSummarize(test[0], test2.slice(1))
-    csv.onSummarize(test[0], mergeSort(test2.slice(1), 7))
-    // csv.onUpdate(test[0], bubbleSort(test.slice(1), 3))
-    return test2
+    // console.log(unpolishedCSV[1])
+    // console.log(polishedCSV[1])
+
+    csv.onSummarize(polishedCSV[0], polishedCSV.slice(1))
+    // csv.onSummarize(polishedCSV[0], mergeSort(polishedCSV.slice(1), 1))
+    return polishedCSV
 })
 
 
