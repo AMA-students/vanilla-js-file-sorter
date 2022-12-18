@@ -25,7 +25,7 @@ export default class {
 const fileParse = async (text, splitter) => {
     const result = await fetch(text)
     const file = await result.text()
-    // console.log(file)
+    console.log(file)
 
     if(splitter !== undefined) {
         return file.split(splitter);
@@ -34,39 +34,46 @@ const fileParse = async (text, splitter) => {
     return file;
 }
 
-// fileParse('./sample4.json').then(data => {
-//     console.log(data)
+const JSONParser = data => {
+    console.log(data)
 
-//     // let arr = data.match(/(?!^)({[^}]+})/gi);
+    let arr = data.match(/(?!^)({[^}]+})/gi);
 
-//     // arr = arr.map(elem => {
-//     //     return elem.match(/(?<=)("[^,[}]+)(?=,|\n)/gi)
-//     // })
+    arr = arr.map(elem => {
+        return elem.match(/(?<=)("[^,[}]+)(?=,|\n)/gi)
+    })
 
-//     let arr = JSON.parse(data).people;
+    // let arr = JSON.parse(data).people;
 
-//     console.log(arr, 'yeet');
+    // console.log(arr, 'yeet');
 
-//     // arr = arr.map(elem => {
-//     //     elem = elem.map(el => el.replaceAll(`\"`, ""))
-//     //     console.log(elem)
-//     //     return elem.map(el => el.split(':'))
-//     // })
+    arr = arr.map(elem => {
+        elem = elem.map(el => el.replaceAll(`\"`, ""))
+        // console.log(elem)
+        return elem.map(el => el.split(':'))
+    })
 
-//     // console.log(arr);
-//     csv.onUpdate([], arr)
-//     // csv.onUpdate([], [...arr].sort((a,b)=> Number(a[3][1]) - Number(b[3][1])))
-// })
+    let arrofObj = arr.map(elem => {
+        return Object.fromEntries(new Map(elem));
+    })
 
+    // console.log(arrofObj);
+    // csv.onUpdate([], arr)
+    csv.onUpdate([], [...arr].sort((a,b)=> Number(a[3][1]) - Number(b[3][1])))
+    return arr
+}
 
 const CSVParser = data => {
     let arr = []
     data.forEach( row => arr.push(row) )
+    console.log(arr);
     arr = removeUndefined(arr);
 
     // csv grouper
     let unpolishedCSV = arr.map( rowChar => {
         const CSVColumnValues = /(?<=^|,)(("[^"]*")|([^,]*))(?=$|,)/g
+        const excessSpaces = /(?<=^|,) [^\w\d]| +(?=$|,)/g
+
         /*
             rowChar === each line of the csv file
             rowChar.replaceAll(/[\r]/ig,"") === rowChar without \r
@@ -79,30 +86,53 @@ const CSVParser = data => {
             (?=$|,) === positive lookahead for the end of the string or a (,)
 
         */
-        return rowChar.replaceAll(/[\r]/ig,"").match(CSVColumnValues)
+
+        return rowChar.replaceAll(/[\r]/ig,"").replaceAll(excessSpaces,"").match(CSVColumnValues)
     })
+    console.log(unpolishedCSV);
 
     // doubleqoute remover
     let polishedCSV = unpolishedCSV.map(elem => {
-
+        
         const qouted = /(?<=")([^\n]+)(?=[^"]\\|")/gi
         
         return elem.map(el => {
             if(el.match(qouted)) {
                 // remove (\") that surounds the string
+                // console.log(el)
                 el = el.match(qouted)[0];
             }
             return el;
         })
         
     })
+    console.log(polishedCSV);
 
     // console.log(unpolishedCSV[1])
     // console.log(polishedCSV[1])
 
-    csv.onSummarize(polishedCSV[0], polishedCSV.slice(1))
+    // test for download
+    // const sorted = mergeSort(polishedCSV.slice(1), 7);
+    // arrayToCsv(polishedCSV[0], sorted, `test.csv`, downloadCSVFile);
+
+    // csv.onSummarize(polishedCSV[0], sorted)
     // csv.onSummarize(polishedCSV[0], mergeSort(polishedCSV.slice(1), 1))
     return polishedCSV
 }
 
-fileParse('./test2.csv','\n').then(data => CSVParser(data))
+// fileParse('./test2.csv','\n').then(data => {
+//     let CSV = CSVParser(data)
+//     const sorted = mergeSort(CSV.slice(1), 7);
+
+//     csv.onSummarize(CSV[0], sorted)
+// });
+fileParse('./sample4.json').then(data => JSONParser(data));
+
+
+export {
+    fileParse,
+    CSVParser,
+
+    JSONParser,
+
+}
