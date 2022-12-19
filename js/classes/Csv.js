@@ -51,10 +51,10 @@ export default class {
 
             summarized = summarized.slice(0, summarized.length/2).concat("", summarized.slice(summarized.length/2));
             // console.log(summarized)
-            this.splitRendering(summarized, counter);
+            this.splitRendering2(summarized, counter);
             return
         }
-        this.splitRendering(datas);
+        this.splitRendering2(datas);
     }
 
     summarize(datas) {
@@ -192,19 +192,105 @@ export default class {
                     // document.querySelector('#progress').value = renderedCounter;
                     document.querySelector('#status').innerText = `Loading: ${renderedCounter++}/${renders.length}`
                     setTimeout(()=> document.querySelector('#status').innerText = `Done`, 500)
-                    Status.Options.enable([clearBtn, inputFile, submitBtn]);
-                    Status.Options.disable([stopBtn]);
+                    // Status.Options.enable([clearBtn, inputFile, submitBtn]);
+                    // Status.Options.disable([stopBtn]);
                 }
             }, 1500);
 
             document.querySelector('#stop').onclick = ()=> {
-                Status.Options.enable([clearBtn]);
-                Status.Options.disable([stopBtn]);
+                // Status.Options.enable([clearBtn]);
+                // Status.Options.disable([stopBtn]);
                 stopped = true;
-                console.log('stopped', stopped)
+                // console.log('stopped', stopped)
                 clearTimeout(renderTimeout)
             }
         });
+    };
+
+    async splitRendering2(data, counter = null) {
+        let stopped = false;
+        let renderedCounter = 1
+        const MAX_ELEMENT_LIMIT = 5000;
+        const renders = elementLimiter(data, MAX_ELEMENT_LIMIT);
+
+        
+        
+        // each render is an addition to the displayed table
+        renders.map( data => {
+            
+            const renderTimeout = setTimeout(() => {
+                render(data)
+            }, 1500);
+
+            document.querySelector('#stop').onclick = ()=> {
+                stopped = true;
+                clearTimeout(renderTimeout)
+            }
+        });
+
+        const render = (data) => {
+
+            if(stopped) return;
+    
+            let rowsLength = null;
+    
+            data.forEach(row => {
+    
+                if(!rowsLength) {
+                    rowsLength = row.length;
+                }
+    
+                const tr = document.createElement('tr');
+                
+                // if the row is not an array, it
+                if(!Array.isArray(row)) {
+                    if(rowsLength) {
+    
+                        let padding = [];
+    
+                        for(let i = 0; i < rowsLength; i++) {
+                            padding[i] = "";
+                        }
+    
+                        // adding padding to the table
+                        row = padding.slice(0, padding.length/2).concat([`... ${counter}x ...`], 
+                        padding.slice( (padding.length/2) + 1 ));
+                        tr.style.fontSize = "25px"
+                    }
+                }
+    
+                // add each row to the table
+                row.forEach( data => {
+                    const td = document.createElement('td');
+    
+                    if(data.original) {
+                        td.innerText = data.original;
+                    }else {
+                        td.innerText = data;
+                    }
+                    tr.appendChild(td)
+                })
+    
+                this.root.appendChild(tr)
+            })    
+    
+            if(renderedCounter !== renders.length) {
+                Status.setStatusText(`Loading: ${renderedCounter++}/${renders.length}`)
+            }
+    
+            if(renderedCounter !== renders.length) return;
+    
+            // when loading is done
+            Status.setStatusText(`Loading: ${renderedCounter++}/${renders.length}`)
+    
+            setTimeout(()=> Status.setStatusText(`Done`), 500)
+            
+            Status.setStatus({
+                // enable: [clearBtn, inputFile, submitBtn],
+                disable: [stopBtn]
+            })
+    
+        }
     };
     
 };
