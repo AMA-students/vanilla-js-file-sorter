@@ -131,9 +131,10 @@ export default class {
         let renderedCounter = 1
         let stopped = false;
 
+        // each render is an addition to the displayed table
         renders.map( data => {
             
-            const renderTimeout = setTimeout(async () => {
+            const renderTimeout = setTimeout(() => {
 
                 if(stopped) return;
 
@@ -164,6 +165,7 @@ export default class {
                         }
                     }
 
+                    // add each row to the table
                     row.forEach( data => {
                         const td = document.createElement('td');
 
