@@ -207,17 +207,19 @@ const CSVParsing = () => {
 
   if(!selectedFile) return;
 
-  // Status.setStatus(statusConfigOnDisplay);
+  Status.setStatus(statusConfigOnDisplay);
   
   var reader = new FileReader();
 
-  reader.readAsDataURL(selectedFile)
+  // reader.readAsDataURL(selectedFile)
+  reader.readAsText(selectedFile)
 
   reader.onload = async function (e) {
     var data = e.target.result
     
-    let CSV = await fileParse(data, '\n')
-    CSV = CSVParser(CSV)
+    // let CSV = await fileParse(data, '\n')
+
+    const CSV = CSVParser(data.split('\n'));
 
     const headerColumn = CSV[0];
     const csvBody = CSV.slice(1)
@@ -231,17 +233,12 @@ const CSVParsing = () => {
     }
 
   }
-
-  
   console.timeEnd('CSVParse')
-
 }
 
 displayBtn.onclick = () => {
   CSVParsing()
   // papaparseParse()
-  Status.setStatus(statusConfigOnDisplay);
-
 }
 
 const statusConfigOnClear = {
