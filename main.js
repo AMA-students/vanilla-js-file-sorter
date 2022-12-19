@@ -129,13 +129,26 @@ form.onsubmit = async e => {
   if(!selectedFile) return;
   csv.clear();
 
-  Papa.parse(selectedFile, {
+  var reader = new FileReader();
 
-    complete: results => {
-      setDataPoints(results, select);
-    }
+  // reader.readAsDataURL(selectedFile)
+  reader.readAsText(selectedFile)
 
-  });
+  reader.onload = async function (e) {
+    const data = e.target.result
+    const CSV = CSVParser(data.split('\n'))
+    const headerColumn = CSV[0];
+
+    setDataPoints(headerColumn, select)
+  }
+
+  // Papa.parse(selectedFile, {
+
+  //   complete: results => {
+  //     setDataPoints(results, select);
+  //   }
+
+  // });
 
   Status.setStatus({
     ...statusConfigOnSubmit,
