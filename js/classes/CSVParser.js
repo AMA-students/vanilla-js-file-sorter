@@ -66,7 +66,6 @@ const JSONParser = data => {
 const CSVParser = data => {
     let arr = []
     data.forEach( row => arr.push(row) )
-    console.log(arr);
     arr = removeUndefined(arr);
 
     // csv grouper
@@ -89,7 +88,7 @@ const CSVParser = data => {
 
         return rowChar.replaceAll(/[\r]/ig,"").replaceAll(excessSpaces,"").match(CSVColumnValues)
     })
-    console.log(unpolishedCSV);
+    // console.log(unpolishedCSV);
 
     // doubleqoute remover
     let polishedCSV = unpolishedCSV.map(elem => {
@@ -106,7 +105,7 @@ const CSVParser = data => {
         })
         
     })
-    console.log(polishedCSV);
+    // console.log(polishedCSV);
 
     // console.log(unpolishedCSV[1])
     // console.log(polishedCSV[1])
