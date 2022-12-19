@@ -72,7 +72,7 @@ const CSVParser = data => {
     // csv grouper
     let unpolishedCSV = arr.map( rowChar => {
         const CSVColumnValues = /(?<=^|,)(("[^"]*")|([^,]*))(?=$|,)/g
-        const excessSpaces = /(?<=^|,) [^\w\d]| +(?=$|,)/g
+        const excessSpaces = /(?<=^|,) [^\w\d"]| +(?=$|,)/g
 
         /*
             rowChar === each line of the csv file
