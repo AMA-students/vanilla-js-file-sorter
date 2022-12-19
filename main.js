@@ -12,6 +12,9 @@ import bubbleSort from './js/functions/algo/bubbleSort.js';
 import setDataPoints from './js/functions/sideEffectes/setDataPoints.js';
 import htmlToCSV, {arrayToCsv, downloadCSVFile } from './js/functions/sideEffectes/htmlToCSV.js';
 
+//parsers 
+import { CSVParser, JSONParser, fileParse } from './js/classes/CSVParser.js';
+
 const form = document.querySelector("#getfile");
 const selectGroup = document.querySelector('#sort-select-group')
 const select = document.querySelector('#select');
@@ -109,8 +112,8 @@ inputFile.addEventListener('change', (e)=> {
 })
 
 const statusConfigOnSubmit = {
-  disable: [stopBtn, clearBtn, updateBtn, downloadBtn],
-  enable: [displayBtn]
+  disable: [stopBtn, updateBtn, downloadBtn, inputFile],
+  enable: [displayBtn, clearBtn]
 }
 
 // on submit state
@@ -122,6 +125,7 @@ form.onsubmit = async e => {
 
   e.preventDefault();
   selectedFile = inputFile.files[0];
+
   if(!selectedFile) return;
   csv.clear();
 
@@ -146,17 +150,20 @@ const statusConfigOnDisplay = {
 
   setStatusText: 'Loading...',
   show: [selectGroup],
-  enable: [stopBtn, updateBtn],
-  disable: [clearBtn, displayBtn, submitBtn, inputFile],
+  enable: [clearBtn, updateBtn],
+  disable: [submitBtn, displayBtn, inputFile],
 
 }
 
 // displayBtn initiate's the loading state
-displayBtn.onclick = () => {
+
+const papaparseParse = () => {
+  console.time('papaparse')
 
   if(!selectedFile) return;
 
   Status.setStatus(statusConfigOnDisplay);
+  Status.Options.disable([submitBtn])
 
   Papa.parse(selectedFile, {
     worker: true,
@@ -178,14 +185,58 @@ displayBtn.onclick = () => {
     }
 
   });
+  console.timeEnd('papaparse')
 
 };
+
+const CSVParsing = () => {
+  console.time('CSVParse')
+
+  if(!selectedFile) return;
+
+  // Status.setStatus(statusConfigOnDisplay);
+  
+  var reader = new FileReader();
+
+  reader.readAsDataURL(selectedFile)
+
+  reader.onload = async function (e) {
+    var data = e.target.result
+    
+    let CSV = await fileParse(data, '\n')
+    CSV = CSVParser(CSV)
+
+    const headerColumn = CSV[0];
+    const csvBody = CSV.slice(1)
+    const dataBody = removeUndefined(csvBody)
+
+    displayMethod(headerColumn, dataBody)      
+    Status.Options.disable([submitBtn])
+
+    updateBtn.onclick = () => {
+      onUpdate(headerColumn, dataBody)
+    }
+
+  }
+
+  
+  console.timeEnd('CSVParse')
+
+}
+
+displayBtn.onclick = () => {
+  CSVParsing()
+  // papaparseParse()
+  Status.setStatus(statusConfigOnDisplay);
+
+}
 
 const statusConfigOnClear = {
 
   setStatusText: "Choose your file",
   hide: [selectGroup],
-  disable: [clearBtn, stopBtn, updateBtn, downloadBtn],
+  enable: [inputFile],
+  disable: [clearBtn, stopBtn, updateBtn, downloadBtn, submitBtn, displayBtn],
 
 }
 
