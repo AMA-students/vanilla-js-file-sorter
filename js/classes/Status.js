@@ -93,4 +93,11 @@ export default class {
             if(cover) element.removeChild(cover);
         }
     }
+    delegateEvent(elements, eventObj) {
+        const {event, func} = eventObj;
+        
+        elements.forEach(element => {
+            element.addEventListener(event, func)
+        });
+    }
 }
