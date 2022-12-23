@@ -237,8 +237,27 @@ const CSVParsing = () => {
 }
 
 displayBtn.onclick = () => {
-  CSVParsing()
-  // papaparseParse()
+  // CSVParsing()
+  papaparseParse()
+
+  const sortingMethodElement = document.querySelector('.settings-selection');
+
+  Status.delegateEvent(
+  [
+    sortingMethodElement,
+    select
+  ],
+  {
+    event: 'click',
+    func: () => {
+      const selectedSortingMethod = document.querySelector('input[name=sorting-method]:checked').value;
+
+      Status.setStatusText(
+        `Sort {${select.value}} using {${selectedSortingMethod}}`
+      )
+    }
+  })
+  
 }
 
 const statusConfigOnClear = {
