@@ -241,7 +241,7 @@ displayBtn.onclick = () => {
   // CSVParsing()
   papaparseParse()
 
-  Status.delegateOnclick(
+  Status.delegateOnclickEvent(
     {
       elements:[select, sortingMethodGroup],
       func: ()=>{

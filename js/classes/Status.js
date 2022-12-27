@@ -100,7 +100,7 @@ export default class {
             element.addEventListener(event, func)
         });
     }
-    delegateOnclick(config) {
+    delegateOnclickEvent(config) {
         const {elements, func} = config;
         
         elements.forEach(element => {
