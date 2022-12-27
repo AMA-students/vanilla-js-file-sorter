@@ -114,4 +114,30 @@ export default class {
             element.onclick = undefined;
         });
     }
+    delegateClassMutationObserver(config) {
+        const {
+            elements,        // array of elemets to be observed
+            classToObserve,  // a string representing the class to be observed
+            withClass,       // function to be triggered when classToObserve is present
+            withoutClass     // function to be triggered when classToObserve is not present
+        } = config
+
+        const BtnDisabledObserver = new MutationObserver((mutations) => {
+            mutations.forEach(mu => {
+              if (mu.type !== "attributes" && mu.attributeName !== "class") return;
+          
+              if (mu.target.classList.contains(classToObserve)) {
+                withClass()
+                return;
+              };
+          
+              withoutClass()
+            });
+        });
+
+        elements.forEach(element => {
+            BtnDisabledObserver.observe(element, {attributes: true})
+        })
+        return BtnDisabledObserver;
+    }
 }
