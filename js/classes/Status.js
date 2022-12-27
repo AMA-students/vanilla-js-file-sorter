@@ -100,4 +100,16 @@ export default class {
             element.addEventListener(event, func)
         });
     }
+    delegateOnclick(func) {
+        elements.forEach(element => {
+            element.onclick = () => {
+                func()
+            }
+        });
+    }
+    removeElementOnclickEvent() {
+        elements.forEach(element => {
+            element.onclick = undefined;
+        });
+    }
 }
