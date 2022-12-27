@@ -100,14 +100,16 @@ export default class {
             element.addEventListener(event, func)
         });
     }
-    delegateOnclick(func) {
+    delegateOnclick(config) {
+        const {elements, func} = config;
+        
         elements.forEach(element => {
             element.onclick = () => {
                 func()
             }
         });
     }
-    removeElementOnclickEvent() {
+    removeElementOnclickEvent(elements) {
         elements.forEach(element => {
             element.onclick = undefined;
         });
