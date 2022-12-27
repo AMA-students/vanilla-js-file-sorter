@@ -289,6 +289,8 @@ const statusConfigOnUpdate = {
 const onUpdate = (headerColumn, dataBody) => {
   // const algorithmName = 'quickSort'
   // let algorithmName;
+  
+  Status.removeElementOnclickEvent([select, sortingMethodGroup])
 
   if(!document.querySelector('input[name=sorting-method]:checked')) {
 
