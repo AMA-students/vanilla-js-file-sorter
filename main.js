@@ -237,15 +237,13 @@ const CSVParsing = () => {
   console.timeEnd('CSVParse')
 }
 
-const BtnDisabledObserver = new MutationObserver((mutations) => {
-  mutations.forEach(mu => {
-    if (mu.type !== "attributes" && mu.attributeName !== "class") return;
-
-    if (mu.target.classList.contains('disabled')) {
-      Status.removeElementOnclickEvent([select, sortingMethodGroup])
-      return;
-    };
-
+const updateBtnDisabledObserverConfig = {
+  elements:[updateBtn],
+  classToObserve: 'disabled',
+  withClass: () => {
+    Status.removeElementOnclickEvent([select, sortingMethodGroup])
+  },
+  withoutClass: () => {
     Status.delegateOnclickEvent(
       {
         elements:[select, sortingMethodGroup],
@@ -257,9 +255,9 @@ const BtnDisabledObserver = new MutationObserver((mutations) => {
         }
       }
     ) 
-  });
-});
-BtnDisabledObserver.observe(document.querySelector('#update'), {attributes: true})
+  }
+}
+Status.delegateClassMutationObserver(updateBtnDisabledObserverConfig)
 
 displayBtn.onclick = () => {
   // CSVParsing()
