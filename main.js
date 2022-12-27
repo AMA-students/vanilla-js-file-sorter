@@ -237,22 +237,33 @@ const CSVParsing = () => {
   console.timeEnd('CSVParse')
 }
 
+const BtnDisabledObserver = new MutationObserver((mutations) => {
+  mutations.forEach(mu => {
+    if (mu.type !== "attributes" && mu.attributeName !== "class") return;
+
+    if (mu.target.classList.contains('disabled')) {
+      Status.removeElementOnclickEvent([select, sortingMethodGroup])
+      return;
+    };
+
+    Status.delegateOnclickEvent(
+      {
+        elements:[select, sortingMethodGroup],
+        func: ()=>{
+          const selectedSortingMethod = document.querySelector('input[name=sorting-method]:checked').value;
+          Status.setStatusText(
+            `Sort {${select.value}} using {${selectedSortingMethod}}`
+          )
+        }
+      }
+    ) 
+  });
+});
+BtnDisabledObserver.observe(document.querySelector('#update'), {attributes: true})
+
 displayBtn.onclick = () => {
   // CSVParsing()
   papaparseParse()
-
-  Status.delegateOnclickEvent(
-    {
-      elements:[select, sortingMethodGroup],
-      func: ()=>{
-        const selectedSortingMethod = document.querySelector('input[name=sorting-method]:checked').value;
-        Status.setStatusText(
-          `Sort {${select.value}} using {${selectedSortingMethod}}`
-        )
-      }
-    }
-  )  
-  
 }
 
 const statusConfigOnClear = {
@@ -289,8 +300,6 @@ const statusConfigOnUpdate = {
 const onUpdate = (headerColumn, dataBody) => {
   // const algorithmName = 'quickSort'
   // let algorithmName;
-  
-  Status.removeElementOnclickEvent([select, sortingMethodGroup])
 
   if(!document.querySelector('input[name=sorting-method]:checked')) {
 
