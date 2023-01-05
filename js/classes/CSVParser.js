@@ -53,10 +53,13 @@ const JSONParser = data => {
         return elem.map(el => el.split(':'))
     })
 
+    console.log(arr)
     let arrofObj = arr.map(elem => {
+        console.log(elem);
         return Object.fromEntries(new Map(elem));
     })
 
+    console.log(arrofObj);
     // console.log(arrofObj);
     // csv.onUpdate([], arr)
     csv.onUpdate([], [...arr].sort((a,b)=> Number(a[3][1]) - Number(b[3][1])))
@@ -125,8 +128,48 @@ const CSVParser = data => {
 
 //     csv.onSummarize(CSV[0], sorted)
 // });
-fileParse('./sample4.json').then(data => JSONParser(data));
+fileParse('./sample4.json').then(data => {
+    // JSONParser(data)
+    // console.log(data)
 
+    let objArr = getGroup(data, /(?!^)({[^}]+})/gi).map(row => {
+        let unpairedKeyValuePairArr = getGroupValues(row, /(?<=)("[^,[}]+)(?=,|\n)/g)
+        return keyValueobjectifier(unpairedKeyValuePairArr,':')
+    })
+
+    // console.log(objArr)
+
+    objArr.forEach(obj => {
+        console.log(getObjKeys(obj), getObjValues(obj));
+    })
+});
+
+// obj getters
+const getObjKeys = (obj) => {
+    return Object.entries(obj).map(entry => entry[0])
+}
+
+const getObjValues = (obj) => {
+    return Object.entries(obj).map(entry => entry[1])
+}
+
+// data getters
+const getGroup = (data, regex) => {
+    return data.match(regex)
+}
+
+const getGroupValues = (data, regex) => {
+    return data.match(regex)
+}
+
+// clone mutators
+const keyValueobjectifier = (data, seperator) => {
+    data = data.map(elem => {
+        return elem.replaceAll(`\"`, "").split(seperator)
+    })
+
+    return Object.fromEntries(new Map(data));
+}
 
 export {
     fileParse,
