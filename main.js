@@ -244,8 +244,8 @@ const updateBtnDisabledObserverConfig = {
     Status.removeElementOnclickEvent([select, sortingMethodGroup])
   },
   withoutClass: () => {
+    
     const highlight = () => {
-      const selectedSortingMethod = document.querySelector('input[name=sorting-method]:checked').value;
       const headers = document.querySelector('table').querySelectorAll('th');
       headers.forEach((header, index) => {
         if(index === select.selectedIndex) {
@@ -257,17 +257,12 @@ const updateBtnDisabledObserverConfig = {
       })
     }
 
-    const headers = document.querySelector('table').querySelectorAll('th');
-    const table = document.querySelector('table');
-    table.addEventListener("", (e) => {
-      console.log(e.target)
-    })
     Status.delegateOnclickEvent(
       {
         elements:[select, sortingMethodGroup],
         func: ()=>{
+          const selectedSortingMethod = document.querySelector('input[name=sorting-method]:checked').value;
           highlight()
-
           Status.setStatusText(
             `Sort {${select.value}} using {${selectedSortingMethod}}`
           )
