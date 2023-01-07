@@ -62,8 +62,14 @@ const JSONParser = data => {
     console.log(arrofObj);
     // console.log(arrofObj);
     // csv.onUpdate([], arr)
-    csv.onUpdate([], [...arr].sort((a,b)=> Number(a[3][1]) - Number(b[3][1])))
-    return arr
+    // csv.onUpdate([], [...arr].sort((a,b)=> Number(a[3][1]) - Number(b[3][1])))
+    const keys = getObjKeys(arrofObj[0])
+    const values = arrofObj.map(obj => {
+        return getObjValues(obj);
+    })
+    // console.log(keys, values);
+    // csv.onUpdate(keys, values.sort((a,b) => a[4] - b[4]))
+    return arrofObj
 }
 
 const CSVParser = data => {
@@ -129,19 +135,19 @@ const CSVParser = data => {
 //     csv.onSummarize(CSV[0], sorted)
 // });
 fileParse('./sample4.json').then(data => {
-    // JSONParser(data)
+    JSONParser(data)
     // console.log(data)
 
-    let objArr = getGroup(data, /(?!^)({[^}]+})/gi).map(row => {
-        let unpairedKeyValuePairArr = getGroupValues(row, /(?<=)("[^,[}]+)(?=,|\n)/g)
-        return keyValueobjectifier(unpairedKeyValuePairArr,':')
-    })
+    // let objArr = getGroup(data, /(?!^)({[^}]+})/gi).map(row => {
+    //     let unpairedKeyValuePairArr = getGroupValues(row, /(?<=)("[^,[}]+)(?=,|\n)/g)
+    //     return keyValueobjectifier(unpairedKeyValuePairArr,':')
+    // })
 
-    // console.log(objArr)
+    // // console.log(objArr)
 
-    objArr.forEach(obj => {
-        console.log(getObjKeys(obj), getObjValues(obj));
-    })
+    // objArr.forEach(obj => {
+    //     console.log(getObjKeys(obj), getObjValues(obj));
+    // })
 });
 
 // obj getters
@@ -176,5 +182,8 @@ export {
     CSVParser,
 
     JSONParser,
+    getGroupValues,
+    getObjValues,
+    getObjKeys,
 
 }
