@@ -12,13 +12,37 @@
     <!-- <script src="/js/modules/chart.js"></script> -->
   </head>
   <body>
+    
     <button id="stop" class="btn">stop</button>
     <button id="settings" class="btn">settings</button>
-    <div id="settings-cover" class="screen hidden">
+    <form action="/" method="get" id="getfile">
+      <input type="file" name="file" id="file">
+      <button type="submit" id="submit" class="btn">submit</button>
+    </form>
+
+    <div id="sort-select-group">
+      <label for="sort-select">sort by</label>
+      <select name="sort-select" id="select"></select>
+    </div>
+
+    <button id="display" class="btn">display</button>
+    <button id="clear" class="btn">clear</button>
+    <button id="update" class="btn">update</button>
+    <button id="download" class="btn">download</button>
+  
+    <!-- <progress id="progress">file</progress> -->
+
+    <h1 id="status" class="text-center">Choose your file</h1>
+    <section class="table-container">
+      <table class="MH-auto"></table>
+    </section>
+
+    <!-- modal -->
+    <div id="settings-cover" class="screen hidden" title="dismiss">
       <div class="modal">
 
         <article class="settings-article">
-          <h3>sorting method</h3>
+          <h3 class="settings-heading">sorting method</h3>
           
           <div class="settings-selection">
             <input type="radio" name="sorting-method" id="bubbleSort" class="settings-radio" value="bubbleSort">
@@ -35,39 +59,19 @@
 
           </div>
 
+          <h3 class="settings-heading">Parsing method</h3>
+          <div class="settings-selection">
+            <input type="radio" name="parsing-method" id="default" class="settings-radio" value="default" checked>
+            <label for="default" class="settings-label">default</label>
+
+            <input type="radio" name="parsing-method" id="papaparse" class="settings-radio" value="papaparse">
+            <label for="papaparse" class="settings-label">papaparse</label>
+          </div>
         </article>
 
       </div>
     </div>
-    <form action="/" method="get" id="getfile">
-      <input type="file" name="file" id="file">
-      <button type="submit" id="submit" class="btn">submit</button>
-    </form>
-
-    <div id="sort-select-group">
-      <label for="sort-select">sort by</label>
-      <select name="sort-select" id="select"></select>
-    </div>
-
-    <button id="display" class="btn">display</button>
-    <button id="clear" class="btn">clear</button>
-    <button id="update" class="btn">update</button>
-    <button id="download" class="btn">download</button>
-    <h1 id="status" class="text-center">Choose your file</h1>
-    <!-- <progress id="progress">file</progress> -->
-    <table class="MH-auto"></table>
-
-    <div style="width:600px; height:400px">
-      <canvas id="myChart" width="400" height="400"></canvas>
-    </div>
-
-    <!-- <div style="width:600px; height:400px">
-      <h2>chart</h2>
-      <div id="chart" width="400" height="400"></div>
-    </div> -->
-
-    <!-- <script src="/js/chart.js"></script> -->
-    <!-- <script src="/js/chart.js"></script> -->
-    <!-- <script src="/js/functions/algo/bubbleSort.js"></script> -->
+    
+    <script src="/js/classes/CSVParser.js" type="module"></script>
   </body>
 </html>
