@@ -122,7 +122,7 @@ export default class {
             withoutClass     // function to be triggered when classToObserve is not present
         } = config
 
-        const BtnDisabledObserver = new MutationObserver((mutations) => {
+        const elementClassObserver = new MutationObserver((mutations) => {
             mutations.forEach(mu => {
               if (mu.type !== "attributes" && mu.attributeName !== "class") return;
           
@@ -136,8 +136,9 @@ export default class {
         });
 
         elements.forEach(element => {
-            BtnDisabledObserver.observe(element, {attributes: true})
+            elementClassObserver.observe(element, {attributes: true})
         })
-        return BtnDisabledObserver;
+
+        return elementClassObserver;
     }
 }
