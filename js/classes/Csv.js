@@ -219,7 +219,7 @@ export default class {
                 render(data)
             }, 1500);
 
-            document.querySelector('#stop').onclick = ()=> {
+            stopBtn.onclick = ()=> {
                 stopped = true;
                 clearTimeout(renderTimeout)
             }
