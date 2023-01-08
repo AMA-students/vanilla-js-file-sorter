@@ -1,31 +1,39 @@
 import CSV from './js/classes/Csv.js';
 import STATUS from './js/classes/Status.js';
 import State from './js/classes/state.js';
+import TableController from './js/classes/TableController.js';
 
-// algorithms
+/*============================={ algorithms }=============================*/
+
 import { selectionSortCSV as selectionSort } from './js/functions/algo/selectionSort.js';
 import quickSort from './js/functions/algo/quickSort.test copy.js';
 import { mergeSortTest as mergeSort } from './js/functions/algo/mergeSort.js';
 import bubbleSort from './js/functions/algo/bubbleSort.js';
 
-// side effect funtions
+/*============================={ side effect funtions }=============================*/
+
 import setDataPoints from './js/functions/sideEffectes/setDataPoints.js';
 import htmlToCSV, {arrayToCsv, downloadCSVFile } from './js/functions/sideEffectes/htmlToCSV.js';
+ 
+/*============================={ parsers }=============================*/
 
-//parsers 
 import { CSVParser, JSONParser, fileParse } from './js/classes/CSVParser.js';
 
 const form = document.querySelector("#getfile");
 const selectGroup = document.querySelector('#sort-select-group')
 const sortingMethodGroup = document.querySelector('.settings-selection');
 const select = document.querySelector('#select');
+const table = document.querySelector('table')
 
-// class instance
+/*============================={ class instances }=============================*/
+
 const state = new State();
-const csv = new CSV(document.querySelector('table'))
+const csv = new CSV(table)
+const tableController = new TableController(table);
 const Status = new STATUS(document.querySelector('#status'));
 
-//buttons
+/*============================={ buttons }=============================*/
+
 import {
   stopBtn,
   clearBtn,
@@ -37,16 +45,13 @@ import {
   downloadBtn,
 } from './js/buttons.js';
 
-import { 
-  testParser, 
-  getRealValues, 
-  removeUndefined, 
-  arrayStringToNumber, 
-} from './js/classes/utility.js';
+import { removeUndefined } from './js/classes/utility.js';
 
 const settingsCover = document.querySelector('#settings-cover');
 
-// initial state
+
+/*============================={ initial state }=============================*/
+
 const statusConfigOnInitial = {
   setStatusText: 'Choose your file',
   hide: [selectGroup],
@@ -88,7 +93,7 @@ const displayMethod = (...args) => {
 
 let selectedFile;
 
-// buttons on click
+/*============================={ buttons on click }=============================*/
 
 settingsBtn.onclick = () => {
   settingsCover.classList.toggle('hidden')
@@ -117,7 +122,8 @@ const statusConfigOnSubmit = {
   enable: [displayBtn, clearBtn]
 }
 
-// on submit state
+/*============================={ on submit state- }=============================*/
+
 form.onsubmit = async e => {
 
   Status.Options.disable([submitBtn])
@@ -287,7 +293,8 @@ const statusConfigOnClear = {
 
 }
 
-// on clear
+/*============================={ on clear }=============================*/
+
 clearBtn.onclick = () => {
 
   if(document.querySelector('.downloadBtn')) {

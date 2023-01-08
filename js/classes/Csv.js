@@ -1,11 +1,11 @@
 import elementLimiter from "../functions/elementLimiter.js";
 import { removeUndefined } from "./utility.js";
 import STATUS from './Status.js';
-
-// buttons 
+ 
+/*============================={ buttons }=============================*/
 import { stopBtn } from '../buttons.js'
 
-// class instances
+/*============================={ class instances }=============================*/
 const Status = new STATUS(document.querySelector('#status'));
 
 
