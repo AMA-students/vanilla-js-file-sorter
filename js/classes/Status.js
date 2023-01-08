@@ -93,4 +93,52 @@ export default class {
             if(cover) element.removeChild(cover);
         }
     }
+    delegateEvent(elements, eventObj) {
+        const {event, func} = eventObj;
+        
+        elements.forEach(element => {
+            element.addEventListener(event, func)
+        });
+    }
+    delegateOnclickEvent(config) {
+        const {elements, func} = config;
+        
+        elements.forEach(element => {
+            element.onclick = () => {
+                func()
+            }
+        });
+    }
+    removeElementOnclickEvent(elements) {
+        elements.forEach(element => {
+            element.onclick = undefined;
+        });
+    }
+    delegateClassMutationObserver(config) {
+        const {
+            elements,        // array of elemets to be observed
+            classToObserve,  // a string representing the class to be observed
+            withClass,       // function to be triggered when classToObserve is present
+            withoutClass     // function to be triggered when classToObserve is not present
+        } = config
+
+        const elementClassObserver = new MutationObserver((mutations) => {
+            mutations.forEach(mu => {
+              if (mu.type !== "attributes" && mu.attributeName !== "class") return;
+          
+              if (mu.target.classList.contains(classToObserve)) {
+                withClass()
+                return;
+              };
+          
+              withoutClass()
+            });
+        });
+
+        elements.forEach(element => {
+            elementClassObserver.observe(element, {attributes: true})
+        })
+
+        return elementClassObserver;
+    }
 }

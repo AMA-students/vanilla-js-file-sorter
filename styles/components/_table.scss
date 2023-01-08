@@ -1,3 +1,7 @@
+.table-container {
+    overflow: auto;
+}
+
 table {
     border-collapse: collapse;
     border-radius: 5px;
@@ -12,6 +16,10 @@ th {
     background: $dark-green;
     color: #ffffff;
     text-align: left;
+
+    &.highlight {
+        color: black;
+    }
 }
   
 th,

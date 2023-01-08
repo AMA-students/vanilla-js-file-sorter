@@ -1,27 +1,39 @@
 import CSV from './js/classes/Csv.js';
 import STATUS from './js/classes/Status.js';
 import State from './js/classes/state.js';
+import TableController from './js/classes/TableController.js';
 
-// algorithms
+/*============================={ algorithms }=============================*/
+
 import { selectionSortCSV as selectionSort } from './js/functions/algo/selectionSort.js';
 import quickSort from './js/functions/algo/quickSort.test copy.js';
 import { mergeSortTest as mergeSort } from './js/functions/algo/mergeSort.js';
 import bubbleSort from './js/functions/algo/bubbleSort.js';
 
-// side effect funtions
+/*============================={ side effect funtions }=============================*/
+
 import setDataPoints from './js/functions/sideEffectes/setDataPoints.js';
 import htmlToCSV, {arrayToCsv, downloadCSVFile } from './js/functions/sideEffectes/htmlToCSV.js';
+ 
+/*============================={ parsers }=============================*/
+
+import { CSVParser, JSONParser, fileParse } from './js/classes/CSVParser.js';
 
 const form = document.querySelector("#getfile");
 const selectGroup = document.querySelector('#sort-select-group')
+const sortingMethodGroup = document.querySelector('.settings-selection');
 const select = document.querySelector('#select');
+const table = document.querySelector('table')
 
-// class instance
+/*============================={ class instances }=============================*/
+
 const state = new State();
-const csv = new CSV(document.querySelector('table'))
+const csv = new CSV(table)
+const tableController = new TableController(table);
 const Status = new STATUS(document.querySelector('#status'));
 
-//buttons
+/*============================={ buttons }=============================*/
+
 import {
   stopBtn,
   clearBtn,
@@ -33,16 +45,13 @@ import {
   downloadBtn,
 } from './js/buttons.js';
 
-import { 
-  testParser, 
-  getRealValues, 
-  removeUndefined, 
-  arrayStringToNumber, 
-} from './js/classes/utility.js';
+import { removeUndefined } from './js/classes/utility.js';
 
 const settingsCover = document.querySelector('#settings-cover');
 
-// initial state
+
+/*============================={ initial state }=============================*/
+
 const statusConfigOnInitial = {
   setStatusText: 'Choose your file',
   hide: [selectGroup],
@@ -84,7 +93,7 @@ const displayMethod = (...args) => {
 
 let selectedFile;
 
-// buttons on click
+/*============================={ buttons on click }=============================*/
 
 settingsBtn.onclick = () => {
   settingsCover.classList.toggle('hidden')
@@ -109,11 +118,12 @@ inputFile.addEventListener('change', (e)=> {
 })
 
 const statusConfigOnSubmit = {
-  disable: [stopBtn, clearBtn, updateBtn, downloadBtn],
-  enable: [displayBtn]
+  disable: [stopBtn, updateBtn, downloadBtn, inputFile],
+  enable: [displayBtn, clearBtn]
 }
 
-// on submit state
+/*============================={ on submit state- }=============================*/
+
 form.onsubmit = async e => {
 
   Status.Options.disable([submitBtn])
@@ -122,16 +132,30 @@ form.onsubmit = async e => {
 
   e.preventDefault();
   selectedFile = inputFile.files[0];
+
   if(!selectedFile) return;
   csv.clear();
 
-  Papa.parse(selectedFile, {
+  var reader = new FileReader();
 
-    complete: results => {
-      setDataPoints(results, select);
-    }
+  // reader.readAsDataURL(selectedFile)
+  reader.readAsText(selectedFile)
 
-  });
+  reader.onload = async function (e) {
+    const data = e.target.result
+    const CSV = CSVParser(data.split('\n'))
+    const headerColumn = CSV[0];
+
+    setDataPoints(headerColumn, select)
+  }
+
+  // Papa.parse(selectedFile, {
+
+  //   complete: results => {
+  //     setDataPoints(results, select);
+  //   }
+
+  // });
 
   Status.setStatus({
     ...statusConfigOnSubmit,
@@ -146,17 +170,20 @@ const statusConfigOnDisplay = {
 
   setStatusText: 'Loading...',
   show: [selectGroup],
-  enable: [stopBtn, updateBtn],
-  disable: [clearBtn, displayBtn, submitBtn, inputFile],
+  enable: [clearBtn, updateBtn],
+  disable: [submitBtn, displayBtn, inputFile],
 
 }
 
 // displayBtn initiate's the loading state
-displayBtn.onclick = () => {
+
+const papaparseParse = () => {
+  console.time('papaparse')
 
   if(!selectedFile) return;
 
   Status.setStatus(statusConfigOnDisplay);
+  Status.Options.disable([submitBtn])
 
   Papa.parse(selectedFile, {
     worker: true,
@@ -178,18 +205,88 @@ displayBtn.onclick = () => {
     }
 
   });
+  console.timeEnd('papaparse')
 
 };
+
+const CSVParsing = () => {
+  console.time('CSVParse')
+
+  if(!selectedFile) return;
+
+  Status.setStatus(statusConfigOnDisplay);
+  
+  var reader = new FileReader();
+
+  // reader.readAsDataURL(selectedFile)
+  reader.readAsText(selectedFile)
+
+  reader.onload = async function (e) {
+    var data = e.target.result
+    
+    // let CSV = await fileParse(data, '\n')
+
+    const CSV = CSVParser(data.split('\n'));
+
+    const headerColumn = CSV[0];
+    const csvBody = CSV.slice(1)
+    const dataBody = removeUndefined(csvBody)
+
+    displayMethod(headerColumn, dataBody)      
+    Status.Options.disable([submitBtn])
+
+    updateBtn.onclick = () => {
+      onUpdate(headerColumn, dataBody)
+    }
+
+  }
+  console.timeEnd('CSVParse')
+}
+
+const updateBtnDisabledObserverConfig = {
+  elements:[updateBtn],
+  classToObserve: 'disabled',
+  withClass: () => {
+    Status.removeElementOnclickEvent([select, sortingMethodGroup])
+  },
+  withoutClass: () => {
+    Status.delegateOnclickEvent(
+      {
+        elements:[select, sortingMethodGroup],
+
+        func: ()=>{
+          const selectedSortingMethod = document.querySelector('input[name=sorting-method]:checked').value;
+          const headerIndexToHighlight = select.selectedIndex
+          tableController.headerHighlighter(headerIndexToHighlight)
+
+          Status.setStatusText(
+            `Sort {${select.value}} using {${selectedSortingMethod}}`
+          )
+
+        }
+
+      }
+    ) 
+  }
+}
+Status.delegateClassMutationObserver(updateBtnDisabledObserverConfig)
+
+displayBtn.onclick = () => {
+  // CSVParsing()
+  papaparseParse()
+}
 
 const statusConfigOnClear = {
 
   setStatusText: "Choose your file",
   hide: [selectGroup],
-  disable: [clearBtn, stopBtn, updateBtn, downloadBtn],
+  enable: [inputFile],
+  disable: [clearBtn, stopBtn, updateBtn, downloadBtn, submitBtn, displayBtn],
 
 }
 
-// on clear
+/*============================={ on clear }=============================*/
+
 clearBtn.onclick = () => {
 
   if(document.querySelector('.downloadBtn')) {

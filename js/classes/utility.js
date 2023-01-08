@@ -87,6 +87,28 @@ const isStringWithoutNum = (value) => {
     return typeof(value) === "string";
 }
 
+const isValidNumberButWithCommaValidator = (value1, value2) => {
+    let originalValue1 = value1
+    let originalValue2 = value2
+
+    value1 = value1.toString()
+    value2 = value2.toString()
+
+    value1 = /(^|^-|^\+)[0-9,.]+$/.test(value1) ? value1.replaceAll(/,/g, '') : value1 
+    value2 = /(^|^-|^\+)[0-9,.]+$/.test(value2) ? value2.replaceAll(/,/g, '') : value2
+
+    value1 = value1 === '' ? originalValue1 : value1
+    value2 = value2 === '' ? originalValue2 : value2
+
+    value1 = (!isNaN(Number(value1)) && value1 !== "") ? Number(value1) : value1 
+    value2 = (!isNaN(Number(value2)) && value2 !== "") ? Number(value2) : value2
+    
+    return [
+        value1,
+        value2
+    ]
+}
+
 const stringStartsWithNumber = value => {
 
     if(typeof(value) !== 'string') return console.error(`this function expects a string as an argument`);
@@ -225,7 +247,7 @@ const alphanumericComparator = (a, b, collator) => {
     let someUndefined = (a == null || b == null);
 
     if(someUndefined) {
-        console.error(`compared to an undefined`);
+        console.error(`compared to an undefined a:${a} b:${b}`);
         return null;
     }
 
@@ -289,6 +311,7 @@ export {
     getCheckedRadio,
     removeUndefined,
     arrayStringToNumber,
-    alphanumericComparator
+    alphanumericComparator,
+    isValidNumberButWithCommaValidator
 
 }

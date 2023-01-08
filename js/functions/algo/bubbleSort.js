@@ -1,4 +1,4 @@
-import { stringToNumber, alphanumericComparator } from "../../classes/utility.js";
+import {alphanumericComparator, isValidNumberButWithCommaValidator } from "../../classes/utility.js";
 
 const bubbleSort = (array, dataPointIndex) => {
 
@@ -11,23 +11,24 @@ const bubbleSort = (array, dataPointIndex) => {
     const option = { numeric: true, sensitivity: 'base' };
     const collator = new Intl.Collator(undefined, option);
 
-    if(dataPointIndex) {
+    if(dataPointIndex !== null) {
 
         for(let x = 0; x < array.length; x++) {
 
             
             for(let y = 0; y < array.length; y++) {
 
-                const currentX = stringToNumber(array[x][dataPointIndex]).realVal;
-                const currentY = stringToNumber(array[y][dataPointIndex]).realVal;
+                const [
+                    currentY,
+                    currentX
+                ] = isValidNumberButWithCommaValidator(array[x][dataPointIndex], array[y][dataPointIndex]);
 
                 if(typeof(currentY) === 'string' || typeof(currentX) === 'string') {
-                    if(alphanumericComparator(currentY, currentX, collator)) {
+                    if(alphanumericComparator(currentX, currentY, collator)) {
                         aux = array[y]
                         array[y] = array[x]
                         array[x] = aux
                     }
-            
                     continue;
                 }
 
@@ -65,19 +66,3 @@ const bubbleSort = (array, dataPointIndex) => {
 }
 
 export default bubbleSort;
-
-// tests
-
-// var unsorted = [23, 45, 16, 37, 3, 99, 22];
-// var unsortedd = [[23,42], [45, 16], [37, 3], [22,43]];
-// const unsorted2 = [[45, 16],[23,42], [37, 3], [22,43]];
-
-// const config = {
-//   array: unsortedd,
-//   isAscending: true,
-//   dataPointIndex: 0
-// }
-
-// const yeet = bubbleSort(config)
-
-// console.log('Sorted by bubbleSort', yeet);
