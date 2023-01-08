@@ -2,18 +2,13 @@ import elementLimiter from "../functions/elementLimiter.js";
 import { removeUndefined } from "./utility.js";
 import STATUS from './Status.js';
 
+// buttons 
+import { stopBtn } from '../buttons.js'
+
+// class instances
 const Status = new STATUS(document.querySelector('#status'));
 
-const form = document.querySelector("#getfile");
-const selectGroup = document.querySelector('#sort-select-group')
-const select = document.querySelector('#select');
 
-//buttons
-const inputFile = document.querySelector("#file");
-const submitBtn = document.querySelector("#submit");
-const displayBtn = document.querySelector('#display')
-const clearBtn = document.querySelector('#clear')
-const stopBtn = document.querySelector('#stop')
 export default class {
     constructor(root) {
         this.root = root;
