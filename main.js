@@ -329,18 +329,22 @@ const onUpdate = (headerColumn, dataBody) => {
   console.log(sorted)
   displayMethod(headerColumn, sorted)
 
-  setTimeout( () => {
-    const sortedColumn = document.querySelectorAll(`table :nth-child(${select.selectedIndex + 1}):not(tr):not(thead)`);
+  Status.dynamicElementObserver(
+    `table :nth-child(${select.selectedIndex + 1}):not(tr):not(thead)`,
 
-    sortedColumn.forEach( elem => {
-      if(elem.tagName === 'TH') {
+    sortedColumn => {
+
+      sortedColumn.forEach( elem => {
+        if(elem.tagName === 'TH') {
+          elem.classList.add('outline');
+          return;
+        }
+        elem.classList.add('highlight');
         elem.classList.add('outline');
-        return;
-      }
-      elem.classList.add('highlight');
-      elem.classList.add('outline');
-    })
-  }, 2000)
+      })
+
+    }
+  )
 
   // test download button
   if(document.querySelector('.downloadBtn')) return;
