@@ -23,6 +23,7 @@ export default class {
     }
 
     setStatusText(statusText) {
+        if(!this.statusTextDisplayer) return;
         this.statusTextDisplayer.innerText = statusText;
     }
 
