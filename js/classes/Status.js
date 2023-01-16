@@ -144,13 +144,14 @@ export default class {
     }
     dynamicElementObserver = (selector, cb) => {
         const observer = new MutationObserver(() => {
-        const dynamicElements = document.querySelectorAll(selector);
-            cb(dynamicElements);
+            const dynamicElements = document.querySelectorAll(selector);
+            cb(dynamicElements, observer);
         });
         
         observer.observe(document.body, {
-        childList: true,
-        subtree: true,
+            childList: true,
+            subtree: true,
         });
+
     }
 }
