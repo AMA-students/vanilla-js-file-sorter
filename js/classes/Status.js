@@ -23,6 +23,7 @@ export default class {
     }
 
     setStatusText(statusText) {
+        if(!this.statusTextDisplayer) return;
         this.statusTextDisplayer.innerText = statusText;
     }
 
@@ -140,5 +141,17 @@ export default class {
         })
 
         return elementClassObserver;
+    }
+    dynamicElementObserver = (selector, cb) => {
+        const observer = new MutationObserver(() => {
+            const dynamicElements = document.querySelectorAll(selector);
+            cb(dynamicElements, observer);
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+        });
+
     }
 }
