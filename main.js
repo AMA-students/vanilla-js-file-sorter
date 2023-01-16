@@ -332,7 +332,7 @@ const onUpdate = (headerColumn, dataBody) => {
   Status.dynamicElementObserver(
     `table :nth-child(${select.selectedIndex + 1}):not(tr):not(thead)`,
 
-    sortedColumn => {
+    (sortedColumn, observer) => {
 
       sortedColumn.forEach( elem => {
         if(elem.tagName === 'TH') {
@@ -342,9 +342,10 @@ const onUpdate = (headerColumn, dataBody) => {
         elem.classList.add('highlight');
         elem.classList.add('outline');
       })
-
+      observer.disconnect();
     }
   )
+  
 
   // test download button
   if(document.querySelector('.downloadBtn')) return;
