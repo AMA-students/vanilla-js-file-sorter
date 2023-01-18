@@ -79,6 +79,24 @@ const sortingAlgorithm = (algo, args) => {
 
 };
 
+const parsingMethodSelector = (method) => {
+
+  const methods = {
+    CSV: () => {
+      parseHandler(data => CSVParsing(data))
+    },
+    JSON: () => {
+      parseHandler(data => JSONParsing(data))
+    },
+    papaparse: () => {
+      papaparseParse()
+    }
+  }
+
+  return methods[method]()
+
+};
+
 // addToConfig -> settings for the maximum limit before non summarized display
 const MAX_ELEMENT_LIMIT = 10000
 
@@ -244,22 +262,7 @@ displayBtn.onclick = () => {
 
   Status.setStatus(statusConfigOnDisplay);
 
-  if(parsingMethod === "CSV") {
-
-    parseHandler( 
-      data => CSVParsing(data)
-    )
-
-  } else if (parsingMethod === "JSON") {
-    
-    parseHandler(
-      data => JSONParsing(data)
-    )
-
-  } else {
-    papaparseParse()
-  }
-
+  parsingMethodSelector(parsingMethod)
 }
 
 const statusConfigOnClear = {
