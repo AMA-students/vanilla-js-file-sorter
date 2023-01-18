@@ -157,6 +157,8 @@ form.onsubmit = async e => {
 
   form.reset();
 
+  settingsCover.classList.toggle('hidden')
+
 }
 
 // displayBtn initiate's the loading state
