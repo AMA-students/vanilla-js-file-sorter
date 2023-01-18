@@ -49,6 +49,7 @@ import { removeUndefined } from './js/classes/utility.js';
 
 const settingsCover = document.querySelector('#settings-cover');
 const parsingMethods = document.querySelectorAll('input[name=parsing-method]');
+const sortingAlgorithms =  document.querySelectorAll('input[name=sorting-method]')
 
 /*============================={ initial state }=============================*/
 
@@ -269,7 +270,7 @@ const statusConfigOnClear = {
   hide: [selectGroup],
   enable: [inputFile],
   disable: [clearBtn, stopBtn, updateBtn, downloadBtn, submitBtn, displayBtn],
-  unrestrictSettings: parsingMethods
+  unrestrictSettings: [...parsingMethods, ...sortingAlgorithms]
 
 }
 
@@ -307,9 +308,11 @@ const onUpdate = (headerColumn, dataBody) => {
   }
 
   const algorithmName = document.querySelector('input[name=sorting-method]:checked').value;
-  // const algorithmName = 'mergeSortTest'
 
-  Status.setStatus(statusConfigOnUpdate)
+  Status.setStatus({
+    ...statusConfigOnUpdate,
+    restrictSettings: sortingAlgorithms
+  })
   
   console.time('algorithm')
   let sorted = sortingAlgorithm( algorithmName,[dataBody, select.selectedIndex]);
