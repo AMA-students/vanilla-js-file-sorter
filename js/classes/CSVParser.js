@@ -134,21 +134,17 @@ const CSVParser = data => {
 
 //     csv.onSummarize(CSV[0], sorted)
 // });
-fileParse('./sample4.json').then(data => {
-    JSONParser(data)
-    // console.log(data)
 
-    // let objArr = getGroup(data, /(?!^)({[^}]+})/gi).map(row => {
-    //     let unpairedKeyValuePairArr = getGroupValues(row, /(?<=)("[^,[}]+)(?=,|\n)/g)
-    //     return keyValueobjectifier(unpairedKeyValuePairArr,':')
-    // })
+// fileParse('./sample4.json').then(data => {
+//     let arrofObj = JSONParser(data);
 
-    // // console.log(objArr)
+//     const keys = getObjKeys(arrofObj[0])
+//     const values = arrofObj.map(obj => {
+//         return getObjValues(obj);
+//     })
 
-    // objArr.forEach(obj => {
-    //     console.log(getObjKeys(obj), getObjValues(obj));
-    // })
-});
+//     csv.onUpdate(keys,values)
+// });
 
 // obj getters
 const getObjKeys = (obj) => {
