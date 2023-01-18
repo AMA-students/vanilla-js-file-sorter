@@ -164,6 +164,7 @@ const papaparseParse = () => {
 
       // addToConfig -> settings for what algorithm to use
       displayMethod(headerColumn, dataBody)      
+      setDataPoints(headerColumn, select)
 
       updateBtn.onclick = () => {
         onUpdate(headerColumn, dataBody)
