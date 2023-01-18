@@ -30,7 +30,7 @@ export default class {
     Options = {
         hide: function(elements) {
 
-            elements.map(element => {
+            elements.forEach(element => {
                 
                 if(element.classList.contains('hide')) return;
 
@@ -46,7 +46,7 @@ export default class {
         },
         show: function(elements) {
 
-            elements.map(element => {
+            elements.forEach(element => {
 
                 if(element.classList.contains('show')) return;
 
@@ -62,14 +62,14 @@ export default class {
         },
 
         disable: function(elements) {
-            elements.map(element => {
+            elements.forEach(element => {
                 element.disabled = true;
                 element.classList.add('disabled')
             })
             
         },
         enable: function(elements) {
-            elements.map(element => {
+            elements.forEach(element => {
                 element.disabled = false;
                 element.classList.remove('disabled')
             })
