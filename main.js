@@ -69,10 +69,6 @@ const sortingAlgorithm = (algo, args) => {
     mergeSort: (...args) => mergeSort(...args),
     selectionSort: (...args) => selectionSort(...args),
 
-    test: (...args) => {
-      console.log(...args)
-    }
-    
   }
 
   return algos[algo](...args)
