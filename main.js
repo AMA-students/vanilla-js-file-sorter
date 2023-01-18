@@ -17,7 +17,7 @@ import htmlToCSV, {arrayToCsv, downloadCSVFile } from './js/functions/sideEffect
  
 /*============================={ parsers }=============================*/
 
-import { CSVParser, JSONParser, fileParse } from './js/classes/CSVParser.js';
+import { CSVParser, JSONParser, getObjKeys, getObjValues,fileParse } from './js/classes/CSVParser.js';
 
 const form = document.querySelector("#getfile");
 const selectGroup = document.querySelector('#sort-select-group')
@@ -177,35 +177,53 @@ const papaparseParse = () => {
 
 };
 
-const CSVParsing = () => {
+const CSVParsing = (data) => {
   console.time('CSVParse')
 
+  const CSV = CSVParser(data.split('\n'));
+
+  const headerColumn = CSV[0];
+  const csvBody = CSV.slice(1)
+  const dataBody = removeUndefined(csvBody)
+
+  console.timeEnd('CSVParse')
+
+  return [headerColumn, dataBody]
+}
+
+const JSONParsing = (data) => {
+  console.time('JSON parsing');
+  let arrofObj = JSONParser(data);
+
+  const keys = getObjKeys(arrofObj[0])
+  const values = arrofObj.map(obj => {
+    return getObjValues(obj);
+  })
+
+  console.timeEnd('JSON parsing')
+  return [keys, values];
+}
+
+const parseHandler = (parser) => {
   if(!selectedFile) return;
   
   var reader = new FileReader();
 
-  // reader.readAsDataURL(selectedFile)
   reader.readAsText(selectedFile)
 
   reader.onload = async function (e) {
     var data = e.target.result
-    
-    // let CSV = await fileParse(data, '\n')
 
-    const CSV = CSVParser(data.split('\n'));
+    const [headerColumn, dataBody] = parser(data);    
 
-    const headerColumn = CSV[0];
-    const csvBody = CSV.slice(1)
-    const dataBody = removeUndefined(csvBody)
-
-    displayMethod(headerColumn, dataBody)      
+    setDataPoints(headerColumn, select)
+    displayMethod(headerColumn, dataBody)   
 
     updateBtn.onclick = () => {
       onUpdate(headerColumn, dataBody)
     }
 
   }
-  console.timeEnd('CSVParse')
 }
 
 const updateBtnWithoutClass = () => {
@@ -254,8 +272,18 @@ displayBtn.onclick = () => {
 
   Status.setStatus(statusConfigOnDisplay);
 
-  if(parsingMethod === "default") {
-    CSVParsing()
+  if(parsingMethod === "CSV") {
+
+    parseHandler( 
+      data => CSVParsing(data)
+    )
+
+  } else if (parsingMethod === "JSON") {
+    
+    parseHandler(
+      data => JSONParsing(data)
+    )
+
   } else {
     papaparseParse()
   }
