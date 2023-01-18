@@ -243,6 +243,26 @@ const CSVParsing = () => {
   console.timeEnd('CSVParse')
 }
 
+const updateBtnWithoutClass = () => {
+  Status.delegateOnclickEvent(
+    {
+      elements:[select, sortingMethodGroup],
+
+      func: ()=>{
+        const selectedSortingMethod = document.querySelector('input[name=sorting-method]:checked').value;
+        const headerIndexToHighlight = select.selectedIndex
+        tableController.headerHighlighter(headerIndexToHighlight)
+
+        Status.setStatusText(
+          `Sort {${select.value}} using {${selectedSortingMethod}}`
+        )
+
+      }
+
+    }
+  ) 
+}
+
 const updateBtnDisabledObserverConfig = {
   elements:[updateBtn],
   classToObserve: 'disabled',
@@ -250,23 +270,7 @@ const updateBtnDisabledObserverConfig = {
     Status.removeElementOnclickEvent([select, sortingMethodGroup])
   },
   withoutClass: () => {
-    Status.delegateOnclickEvent(
-      {
-        elements:[select, sortingMethodGroup],
-
-        func: ()=>{
-          const selectedSortingMethod = document.querySelector('input[name=sorting-method]:checked').value;
-          const headerIndexToHighlight = select.selectedIndex
-          tableController.headerHighlighter(headerIndexToHighlight)
-
-          Status.setStatusText(
-            `Sort {${select.value}} using {${selectedSortingMethod}}`
-          )
-
-        }
-
-      }
-    ) 
+    updateBtnWithoutClass()
   }
 }
 Status.delegateClassMutationObserver(updateBtnDisabledObserverConfig)
