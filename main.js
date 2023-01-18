@@ -48,7 +48,7 @@ import {
 import { removeUndefined } from './js/classes/utility.js';
 
 const settingsCover = document.querySelector('#settings-cover');
-
+const parsingMethods = document.querySelectorAll('input[name=parsing-method]');
 
 /*============================={ initial state }=============================*/
 
@@ -166,24 +166,12 @@ form.onsubmit = async e => {
 
 }
 
-const statusConfigOnDisplay = {
-
-  setStatusText: 'Loading...',
-  show: [selectGroup],
-  enable: [clearBtn, updateBtn],
-  disable: [submitBtn, displayBtn, inputFile],
-
-}
-
 // displayBtn initiate's the loading state
 
 const papaparseParse = () => {
   console.time('papaparse')
 
   if(!selectedFile) return;
-
-  Status.setStatus(statusConfigOnDisplay);
-  Status.Options.disable([submitBtn])
 
   Papa.parse(selectedFile, {
     worker: true,
@@ -213,8 +201,6 @@ const CSVParsing = () => {
   console.time('CSVParse')
 
   if(!selectedFile) return;
-
-  Status.setStatus(statusConfigOnDisplay);
   
   var reader = new FileReader();
 
@@ -233,7 +219,6 @@ const CSVParsing = () => {
     const dataBody = removeUndefined(csvBody)
 
     displayMethod(headerColumn, dataBody)      
-    Status.Options.disable([submitBtn])
 
     updateBtn.onclick = () => {
       onUpdate(headerColumn, dataBody)
@@ -275,9 +260,26 @@ const updateBtnDisabledObserverConfig = {
 }
 Status.delegateClassMutationObserver(updateBtnDisabledObserverConfig)
 
+const statusConfigOnDisplay = {
+
+  setStatusText: 'Loading...',
+  show: [selectGroup],
+  enable: [clearBtn, updateBtn],
+  disable: [submitBtn, displayBtn, inputFile],
+  restrictSettings: parsingMethods
+}
+
 displayBtn.onclick = () => {
-  // CSVParsing()
-  papaparseParse()
+  const parsingMethod = document.querySelector('input[name=parsing-method]:checked').value;
+
+  Status.setStatus(statusConfigOnDisplay);
+
+  if(parsingMethod === "default") {
+    CSVParsing()
+  } else {
+    papaparseParse()
+  }
+
 }
 
 const statusConfigOnClear = {
@@ -286,6 +288,7 @@ const statusConfigOnClear = {
   hide: [selectGroup],
   enable: [inputFile],
   disable: [clearBtn, stopBtn, updateBtn, downloadBtn, submitBtn, displayBtn],
+  unrestrictSettings: parsingMethods
 
 }
 
