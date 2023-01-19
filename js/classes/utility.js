@@ -298,18 +298,86 @@ const getCheckedRadio = (radioName) => {
     return document.querySelector(`input[name=${radioName}]:checked`);
 }
 
+const arrayOrderOrganizer = (array, sortedOrder) => {
+    // array will be the column to be sorted in parsed data of the uploaded file 
+    // initialOrder is the index of the initial order of the data for the uploaded fle
+    // sortedOrder is the sorted and indexed data of the uploaded file
+    // unparsed is the unparsed data of the uploaded file
+  
+    /*
+        initialOrder will be based on the array
+        sortedOrder will be based on the sorted array
+  
+        initialOrder will be compared with the sortedOrder
+        the unparsed will be sorted based on that comparison
+    */
+  
+    //   /* 
+    //     add to newArr the lines based on the sortedOrder
+    //     arr
+    //     initialOrder -> sortedOrder
+    //     oranize the array to match the sortedOrder 
+    //     for each line of initialOrder, check the index of the current | X |
+    //     for each line of sortedOrder, find the line on the array that has the same value as the current line 
+    //     of the sortedOrder and add it to newArr
+  
+    //     to do that, you have the get the index of the current line of the sortedOrder.
+    //     that index is equivalent to the line in the array.
+    //     the value of that line in the array should be added to the newArr
+    //   */
+  
+    const headers = array[0];
+    array = array.slice(1);
+    const newArr = []
+    newArr.push(headers)
+    sortedOrder.forEach((line, index) => {
+  
+      newArr.push(array[line.index])
+      
+    })
+  
+    // console.log(newArr, initialOrder, sortedOrder)
+    return newArr;
+}
+  
+const arrayOrderMapper = (array, data, sorter) => {
+    /*
+      for tracking where the elements are placed after being sorted
+      possible use for reconstructing the file
+      the idea is to organize the lines of the file by using the sortedOrder as the basis
+    */
+  
+   const initialOrder = array.map((elem, index) => { return {elem: elem, index: index} })
+  
+    let sortedOrder;
+
+    if(sorter) {
+        sortedOrder = sorter(initialOrder)
+    } else {
+        sortedOrder = [...initialOrder].sort((a, b) => a.elem - b.elem);
+    }
+
+
+    return {
+        organized: arrayOrderOrganizer(data, sortedOrder),
+        initialOrder: initialOrder,
+        sortedOrder: sortedOrder
+    };
+}
+
 // strings
 
 // pure numbers
 
 export {
-
+    
     testParser,
     getRealValue,
     getRealValues,
     stringToNumber,
     getCheckedRadio,
     removeUndefined,
+    arrayOrderMapper,
     arrayStringToNumber,
     alphanumericComparator,
     isValidNumberButWithCommaValidator

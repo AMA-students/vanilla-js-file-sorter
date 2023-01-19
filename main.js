@@ -45,7 +45,7 @@ import {
   downloadBtn,
 } from './js/buttons.js';
 
-import { removeUndefined } from './js/classes/utility.js';
+import { removeUndefined, arrayOrderMapper } from './js/classes/utility.js';
 
 const settingsCover = document.querySelector('#settings-cover');
 const parsingMethods = document.querySelectorAll('input[name=parsing-method]');
@@ -76,17 +76,17 @@ const sortingAlgorithm = (algo, args) => {
 
 };
 
-const parsingMethodSelector = (method) => {
+const parsingMethodSelector = (method, cb) => {
 
   const methods = {
     CSV: () => {
-      parseHandler(data => CSVParsing(data))
+      parseHandler(data => CSVParsing(data), cb)
     },
     JSON: () => {
-      parseHandler(data => JSONParsing(data))
+      parseHandler(data => JSONParsing(data), cb)
     },
     papaparse: () => {
-      papaparseParse()
+      papaparseParse(cb)
     }
   }
 
@@ -164,7 +164,7 @@ form.onsubmit = async e => {
 
 // displayBtn initiate's the loading state
 
-const papaparseParse = () => {
+const papaparseParse = (cb) => {
   console.time('papaparse')
 
   if(!selectedFile) return;
@@ -183,9 +183,11 @@ const papaparseParse = () => {
       displayMethod(headerColumn, dataBody)      
       setDataPoints(headerColumn, select)
 
-      updateBtn.onclick = () => {
-        onUpdate(headerColumn, dataBody)
-      }
+      // updateBtn.onclick = data => {
+      //   onUpdate(headerColumn, dataBody, data)
+      // }
+
+      cb(headerColumn, dataBody, results.data)
 
     }
 
@@ -246,13 +248,11 @@ const parseHandler = (parser, cb) => {
     var data = e.target.result
 
     const [headerColumn, dataBody] = parser(data);    
-
+    console.log(dataBody);
     setDataPoints(headerColumn, select)
     displayMethod(headerColumn, dataBody)   
 
-    updateBtn.onclick = () => {
-      onUpdate(headerColumn, dataBody)
-    }
+    cb(headerColumn, dataBody, data)
   }
 }
 
@@ -261,7 +261,15 @@ displayBtn.onclick = () => {
 
   Status.setStatus(statusConfigOnDisplay);
 
-  parsingMethodSelector(parsingMethod)
+  parsingMethodSelector(parsingMethod, (headerColumn, dataBody, data) => {
+
+    updateBtn.onclick = () => {
+
+      onUpdate(headerColumn, dataBody, data)
+
+    }
+
+  })
 }
 
 const statusConfigOnClear = {
@@ -297,7 +305,7 @@ const statusConfigOnUpdate = {
 
 }
 
-const onUpdate = (headerColumn, dataBody) => {
+const onUpdate = (headerColumn, dataBody, data) => {
 
   if(!document.querySelector('input[name=sorting-method]:checked')) {
 
@@ -307,6 +315,8 @@ const onUpdate = (headerColumn, dataBody) => {
 
   const algorithmName = document.querySelector('input[name=sorting-method]:checked').value;
 
+  const columnToSort = dataBody.map(row => row[select.selectedIndex])
+
   Status.setStatus({
     ...statusConfigOnUpdate,
     restrictSettings: sortingAlgorithms
@@ -315,7 +325,7 @@ const onUpdate = (headerColumn, dataBody) => {
   console.time('algorithm')
   let sorted = sortingAlgorithm( algorithmName,[dataBody, select.selectedIndex]);
   console.timeEnd('algorithm')
-  console.log(sorted)
+
   displayMethod(headerColumn, sorted)
 
   Status.dynamicElementObserver(
@@ -339,8 +349,33 @@ const onUpdate = (headerColumn, dataBody) => {
     }
   )
 
+  let sortedFileContent;
+
+  if(Array.isArray(data)) {
+    if(!selectedFile) return;
+  
+    var reader = new FileReader();
+  
+    reader.readAsText(selectedFile)
+  
+    reader.onload = async function (e) {
+      var data = e.target.result
+      
+      sortedFileContent = arrayOrderMapper(columnToSort, data.split("\n")).organized;
+
+      downloadBtn.onclick = () => {
+        downloadCSVFile(sortedFileContent.join("\n"), `Sorted-by-${select.value}-${selectedFile.name}`)
+      }
+    }
+
+  } else {
+    
+    sortedFileContent = arrayOrderMapper(columnToSort, data.split("\n")).organized;
+  }
+
+
   downloadBtn.onclick = () => {
-    arrayToCsv(headerColumn, sorted, `Sorted-by-${select.value}-${selectedFile.name}`);
-  } 
+    downloadCSVFile(sortedFileContent.join("\n"), `Sorted-by-${select.value}-${selectedFile.name}`)
+  }
 
 }
