@@ -298,8 +298,6 @@ const statusConfigOnUpdate = {
 }
 
 const onUpdate = (headerColumn, dataBody) => {
-  // const algorithmName = 'quickSort'
-  // let algorithmName;
 
   if(!document.querySelector('input[name=sorting-method]:checked')) {
 
@@ -340,17 +338,9 @@ const onUpdate = (headerColumn, dataBody) => {
 
     }
   )
-  
-
-  // test download button
-  if(document.querySelector('.downloadBtn')) return;
 
   downloadBtn.onclick = () => {
-
-    var html = document.querySelector("table").outerHTML;
-    arrayToCsv(headerColumn, sorted, `Sorted-by-${select.value}-${selectedFile.name}`, downloadCSVFile);
-
+    arrayToCsv(headerColumn, sorted, `Sorted-by-${select.value}-${selectedFile.name}`);
   } 
 
-  console.log(3);
 }
