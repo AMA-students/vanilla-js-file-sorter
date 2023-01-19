@@ -333,7 +333,11 @@ const onUpdate = (headerColumn, dataBody) => {
         elem.classList.add('highlight');
         elem.classList.add('outline');
       })
-      observer.disconnect();
+
+      setTimeout(()=>{
+        observer.disconnect();
+      },5000)
+
     }
   )
   
