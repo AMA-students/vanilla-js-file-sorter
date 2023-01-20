@@ -3,11 +3,14 @@ import STATUS from './js/classes/Status.js';
 import State from './js/classes/state.js';
 import TableController from './js/classes/TableController.js';
 
+// import {scaleLinear} from "https://cdn.skypack.dev/d3-scale@4";
+// import {max} from "https://cdn.skypack.dev/d3-array@3";
+
 /*============================={ algorithms }=============================*/
 
 import { selectionSortCSV as selectionSort } from './js/functions/algo/selectionSort.js';
 import quickSort from './js/functions/algo/quickSort.test copy.js';
-import { mergeSortTest as mergeSort } from './js/functions/algo/mergeSort.js';
+import { mergeSort } from './js/functions/algo/mergeSort.js';
 import bubbleSort from './js/functions/algo/bubbleSort.js';
 
 /*============================={ side effect funtions }=============================*/
