@@ -1,9 +1,13 @@
-import {alphanumericComparator, isValidNumberButWithCommaValidator, arrayOrderMapper } from "../../classes/utility.js";
+import {alphanumericComparator, isValidNumberButWithCommaValidator} from "../../classes/utility.js";
 
-const bubbleSort = (array, dataPointIndex) => {
+import DataRecorder from "../../classes/DataRecorder.js";
+const bubbleSort = (array, dataPointIndex, data) => {
 
     if (array.length <= 1) return array;
 
+    const dataRecorder = new DataRecorder(data,'\n', dataPointIndex)
+    dataRecorder.setParsedData(array)
+    
     let isAscending = true;
 
     let aux; 
@@ -25,6 +29,9 @@ const bubbleSort = (array, dataPointIndex) => {
                     aux = array[y]
                     array[y] = array[x]
                     array[x] = aux
+
+                    dataRecorder.dataRecords[y].moveHistoryRecorder(x)
+                    dataRecorder.dataRecords[x].moveHistoryRecorder(y)
                 }
                 continue;
 
@@ -37,6 +44,9 @@ const bubbleSort = (array, dataPointIndex) => {
                     aux = array[y]
                     array[y] = array[x]
                     array[x] = aux
+
+                    dataRecorder.dataRecords[y].moveHistoryRecorder(x)
+                    dataRecorder.dataRecords[x].moveHistoryRecorder(y)
                 }
                 continue;
 
@@ -48,11 +58,19 @@ const bubbleSort = (array, dataPointIndex) => {
                 aux = array[y]
                 array[y] = array[x]
                 array[x] = aux
+
+                dataRecorder.dataRecords[y].moveHistoryRecorder(x)
+                dataRecorder.dataRecords[x].moveHistoryRecorder(y)
             }
 
 
         }
     }
+    
+    console.log(
+        dataRecorder
+    );
+
     return array
 
 }
