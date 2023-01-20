@@ -327,7 +327,7 @@ const onUpdate = (headerColumn, dataBody, data) => {
   })
   
   console.time('algorithm')
-  let sorted = sortingAlgorithm( algorithmName,[dataBody, select.selectedIndex]);
+  let sorted = sortingAlgorithm( algorithmName, [dataBody, select.selectedIndex, data]);
   console.timeEnd('algorithm')
 
   displayMethod(headerColumn, sorted)
