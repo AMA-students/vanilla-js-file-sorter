@@ -365,13 +365,56 @@ const arrayOrderMapper = (array, data, sorter) => {
     };
 }
 
+const dataRecorder = (data, datapointIndex) => {
+    /*
+        columnToSort 
+
+        {
+
+            dataValue: 'unseperated data' // the line of data before it was seperated by the delimiter
+
+            processedData: 'dataValue that is parsed by a parse' // can be taken from the array
+
+            value: processedData[datapointIndex] // the value of the column to be sorted for that particular row
+
+            moveHistory: [0, 2, 5, 2] // history of where the element was moved starting from its initial position
+
+        }
+
+        how it will be used:
+
+        const dataRecord = dataRecorder(data);
+
+        // when the data is moved to index 4 from index 0
+        dataRecord[0].moveHistory.push([0, 4]) // initial value => [0] to [0, 4]
+
+        // when
+        dataRecord[0].dataValue = data[0]
+
+
+
+    */
+    
+    const dataRecord = data.map((line, index) => {
+        return {
+            dataValue: line,
+            processedData: undefined,
+            value: undefined,
+            moveHistory: [index],
+        }
+    })
+
+    return dataRecord;
+
+}
+
 // strings
 
 // pure numbers
 
 export {
-    
     testParser,
+    dataRecorder,
     getRealValue,
     getRealValues,
     stringToNumber,
