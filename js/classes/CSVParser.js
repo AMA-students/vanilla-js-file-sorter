@@ -1,10 +1,12 @@
 import CSV from '../classes/Csv.js';
 import { removeUndefined } from "../classes/utility.js";
-import { mergeSortTest as mergeSort } from '../functions/algo/mergeSort.js';
+import { mergeSort } from '../functions/algo/mergeSort.js';
 import quickSort from '../functions/algo/quickSort.test.js';
 import bubbleSort from '../functions/algo/bubbleSort.js';
 import htmlToCSV, {arrayToCsv, downloadCSVFile } from '../functions/sideEffectes/htmlToCSV.js';
-const csv = new CSV(document.querySelector('table'))
+
+const table = document.querySelector('table');
+const csv = new CSV(table)
 
 export default class {
     constructor(array) {
