@@ -1,6 +1,6 @@
 import { alphanumericComparator, stringToNumber } from "../../classes/utility.js"
 
-function merge(left, right, dataPointIndex) {
+function mergeTest(left, right, dataPointIndex) {
     let arr = []
 
     const option = { numeric: true, sensitivity: 'base' };
@@ -30,7 +30,7 @@ function merge(left, right, dataPointIndex) {
     return [ ...arr, ...left, ...right ]
 }
 
-function mergeSort(array, dataPointIndex) {
+function mergeSortTest(array, dataPointIndex) {
 
 	// Base case or terminating case
 	if(array.length < 2) return array;
@@ -38,8 +38,39 @@ function mergeSort(array, dataPointIndex) {
 	const half = array.length / 2
 	
 	const left = array.splice(0, half)
-	return merge(mergeSort(left, dataPointIndex),mergeSort(array, dataPointIndex), dataPointIndex)
+	return mergeTest(mergeSortTest(left, dataPointIndex),mergeSortTest(array, dataPointIndex), dataPointIndex)
 }
+
+
+function merge2(left, right, dataPointIndex) {
+    let arr = []
+    // Break out of loop if any one of the array gets empty
+    while (left.length && right.length) {
+        // Pick the smaller among the smallest element of left and right sub arrays 
+        if (stringToNumber(left[0][dataPointIndex]).realVal < stringToNumber(right[0][dataPointIndex]).realVal) {
+            arr.push(left.shift())  
+        } else {
+            arr.push(right.shift()) 
+        }
+    }
+    
+    // Concatenating the leftover elements
+    // (in case we didn't go through the entire left or right array)
+    return [ ...arr, ...left, ...right ]
+}
+
+function mergeSort2(array, dataPointIndex) {
+	const half = array.length / 2
+	
+	// Base case or terminating case
+	if(array.length < 2){
+	  return array 
+	}
+	
+	const left = array.splice(0, half)
+	return merge2(mergeSort2(left, dataPointIndex),mergeSort2(array, dataPointIndex), dataPointIndex)
+}
+
 export {
-    mergeSort
+    mergeSortTest
 }
