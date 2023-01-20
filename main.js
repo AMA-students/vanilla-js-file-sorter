@@ -11,7 +11,8 @@ import TableController from './js/classes/TableController.js';
 import { selectionSortCSV as selectionSort } from './js/functions/algo/selectionSort.js';
 import quickSort from './js/functions/algo/quickSort.test copy.js';
 import { mergeSort } from './js/functions/algo/mergeSort.js';
-import bubbleSort from './js/functions/algo/bubbleSort.js';
+// import bubbleSort from './js/functions/algo/bubbleSort.js';
+import bubbleSort from './js/functions/data-based-sorters/bubbleSort.js';
 
 /*============================={ side effect funtions }=============================*/
 
