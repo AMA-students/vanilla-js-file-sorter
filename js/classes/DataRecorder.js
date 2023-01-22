@@ -28,7 +28,7 @@ export default class {
         this.fileContentRecords.forEach((record, index) => {
 
             record.setFileContentLine(
-                this.parsedFileContentBody[index]
+                this.fileContentBody[index]
             )
 
         });
