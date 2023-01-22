@@ -1,52 +1,44 @@
+import { removeUndefined } from "./utility.js";
 export default class {
-    constructor(data, delimiter, datapointIndex) {
-        this.data = data // unmodified data
+    constructor(fileContent, datapointIndex) {
+        this.setFileContent(fileContent) // fileContent data
 
-        this.delimiter = delimiter // data splitter
-        this.splitData = this.data.split(this.delimiter) // split data by the delimiter
+        this.setDataPointIndex(datapointIndex) // index of the column to be sorted
+    }
 
-        this.unmodifiedHeader = this.splitData[0]; // csv header
-        this.unmodifiedDataBody = this.splitData.slice(1); // csv data
+    setFileContent(fileContent) {
+        this.fileContent = fileContent // fileContent data
+    }
 
+    setDataPointIndex(datapointIndex) {
         this.datapointIndex = datapointIndex // index of the column to be sorted
-        
-        this.dataRecords = this.unmodifiedDataBody.map((unmodifiedLine, index) => {
-            return new DataRecord(unmodifiedLine, index) // create data record for each line of the data body
-        })
+    }
+
+    setComparisonHistory(history) {
+        this.comparisonHistory = history;
+    }
+
+    fileContentSplitter(delimiter) {
+
+        this.delimiter = delimiter // fileContent splitter
+        this.splitFileContent = this.fileContent.split(this.delimiter) // split fileContent by the delimiter
+        this.splitFileContent = removeUndefined(this.splitFileContent)
+        // this.setFileContentHeader(this.splitFileContent[0])        // csv header
+        // this.setFileContentBody(this.splitFileContent.slice(1))   // csv data
 
     }
 
-    setParsedData = (parsedData) => {
+    setParsedFileContentRecords() {
+        this.fileContentRecords.forEach((record, index) => {
 
-        this.parsedData = parsedData;
-
-        this.setParsedBHeader(this.parsedData[0]);
-        this.setParsedBody(this.parsedData.slice(1));
-
-    }   
-
-    setunmodifiedHeader = (unmodifiedHeader) => {
-        this.unmodifiedHeader = unmodifiedHeader
-    }
-
-    setParsedBHeader = (setParsedHeader) => {
-        this.parsedHeader = setParsedHeader
-    }
-
-    setParsedBody = (parsedBody) => {
-        this.parsedBody = parsedBody
-
-        // set the values for the dataRecords that can be gathered from the parsed data
-        this.dataRecords.forEach((record, index) => {
-
-            record.setParsedDataLine(
+            record.setParsedFileContentLine(
                 this.parsedBody[index]
             )
 
             if(this.parsedBody[index] == null) {
 
                 record.setValue(
-                    undefined
+                    null
                 )
 
                 return null;    
@@ -58,17 +50,65 @@ export default class {
 
         });
     }
+
+    setFileContentRecords = () => {
+
+        this.setComparisonHistory([]);
+
+        this.fileContentRecords = this.fileContentBody.map((fileContentLine, index) => {
+            if(fileContentLine != '') {
+                return new FileContentRecord(fileContentLine, index) // create data record for each line of the data body
+            }
+        })
+
+        if(!this.parsedBody) return;
+
+        this.setParsedFileContentRecords()
+    }
+
+    setFileContentHeader = (fileContentHeader) => {
+        this.fileContentHeader = fileContentHeader
+    }
+
+    setFileContentBody = (fileContentBody) => {
+
+        this.fileContentBody = fileContentBody
+
+        this.setFileContentRecords()
+
+    }
+
+    setParsedFileContent = (parsedFileContent) => {
+
+        this.parsedFileContent = parsedFileContent;
+
+        this.setParsedHeader(this.parsedFileContent[0]);
+        this.setParsedBody(this.parsedFileContent.slice(1));
+
+    } 
+
+    setParsedHeader = (setParsedHeader) => {
+        this.parsedHeader = setParsedHeader
+    }
+
+    setParsedBody = (parsedBody) => {
+        this.parsedBody = parsedBody
+    }
+
+    comparisonHistoryRecorder = (comparison) => {
+        this.comparisonHistory.push(comparison)
+    }
 }
 
-class DataRecord {
+class FileContentRecord {
 
-    constructor(unmodifiedLine, index) {
+    constructor(fileContentLine, index) {
 
-        this.unmodifiedLine = unmodifiedLine; // the line of data before it was seperated by the delimiter
+        this.fileContentLine = fileContentLine; // the line of data before it was seperated by the delimiter
 
-        this.parsedDataLine = undefined;  // can be taken from the array
+        this.parsedFileContentLine = null;  // can be taken from the array
 
-        this.value = undefined; // the value of the column to be sorted for that particular row
+        this.value = null; // the value of the column to be sorted for that particular row
 
         this.moveHistory = [index] // history of where the element was moved starting from its initial position
 
@@ -78,8 +118,8 @@ class DataRecord {
         this.moveHistory.push(indexMoved)
     }
 
-    setParsedDataLine = (parsedDataLine) => {
-        this.parsedDataLine = parsedDataLine
+    setParsedFileContentLine = (parsedFileContentLine) => {
+        this.parsedFileContentLine = parsedFileContentLine
     }
 
     setValue = (value) => {
@@ -94,14 +134,14 @@ class DataRecord {
     header, 
     dataBody, 
     dataPointIndex
-    unmodified data, 
+    fileContent data, 
     parsed data, 
     and the collection of the data records
 
 
     DataRecoreds will handle the line of the data. 
     This will include the:
-    unmodified line of the data,
+    fileContent line of the data,
     the parsed line of the data, 
     the moveHistory of that data, 
     the value to be sorted on the data,
