@@ -50,10 +50,8 @@ export default class {
 
         this.setComparisonHistory([]);
 
-        this.fileContentRecords = this.parsedFileContentBody.map((fileContentLine, index) => {
-            if(fileContentLine != '') {
-                return new FileContentRecord(fileContentLine, index) // create data record for each line of the data body
-            }
+        this.fileContentRecords = this.parsedFileContentBody.map((parsedFileContentLine, index) => {
+            return new FileContentRecord(parsedFileContentLine, index) // create data record for each line of the data body
         })
 
         if(!this.parsedFileContentBody) return;
@@ -103,11 +101,11 @@ export default class {
 
 class FileContentRecord {
 
-    constructor(fileContentLine, index) {
+    constructor(parsedFileContentLine, index) {
 
-        this.fileContentLine = fileContentLine; // the line of data before it was seperated by the delimiter
+        this.fileContentLine = null; // the line of data before it was seperated by the delimiter
 
-        this.parsedFileContentLine = null;  // can be taken from the array
+        this.parsedFileContentLine = parsedFileContentLine;  // can be taken from the array
 
         this.value = null; // the value of the column to be sorted for that particular row
 
