@@ -32,10 +32,10 @@ export default class {
         this.fileContentRecords.forEach((record, index) => {
 
             record.setParsedFileContentLine(
-                this.parsedBody[index]
+                this.parsedFileContentBody[index]
             )
 
-            if(this.parsedBody[index] == null) {
+            if(this.parsedFileContentBody[index] == null) {
 
                 record.setValue(
                     null
@@ -45,7 +45,7 @@ export default class {
             };
 
             record.setValue(
-                this.parsedBody[index][this.datapointIndex]
+                this.parsedFileContentBody[index][this.datapointIndex]
             )
 
         });
@@ -61,7 +61,7 @@ export default class {
             }
         })
 
-        if(!this.parsedBody) return;
+        if(!this.parsedFileContentBody) return;
 
         this.setParsedFileContentRecords()
     }
@@ -82,17 +82,17 @@ export default class {
 
         this.parsedFileContent = parsedFileContent;
 
-        this.setParsedHeader(this.parsedFileContent[0]);
-        this.setParsedBody(this.parsedFileContent.slice(1));
+        this.setParsedFileContentHeader(this.parsedFileContent[0]);
+        this.setParsedFileContentBody(this.parsedFileContent.slice(1));
 
     } 
 
-    setParsedHeader = (setParsedHeader) => {
-        this.parsedHeader = setParsedHeader
+    setParsedFileContentHeader = (setParsedFileContentHeader) => {
+        this.parsedFileContentHeader = setParsedFileContentHeader
     }
 
-    setParsedBody = (parsedBody) => {
-        this.parsedBody = parsedBody
+    setParsedFileContentBody = (parsedFileContentBody) => {
+        this.parsedFileContentBody = parsedFileContentBody
     }
 
     comparisonHistoryRecorder = (comparison) => {
