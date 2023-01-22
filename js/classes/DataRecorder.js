@@ -12,6 +12,10 @@ export default class {
 
     setDataPointIndex(datapointIndex) {
         this.datapointIndex = datapointIndex // index of the column to be sorted
+
+        if(!this.parsedFileContentBody) return;
+
+        this.setParsedFileContentRecords();
     }
 
     setComparisonHistory(history) {
