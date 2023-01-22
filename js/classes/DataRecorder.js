@@ -69,16 +69,16 @@ export default class {
 
         this.fileContentBody = fileContentBody
 
-        this.setFileContentRecords()
-
     }
 
     setParsedFileContent = (parsedFileContent) => {
 
-        this.parsedFileContent = parsedFileContent;
+        this.parsedFileContent = removeUndefined(parsedFileContent);
 
         this.setParsedFileContentHeader(this.parsedFileContent[0]);
         this.setParsedFileContentBody(this.parsedFileContent.slice(1));
+
+        this.setComparisonHistory([])
 
     } 
 
