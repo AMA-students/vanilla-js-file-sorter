@@ -39,15 +39,6 @@ export default class {
                 this.parsedFileContentBody[index]
             )
 
-            if(this.parsedFileContentBody[index] == null) {
-
-                record.setValue(
-                    null
-                )
-
-                return null;    
-            };
-
             record.setValue(
                 this.parsedFileContentBody[index][this.datapointIndex]
             )
