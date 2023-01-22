@@ -2,6 +2,7 @@ import CSV from './js/classes/Csv.js';
 import STATUS from './js/classes/Status.js';
 import State from './js/classes/state.js';
 import TableController from './js/classes/TableController.js';
+import DataRecorder from './js/classes/DataRecorder.js';
 
 // import {scaleLinear} from "https://cdn.skypack.dev/d3-scale@4";
 // import {max} from "https://cdn.skypack.dev/d3-array@3";
@@ -90,7 +91,22 @@ const parsingMethodSelector = (method, cb) => {
       parseHandler(data => JSONParsing(data), cb)
     },
     papaparse: () => {
-      papaparseParse(cb)
+      if(!selectedFile) return;
+  
+      var reader = new FileReader();
+
+      reader.readAsText(selectedFile)
+
+      reader.onload = async function (e) {
+        var data = e.target.result
+        
+        const dataRecorder = new DataRecorder()
+        dataRecorder.setFileContent(data)
+        dataRecorder.fileContentSplitter('\n')
+
+        papaparseParse(dataRecorder, cb)
+      }
+
     }
   }
 
@@ -168,7 +184,7 @@ form.onsubmit = async e => {
 
 // displayBtn initiate's the loading state
 
-const papaparseParse = (cb) => {
+const papaparseParse = (dataRecorder, cb) => {
   console.time('papaparse')
 
   if(!selectedFile) return;
@@ -191,7 +207,9 @@ const papaparseParse = (cb) => {
       //   onUpdate(headerColumn, dataBody, data)
       // }
 
-      cb(headerColumn, dataBody, results.data)
+      dataRecorder.setParsedFileContent(results.data)
+
+      cb(headerColumn, dataBody, dataRecorder)
 
     }
 
@@ -247,16 +265,21 @@ const parseHandler = (parser, cb) => {
   var reader = new FileReader();
 
   reader.readAsText(selectedFile)
-
+  console.log(selectedFile);
   reader.onload = async function (e) {
     var data = e.target.result
 
-    const [headerColumn, dataBody] = parser(data);    
-    console.log(dataBody);
-    setDataPoints(headerColumn, select)
-    displayMethod(headerColumn, dataBody)   
+    const  dataRecorder = new DataRecorder();
+    dataRecorder.setFileContent(data)
+    
+    const [headerColumn, dataBody] = parser(data);
 
-    cb(headerColumn, dataBody, data)
+    dataRecorder.setParsedFileContent([headerColumn, ...dataBody])
+
+    setDataPoints(headerColumn, select)
+    displayMethod(headerColumn, dataBody)  
+
+    cb(headerColumn, dataBody, dataRecorder)
   }
 }
 
@@ -265,11 +288,11 @@ displayBtn.onclick = () => {
 
   Status.setStatus(statusConfigOnDisplay);
 
-  parsingMethodSelector(parsingMethod, (headerColumn, dataBody, data) => {
+  parsingMethodSelector(parsingMethod, (headerColumn, dataBody, dataRecorder) => {
 
     updateBtn.onclick = () => {
 
-      onUpdate(headerColumn, dataBody, data)
+      onUpdate(headerColumn, dataBody, dataRecorder)
 
     }
 
@@ -309,7 +332,11 @@ const statusConfigOnUpdate = {
 
 }
 
-const onUpdate = (headerColumn, dataBody, data) => {
+const onUpdate = (headerColumn, dataBody, dataRecorder) => {
+
+  const data = dataRecorder.fileContent;
+
+  dataRecorder.setDataPointIndex(select.selectedIndex)
 
   if(!document.querySelector('input[name=sorting-method]:checked')) {
 
@@ -327,7 +354,7 @@ const onUpdate = (headerColumn, dataBody, data) => {
   })
   
   console.time('algorithm')
-  let sorted = sortingAlgorithm( algorithmName, [dataBody, select.selectedIndex, data]);
+  let sorted = sortingAlgorithm( algorithmName, [dataRecorder, select.selectedIndex]);
   console.timeEnd('algorithm')
 
   displayMethod(headerColumn, sorted)
