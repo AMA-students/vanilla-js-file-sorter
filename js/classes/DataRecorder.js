@@ -50,7 +50,7 @@ export default class {
 
         this.setComparisonHistory([]);
 
-        this.fileContentRecords = this.fileContentBody.map((fileContentLine, index) => {
+        this.fileContentRecords = this.parsedFileContentBody.map((fileContentLine, index) => {
             if(fileContentLine != '') {
                 return new FileContentRecord(fileContentLine, index) // create data record for each line of the data body
             }
