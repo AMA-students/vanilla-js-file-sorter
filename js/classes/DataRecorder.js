@@ -88,6 +88,12 @@ export default class {
 
     setParsedFileContentBody = (parsedFileContentBody) => {
         this.parsedFileContentBody = parsedFileContentBody
+
+        this.setFileContentRecords()
+
+        if(!this.datapointIndex) return;
+
+        this.setParsedFileContentRecords()
     }
 
     comparisonHistoryRecorder = (comparison) => {
