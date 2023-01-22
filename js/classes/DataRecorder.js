@@ -12,10 +12,6 @@ export default class {
 
     setDataPointIndex(datapointIndex) {
         this.datapointIndex = datapointIndex // index of the column to be sorted
-
-        if(!this.parsedFileContentBody) return;
-
-        this.setParsedFileContentRecords();
     }
 
     setComparisonHistory(history) {
@@ -23,13 +19,9 @@ export default class {
     }
 
     fileContentSplitter(delimiter) {
-
         this.delimiter = delimiter // fileContent splitter
         this.splitFileContent = this.fileContent.split(this.delimiter) // split fileContent by the delimiter
         this.splitFileContent = removeUndefined(this.splitFileContent)
-        this.setFileContentHeader(this.splitFileContent[0])        // csv header
-        this.setFileContentBody(this.splitFileContent.slice(1))   // csv data
-
     }
 
     setParsedFileContentRecords() {
@@ -47,16 +39,9 @@ export default class {
     }
 
     setFileContentRecords = () => {
-
-        this.setComparisonHistory([]);
-
         this.fileContentRecords = this.parsedFileContentBody.map((parsedFileContentLine, index) => {
             return new FileContentRecord(parsedFileContentLine, index) // create data record for each line of the data body
         })
-
-        if(!this.parsedFileContentBody) return;
-
-        this.setParsedFileContentRecords()
     }
 
     setFileContentHeader = (fileContentHeader) => {
@@ -70,14 +55,7 @@ export default class {
     }
 
     setParsedFileContent = (parsedFileContent) => {
-
         this.parsedFileContent = removeUndefined(parsedFileContent);
-
-        this.setParsedFileContentHeader(this.parsedFileContent[0]);
-        this.setParsedFileContentBody(this.parsedFileContent.slice(1));
-
-        this.setComparisonHistory([])
-
     } 
 
     setParsedFileContentHeader = (setParsedFileContentHeader) => {
@@ -86,12 +64,6 @@ export default class {
 
     setParsedFileContentBody = (parsedFileContentBody) => {
         this.parsedFileContentBody = parsedFileContentBody
-
-        this.setFileContentRecords()
-
-        if(!this.datapointIndex) return;
-
-        this.setParsedFileContentRecords()
     }
 
     comparisonHistoryRecorder = (comparison) => {
