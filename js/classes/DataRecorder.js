@@ -24,12 +24,18 @@ export default class {
         this.splitFileContent = removeUndefined(this.splitFileContent)
     }
 
-    setParsedFileContentRecords() {
+    setFileContentLines() {
         this.fileContentRecords.forEach((record, index) => {
 
-            record.setParsedFileContentLine(
+            record.setFileContentLine(
                 this.parsedFileContentBody[index]
             )
+
+        });
+    }
+
+    setFileContentValues() {
+        this.fileContentRecords.forEach((record, index) => {
 
             record.setValue(
                 this.parsedFileContentBody[index][this.datapointIndex]
@@ -91,6 +97,10 @@ class FileContentRecord {
 
     setParsedFileContentLine = (parsedFileContentLine) => {
         this.parsedFileContentLine = parsedFileContentLine
+    }
+
+    setFileContentLine = (fileContentLine) => {
+        this.fileContentLine = fileContentLine
     }
 
     setValue = (value) => {
