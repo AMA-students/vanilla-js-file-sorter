@@ -27,8 +27,8 @@ export default class {
         this.delimiter = delimiter // fileContent splitter
         this.splitFileContent = this.fileContent.split(this.delimiter) // split fileContent by the delimiter
         this.splitFileContent = removeUndefined(this.splitFileContent)
-        // this.setFileContentHeader(this.splitFileContent[0])        // csv header
-        // this.setFileContentBody(this.splitFileContent.slice(1))   // csv data
+        this.setFileContentHeader(this.splitFileContent[0])        // csv header
+        this.setFileContentBody(this.splitFileContent.slice(1))   // csv data
 
     }
 
