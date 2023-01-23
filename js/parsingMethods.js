@@ -1,10 +1,10 @@
 import { CSVParser, JSONParser, getObjKeys, getObjValues } from './classes/CSVParser.js';
 import { removeUndefined } from './classes/utility.js';
 
-const CSVParsing = (data) => {
+const CSVParsing = (dataRecorder) => {
   console.time('CSVParse')
-
-  const CSV = CSVParser(data.split('\n'));
+  
+  const CSV = CSVParser(dataRecorder.splitFileContent);
 
   const headerColumn = CSV[0];
   const csvBody = CSV.slice(1)
@@ -15,9 +15,10 @@ const CSVParsing = (data) => {
   return [headerColumn, dataBody]
 }
 
-const JSONParsing = (data) => {
+const JSONParsing = (dataRecorder) => {
+
   console.time('JSON parsing');
-  let arrofObj = JSONParser(data);
+  let arrofObj = JSONParser(dataRecorder.fileContent);
 
   const keys = getObjKeys(arrofObj[0])
   const values = arrofObj.map(obj => {

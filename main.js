@@ -3,6 +3,7 @@ import STATUS from './js/classes/Status.js';
 import State from './js/classes/state.js';
 import TableController from './js/classes/TableController.js';
 import DataRecorder from './js/classes/DataRecorder.js';
+import { CSVRecorder } from './js/classes/FileRecorders.js';
 
 // import {scaleLinear} from "https://cdn.skypack.dev/d3-scale@4";
 // import {max} from "https://cdn.skypack.dev/d3-array@3";
@@ -100,9 +101,12 @@ const parsingMethodSelector = (method, cb) => {
       reader.onload = async function (e) {
         var data = e.target.result
         
-        const dataRecorder = new DataRecorder()
-        dataRecorder.setFileContent(data)
-        dataRecorder.fileContentSplitter('\n')
+        // const dataRecorder = new DataRecorder()
+        // dataRecorder.setFileContent(data)
+        // dataRecorder.fileContentSplitter('\n')
+
+        const dataRecorder = new CSVRecorder()
+        dataRecorder.initializeFileContent(data)
 
         papaparseParse(dataRecorder, cb)
       }
@@ -203,13 +207,9 @@ const papaparseParse = (dataRecorder, cb) => {
       displayMethod(headerColumn, dataBody)      
       setDataPoints(headerColumn, select)
 
-      // updateBtn.onclick = data => {
-      //   onUpdate(headerColumn, dataBody, data)
-      // }
+      dataRecorder.initializeParsedFileContent(results.data)
 
-      dataRecorder.setParsedFileContent(results.data)
-
-      cb(headerColumn, dataBody, dataRecorder)
+      cb(dataRecorder)
 
     }
 
@@ -269,17 +269,25 @@ const parseHandler = (parser, cb) => {
   reader.onload = async function (e) {
     var data = e.target.result
 
-    const  dataRecorder = new DataRecorder();
-    dataRecorder.setFileContent(data)
-    
-    const [headerColumn, dataBody] = parser(data);
+    // const  dataRecorder = new DataRecorder();
+    // dataRecorder.setFileContent(data)
+    // dataRecorder.fileContentSplitter('\n');
 
-    dataRecorder.setParsedFileContent([headerColumn, ...dataBody])
+    const dataRecorder = new CSVRecorder();
 
+    dataRecorder.initializeFileContent(data)
+
+    const [headerColumn, dataBody] = parser(dataRecorder);
+
+    // dataRecorder.setParsedFileContent([headerColumn, ...dataBody])
+
+    dataRecorder.initializeParsedFileContent([headerColumn, ...dataBody])
+
+    console.log(dataRecorder);
     setDataPoints(headerColumn, select)
     displayMethod(headerColumn, dataBody)  
 
-    cb(headerColumn, dataBody, dataRecorder)
+    cb(dataRecorder)
   }
 }
 
@@ -288,11 +296,11 @@ displayBtn.onclick = () => {
 
   Status.setStatus(statusConfigOnDisplay);
 
-  parsingMethodSelector(parsingMethod, (headerColumn, dataBody, dataRecorder) => {
+  parsingMethodSelector(parsingMethod, (dataRecorder) => {
 
     updateBtn.onclick = () => {
 
-      onUpdate(headerColumn, dataBody, dataRecorder)
+      onUpdate(dataRecorder)
 
     }
 
@@ -332,11 +340,17 @@ const statusConfigOnUpdate = {
 
 }
 
-const onUpdate = (headerColumn, dataBody, dataRecorder) => {
+const onUpdate = (dataRecorder) => {
 
   const data = dataRecorder.fileContent;
 
-  dataRecorder.setDataPointIndex(select.selectedIndex)
+  const dataBody = dataRecorder.parsedFileContentBody;
+
+  const headerColumn = dataRecorder.parsedFileContentHeader;
+
+  dataRecorder.initializeFileContentRecords()
+
+  dataRecorder.initializeDatapointIndex(select.selectedIndex)
 
   if(!document.querySelector('input[name=sorting-method]:checked')) {
 
@@ -345,7 +359,7 @@ const onUpdate = (headerColumn, dataBody, dataRecorder) => {
   }
 
   const algorithmName = document.querySelector('input[name=sorting-method]:checked').value;
-
+  console.log(dataBody);
   const columnToSort = dataBody.map(row => row[select.selectedIndex])
 
   Status.setStatus({
@@ -380,32 +394,17 @@ const onUpdate = (headerColumn, dataBody, dataRecorder) => {
     }
   )
 
-  let sortedFileContent;
-
-  if(Array.isArray(data)) {
-    if(!selectedFile) return;
+  const sortedData = dataRecorder.fileContentRecords.map(record => {
+    return record.fileContentLine;
+  })
   
-    var reader = new FileReader();
+  dataRecorder.initializeSortedFileContent();
   
-    reader.readAsText(selectedFile)
-  
-    reader.onload = async function (e) {
-      var data = e.target.result
-      
-      sortedFileContent = arrayOrderMapper(columnToSort, data.split("\n")).organized;
+  const  sortedFileContent = arrayOrderMapper(columnToSort, [dataRecorder.fileContentHeader,...sortedData]).organized;
 
-      downloadBtn.onclick = () => {
-        downloadCSVFile(sortedFileContent.join("\n"), `Sorted-by-${select.value}-${selectedFile.name}`)
-      }
-    }
-
-  } else {
-    
-    sortedFileContent = arrayOrderMapper(columnToSort, data.split("\n")).organized;
-  }
-
-
+  console.log(dataRecorder);
   downloadBtn.onclick = () => {
+    // downloadCSVFile(sortedFileContent.join("\n"), `Sorted-by-${select.value}-${selectedFile.name}`)
     downloadCSVFile(sortedFileContent.join("\n"), `Sorted-by-${select.value}-${selectedFile.name}`)
   }
 
