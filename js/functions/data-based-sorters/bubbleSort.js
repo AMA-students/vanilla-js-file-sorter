@@ -1,13 +1,12 @@
 import {alphanumericComparator, isValidNumberButWithCommaValidator} from "../../classes/utility.js";
 
 import DataRecorder from "../../classes/DataRecorder.js";
-const bubbleSort = (array, dataPointIndex, data) => {
+const bubbleSort = (dataRecorder, dataPointIndex) => {
 
+    const array = dataRecorder.parsedFileContentBody;
+    
     if (array.length <= 1) return array;
 
-    const dataRecorder = new DataRecorder(data,'\n', dataPointIndex)
-    dataRecorder.setParsedData(array)
-    
     let isAscending = true;
 
     let aux; 
@@ -18,20 +17,34 @@ const bubbleSort = (array, dataPointIndex, data) => {
     for(let x = 0; x < array.length; x++) {
         
         for(let y = 0; y < array.length; y++) {
-            
+
             const [currentX, currentY] = mode(array[x], array[y], dataPointIndex);
 
             const someString = typeof(currentY) === 'string' || typeof(currentX) === 'string';
+             
+            const comparison = [x,y]
 
             if(someString) {
 
+
+                dataRecorder.comparisonHistoryRecorder(comparison)
+
                 if(alphanumericComparator(currentY, currentX, collator)) {
+
+                    comparison.push(true)
+
                     aux = array[y]
                     array[y] = array[x]
                     array[x] = aux
 
-                    dataRecorder.dataRecords[y].moveHistoryRecorder(x)
-                    dataRecorder.dataRecords[x].moveHistoryRecorder(y)
+                    aux = dataRecorder.fileContentRecords[y]
+
+                    dataRecorder.fileContentRecords[y].moveHistoryRecorder(x)
+                    dataRecorder.fileContentRecords[y] = dataRecorder.fileContentRecords[x]
+
+                    dataRecorder.fileContentRecords[x].moveHistoryRecorder(y)
+                    dataRecorder.fileContentRecords[x] = aux
+
                 }
                 continue;
 
@@ -40,13 +53,23 @@ const bubbleSort = (array, dataPointIndex, data) => {
             // isAscending
             if(isAscending) {
 
+                dataRecorder.comparisonHistoryRecorder(comparison)
+
                 if( currentX < currentY ) {
+
+                    comparison.push(true)
+
                     aux = array[y]
                     array[y] = array[x]
                     array[x] = aux
 
-                    dataRecorder.dataRecords[y].moveHistoryRecorder(x)
-                    dataRecorder.dataRecords[x].moveHistoryRecorder(y)
+                    aux = dataRecorder.fileContentRecords[y]
+
+                    dataRecorder.fileContentRecords[y].moveHistoryRecorder(x)
+                    dataRecorder.fileContentRecords[y] = dataRecorder.fileContentRecords[x]
+
+                    dataRecorder.fileContentRecords[x].moveHistoryRecorder(y)
+                    dataRecorder.fileContentRecords[x] = aux
                 }
                 continue;
 
@@ -54,22 +77,29 @@ const bubbleSort = (array, dataPointIndex, data) => {
 
             // !isAscending
             if(isAscending) return;
+
+            dataRecorder.comparisonHistoryRecorder(comparison)
+
             if( currentX < currentY ) {
+
+                comparison.push(true)
+
                 aux = array[y]
                 array[y] = array[x]
                 array[x] = aux
+              
+                aux = dataRecorder.fileContentRecords[y]
 
-                dataRecorder.dataRecords[y].moveHistoryRecorder(x)
-                dataRecorder.dataRecords[x].moveHistoryRecorder(y)
+                dataRecorder.fileContentRecords[y].moveHistoryRecorder(x)
+                dataRecorder.fileContentRecords[y] = dataRecorder.fileContentRecords[x]
+
+                dataRecorder.fileContentRecords[x].moveHistoryRecorder(y)
+                dataRecorder.fileContentRecords[x] = aux
             }
 
 
         }
     }
-    
-    console.log(
-        dataRecorder
-    );
 
     return array
 
