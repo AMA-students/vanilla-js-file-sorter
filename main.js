@@ -12,7 +12,9 @@ import { CSVRecorder } from './js/classes/FileRecorders.js';
 
 import { selectionSortCSV as selectionSort } from './js/functions/algo/selectionSort.js';
 import quickSort from './js/functions/algo/quickSort.test copy.js';
-import { mergeSort } from './js/functions/algo/mergeSort.js';
+// import { mergeSort } from './js/functions/algo/mergeSort.js';
+import {mergeSort} from './js/functions/data-based-sorters/mergeSort.js';
+
 // import bubbleSort from './js/functions/algo/bubbleSort.js';
 import bubbleSort from './js/functions/data-based-sorters/bubbleSort.js';
 
@@ -73,7 +75,18 @@ const sortingAlgorithm = (algo, args) => {
 
     quickSort: (...args) => quickSort(...args),
     bubbleSort: (...args) => bubbleSort(...args),
-    mergeSort: (...args) => mergeSort(...args),
+    // mergeSort: (...args) => mergeSort(...args),
+    mergeSort: (...args) => {
+      const [dataRecorder, dataPointIndex] = args
+
+      // mergeSort(...args)
+      return mergeSort(
+        dataRecorder.fileContentRecords,
+        dataPointIndex,
+        dataRecorder
+      )
+    },
+
     selectionSort: (...args) => selectionSort(...args),
 
   }
@@ -344,7 +357,9 @@ const onUpdate = (dataRecorder) => {
 
   const data = dataRecorder.fileContent;
 
-  const dataBody = dataRecorder.parsedFileContentBody;
+  const dataBody = [...dataRecorder.parsedFileContentBody];
+
+  console.log(dataBody);
 
   const headerColumn = dataRecorder.parsedFileContentHeader;
 
@@ -370,6 +385,13 @@ const onUpdate = (dataRecorder) => {
   console.time('algorithm')
   let sorted = sortingAlgorithm( algorithmName, [dataRecorder, select.selectedIndex]);
   console.timeEnd('algorithm')
+
+  console.log(sorted); // should be a sorted parsedFileContentBody
+
+  if(dataRecorder.fileContentRecords.length < 1) {
+   dataRecorder.fileContentRecords = sorted;
+   sorted = sorted.map(records => records.parsedFileContentLine)
+  }
 
   displayMethod(headerColumn, sorted)
 
