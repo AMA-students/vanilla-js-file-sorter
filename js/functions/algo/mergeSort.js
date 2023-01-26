@@ -1,4 +1,4 @@
-import { alphanumericComparator, stringToNumber } from "../../classes/utility.js"
+import { alphanumericComparator, stringToNumber, isValidNumberButWithCommaValidator } from "../../classes/utility.js"
 
 function merge(left, right, dataPointIndex) {
     let arr = []
@@ -9,13 +9,10 @@ function merge(left, right, dataPointIndex) {
     // Break out of loop if any one of the array gets empty
     while (left.length && right.length) {
         // Pick the smaller among the smallest element of left and right sub arrays 
-		const leftValue = stringToNumber(left[0][dataPointIndex]).realVal
-		const rightValue = stringToNumber(right[0][dataPointIndex]).realVal
-        // if ( alphanumericComparator(rightValue, leftValue) ) {
-        //     arr.push(left.shift())  
-        // } else {
-        //     arr.push(right.shift()) 
-        // }
+		// const leftValue = stringToNumber(left[0][dataPointIndex]).realVal
+		// const rightValue = stringToNumber(right[0][dataPointIndex]).realVal
+
+		const [leftValue, rightValue] = mode(left[0], right[0], dataPointIndex)
 		
 		if( typeof(leftValue) === 'string' || typeof(rightValue) === 'string' ) {
 			alphanumericComparator(rightValue, leftValue, collator) ?  arr.push(left.shift()) : arr.push(right.shift());
@@ -40,6 +37,24 @@ function mergeSort(array, dataPointIndex) {
 	const left = array.splice(0, half)
 	return merge(mergeSort(left, dataPointIndex),mergeSort(array, dataPointIndex), dataPointIndex)
 }
+
+const mode = (currentX, currentY, dataPointIndex) => {
+
+    if(dataPointIndex == null) {
+
+        return [
+            currentX,
+            currentY
+        ] = isValidNumberButWithCommaValidator(currentX, currentY);
+    }
+
+
+    return [
+        currentX,
+        currentY
+    ] = isValidNumberButWithCommaValidator(currentX[dataPointIndex], currentY[dataPointIndex]);
+}
+
 export {
     mergeSort
 }
