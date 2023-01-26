@@ -10,7 +10,12 @@ function merge(left, right, dataPointIndex, dataRecorder) {
     while (left.length && right.length) {
         // Pick the smaller among the smallest element of left and right sub arrays 
 
-		const [leftValue, rightValue] = mode(left[0], right[0], dataPointIndex);
+		const [leftValue, rightValue] = mode(
+			left[0].parsedFileContentLine, 
+			right[0].parsedFileContentLine, 
+			dataPointIndex
+		);
+
 
 		const comparison = {
 			left: leftValue, 
@@ -19,10 +24,13 @@ function merge(left, right, dataPointIndex, dataRecorder) {
 
 		dataRecorder?.comparisonHistoryRecorder(comparison)
 
+		let result;
+
 		if( typeof(leftValue) === 'string' || typeof(rightValue) === 'string' ) {
 
-			const result = alphanumericComparator(rightValue, leftValue, collator);
+			result = alphanumericComparator(rightValue, leftValue, collator);
 
+			// each array removes the pushed elements until one or both of them is empty
 			result ?  arr.push(left.shift()) : arr.push(right.shift());
 
 			comparison.comparison = result
@@ -30,7 +38,11 @@ function merge(left, right, dataPointIndex, dataRecorder) {
 			continue;
 		}
 
-		leftValue < rightValue ?  arr.push(left.shift()) : arr.push(right.shift());
+		result = leftValue < rightValue;
+
+		result ?  arr.push(left.shift()) : arr.push(right.shift());
+
+		comparison.comparison = result
     }
     
     // Concatenating the leftover elements
