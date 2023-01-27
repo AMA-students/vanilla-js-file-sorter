@@ -7,75 +7,22 @@
   margin-top: 60px;
 } */
 
-// colors
-$dark-green: #006b56;
-$green: #009578;
-$light-green: #00a382;
+// @charset 'utf-8';
 
-$dark-gray: #202124;
-$gray: #292a2d;
-$light-gray: #5f6368;
+// //Vendor
+// @import "vendor/__vendor-dir";
 
-$dark-wood: #FFBF47;
-$wood: #FFDB99;
-$light-wood: #FFF1D6;
+//Abstracts
+@import "abstracts/__abstracts-dir";
 
-// https://coolors.co/8a817c-fff8eb-141414-6247aa-2ec4b6
+//Base Styles
+@import "base/__base-dir";
 
-$dark-onyx: #141414;
-$onyx: #3D3D3D;
-$light-onyx: #7A7A7A;
+//Components
+@import "components/__components-dir";
 
-$scheme-woody: $dark-onyx, $light-wood;
-$scheme-onyx: $light-wood, $light-onyx;
-
-$btn-scheme-woody: $dark-onyx, $wood, $dark-wood;
-$btn-scheme-onyx: $light-wood, $onyx, $dark-onyx;
-
-@mixin btn-color-scheme($text, $bg, $bg-hov) {
-  background-color: $bg;
-  color:$text;
-
-  &:hover:not(.disabled) {
-    background: $bg-hov;
-  }
-}
-
-@mixin color-scheme($text, $bg) {
-  background-color: $bg;
-  color:$text;
-}
-
-// colors -- button
-$clr-primary-btn:$green;
-$clr-primary-btn-hov:$dark-green;
-
-// text
-$primary-font: "Quicksand", sans-serif;
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: $primary-font;
-}
-
-body {
-  @include color-scheme($scheme-woody...);
-}
-  
-// table 
-@import "components/table";
-  
-// buttons
-@import "components/btn";
-  
-
-// modal
-@import "components/modal";
-  
-/* settings */
-@import "components/settings";
+// //Layout
+// @import "layouts/__layouts-dir";
 
 // utility
 @import "utility";
