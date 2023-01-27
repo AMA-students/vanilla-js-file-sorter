@@ -59,6 +59,10 @@ $primary-font: "Quicksand", sans-serif;
   box-sizing: border-box;
   font-family: $primary-font;
 }
+
+body {
+  @include color-scheme($scheme-woody...);
+}
   
 // table 
 @import "components/table";
