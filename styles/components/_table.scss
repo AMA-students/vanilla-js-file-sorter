@@ -1,5 +1,6 @@
 .table-container {
     overflow: auto;
+    padding: 1rem;
 }
 
 table {
@@ -13,7 +14,7 @@ table {
 }
   
 th {
-    background: $dark-green;
+    background: $onyx;
     color: #ffffff;
     text-align: left;
 
