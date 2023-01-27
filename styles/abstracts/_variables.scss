@@ -1,0 +1,29 @@
+// text
+$primary-font: "Quicksand", sans-serif;
+
+$dark-green: #006b56;
+$green: #009578;
+$light-green: #00a382;
+
+$dark-gray: #202124;
+$gray: #292a2d;
+$light-gray: #5f6368;
+
+$dark-wood: #FFBF47;
+$wood: #FFD685;
+$light-wood: #FFF1D6;
+
+// https://coolors.co/8a817c-fff8eb-141414-6247aa-2ec4b6
+
+$dark-onyx: #141414;
+$onyx: #3D3D3D;
+$light-onyx: #7A7A7A;
+
+$clr-primary-btn:$green;
+$clr-primary-btn-hov:$dark-green;
+
+$scheme-woody: $dark-onyx, $light-wood;
+$scheme-onyx: $light-wood, $light-onyx;
+
+$btn-scheme-woody: $dark-onyx, $wood, $dark-wood;
+$btn-scheme-onyx: $light-wood, $onyx, $dark-onyx;
