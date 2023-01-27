@@ -1,3 +1,25 @@
+$settings-scheme-woody: $dark-onyx, $wood, $dark-wood;
+$settings-scheme-onyx: $light-wood, $onyx, $dark-onyx;
+
+@mixin settings-scheme($text, $bg, $dark-bg) {
+    &-article {
+        color: $dark-bg;
+    }
+
+    &-label {
+        background-color: $bg;
+        color: $text;
+    }
+    
+    &-label:not(:last-of-type) {
+        border-right: 1px solid $dark-bg;
+    }
+
+    &-radio:checked + &-label {
+        background-color: $dark-bg;
+    }
+}
+
 .settings {
     &-article {
         padding: 15px;
@@ -38,4 +60,6 @@
         overflow: hidden;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.50);
     }
+
+    @include settings-scheme($settings-scheme-onyx...)
 }
