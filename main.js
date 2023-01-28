@@ -77,17 +77,17 @@ const sortingAlgorithm = (algo, args) => {
 
     quickSort: (...args) => quickSort(...args),
     bubbleSort: (...args) => bubbleSort(...args),
-    // mergeSort: (...args) => mergeSort(...args),
-    mergeSort: (...args) => {
-      const [dataRecorder, dataPointIndex] = args
+    mergeSort: (...args) => mergeSort(...args),
+    // mergeSort: (...args) => {
+    //   const [dataRecorder, dataPointIndex] = args
 
-      // mergeSort(...args)
-      return mergeSort(
-        dataRecorder.fileContentRecords,
-        dataPointIndex,
-        dataRecorder
-      )
-    },
+    //   // mergeSort(...args)
+    //   return mergeSort(
+    //     dataRecorder.fileContentRecords,
+    //     dataPointIndex,
+    //     dataRecorder
+    //   )
+    // },
 
     selectionSort: (...args) => selectionSort(...args),
 
