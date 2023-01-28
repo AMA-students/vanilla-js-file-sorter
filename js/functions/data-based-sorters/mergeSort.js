@@ -1,4 +1,4 @@
-import { alphanumericComparator, isValidNumberButWithCommaValidator } from "../../classes/utility.js"
+import { alphanumericComparator, isValidNumberButWithCommaValidator, sortingMode } from "../../classes/utility.js"
 
 function merge(left, right, dataPointIndex, dataRecorder) {
     let arr = []
@@ -10,12 +10,12 @@ function merge(left, right, dataPointIndex, dataRecorder) {
     while (left.length && right.length) {
         // Pick the smaller among the smallest element of left and right sub arrays 
 
-		const [leftValue, rightValue] = mode(
-			left[0].parsedFileContentLine, 
-			right[0].parsedFileContentLine, 
-			dataPointIndex
+		const [leftValue, rightValue] = sortingMode(
+			left[0], 
+			right[0], 
+			dataPointIndex,
+			dataRecorder
 		);
-
 
 		const comparison = {
 			left: leftValue, 
@@ -47,6 +47,7 @@ function merge(left, right, dataPointIndex, dataRecorder) {
     
     // Concatenating the leftover elements
     // (in case we didn't go through the entire left or right array)
+	dataRecorder?.fileContentRecords = [ ...arr, ...left, ...right ]
     return [ ...arr, ...left, ...right ]
 }
 
@@ -58,29 +59,13 @@ function mergeSort(array, dataPointIndex, dataRecorder) {
 	const half = array.length / 2
 
 	const left = array.splice(0, half)
+	
 
     return merge(
 		mergeSort(left, dataPointIndex, dataRecorder), 
 		mergeSort(array, dataPointIndex, dataRecorder), 
 		dataPointIndex, dataRecorder
 	)
-}
-
-const mode = (currentX, currentY, dataPointIndex) => {
-
-    if(dataPointIndex == null) {
-
-        return [
-            currentX,
-            currentY
-        ] = isValidNumberButWithCommaValidator(currentX, currentY);
-    }
-
-
-    return [
-        currentX,
-        currentY
-    ] = isValidNumberButWithCommaValidator(currentX[dataPointIndex], currentY[dataPointIndex]);
 }
 
 export {
