@@ -283,11 +283,11 @@ const DatasetClassifier = (dataset) => {
 // 
 let testArray = ['03','3',"1",'2', "09", '10', '11', '20'];
 
-const alphanumericComparator = (a, b, collator) => {
+const alphanumericComparator = (a, b, collator, compareUndefined) => {
 
     let someUndefined = (a == null || b == null);
 
-    if(someUndefined) {
+    if(someUndefined && !compareUndefined) {
         console.error(`compared to an undefined a:${a} b:${b}`);
         return null;
     }
