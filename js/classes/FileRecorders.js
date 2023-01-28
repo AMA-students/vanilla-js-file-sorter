@@ -59,29 +59,19 @@ class CSVRecorder extends DataRecorder {
 
     initializeSortedFileContent() {
 
-        this.sortedFileContent = [...this.fileContentBody]
+        this.sortedFileContent = [
+            this.fileContentHeader,
+            ...this.fileContentRecords.map(record => record.fileContentLine)
+        ]
 
-        this.fileContentRecords.forEach(record => {
+    }
 
-            const initialPos = record.moveHistory[0]
+    initializeSortedParsedFileContent() {
 
-            const lastPos = record.moveHistory[record.moveHistory.length - 1]
-
-            console.log(record,initialPos, lastPos);
-
-            [this.sortedFileContent[initialPos], this.sortedFileContent[lastPos]] = 
-            [this.sortedFileContent[lastPos], this.sortedFileContent[initialPos]]
-
-        })
-        this.sortedFileContent = [this.fileContentHeader, ...this.sortedFileContent];
-        
-        // this.SortedFileContentRecords = SortedFileContentRecords;
-
-        // this.SortedParseFileContent = this.SortedFileContentRecords.parsedFileContent
-
-        // this.SortedParseFileContentHeader = this.SortedFileContentRecords.parsedFileContentHeader
-        
-        // this.SortedParsedFileBody = this.SortedFileContentRecords.parsedFileBody
+        this.sortedParsedFileContent = [
+            this.parsedFileContentHeader,
+            ...this.fileContentRecords.map(record => record.parsedFileContentLine)
+        ]
 
     }
     
