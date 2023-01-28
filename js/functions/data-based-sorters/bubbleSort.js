@@ -28,7 +28,7 @@ const bubbleSort = (array, dataPointIndex, dataRecorder) => {
             if(someString) {
 
 
-                dataRecorder.comparisonHistoryRecorder(comparison)
+                dataRecorder?.comparisonHistoryRecorder(comparison)
 
                 if(alphanumericComparator(currentY, currentX, collator)) {
 
@@ -36,10 +36,12 @@ const bubbleSort = (array, dataPointIndex, dataRecorder) => {
 
                     aux = array[y]
 
-                    array[y]?.moveHistoryRecorder(x)
+                    if(dataRecorder) { 
+                        array[y]?.moveHistoryRecorder(x), 
+                        array[x]?.moveHistoryRecorder(y) 
+                    }
+                    
                     array[y] = array[x]
-
-                    array[x]?.moveHistoryRecorder(y)
                     array[x] = aux
 
                 }
@@ -50,7 +52,7 @@ const bubbleSort = (array, dataPointIndex, dataRecorder) => {
             // isAscending
             if(isAscending) {
 
-                dataRecorder.comparisonHistoryRecorder(comparison)
+                dataRecorder?.comparisonHistoryRecorder(comparison)
 
                 if( currentX < currentY ) {
 
@@ -58,10 +60,12 @@ const bubbleSort = (array, dataPointIndex, dataRecorder) => {
 
                     aux = array[y]
 
-                    array[y]?.moveHistoryRecorder(x)
+                    if(dataRecorder) { 
+                        array[y]?.moveHistoryRecorder(x), 
+                        array[x]?.moveHistoryRecorder(y) 
+                    }
+                    
                     array[y] = array[x]
-
-                    array[x]?.moveHistoryRecorder(y)
                     array[x] = aux
 
                 }
@@ -72,7 +76,7 @@ const bubbleSort = (array, dataPointIndex, dataRecorder) => {
             // !isAscending
             if(isAscending) return;
 
-            dataRecorder.comparisonHistoryRecorder(comparison)
+            dataRecorder?.comparisonHistoryRecorder(comparison)
 
             if( currentX < currentY ) {
 
@@ -80,10 +84,12 @@ const bubbleSort = (array, dataPointIndex, dataRecorder) => {
 
                 aux = array[y]
 
-                array[y]?.moveHistoryRecorder(x)
+                if(dataRecorder) { 
+                    array[y]?.moveHistoryRecorder(x), 
+                    array[x]?.moveHistoryRecorder(y) 
+                }
+                
                 array[y] = array[x]
-
-                array[x]?.moveHistoryRecorder(y)
                 array[x] = aux
               
             }
