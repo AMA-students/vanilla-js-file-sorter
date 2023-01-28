@@ -87,21 +87,62 @@ const isStringWithoutNum = (value) => {
     return typeof(value) === "string";
 }
 
+// const isValidNumberButWithCommaValidator = (value1, value2) => {
+
+//     value1 = value1 == null ? '': value1
+//     value2 = value2 == null ? '': value2
+
+//     const originalValue1 = value1
+//     const originalValue2 = value2
+
+//     value1 = value1.toString()
+//     value2 = value2.toString()
+
+//     value1 = /(^|^-|^\+)[0-9,.]+$/.test(value1) ? value1.replaceAll(/,/g, '') : value1 
+//     value2 = /(^|^-|^\+)[0-9,.]+$/.test(value2) ? value2.replaceAll(/,/g, '') : value2
+
+//     value1 = value1 === '' ? originalValue1 : value1
+//     value2 = value2 === '' ? originalValue2 : value2
+
+//     value1 = (!isNaN(Number(value1)) && value1 !== "") ? Number(value1) : value1 
+//     value2 = (!isNaN(Number(value2)) && value2 !== "") ? Number(value2) : value2
+    
+//     return [
+//         value1,
+//         value2
+//     ]
+// }
+
+function removeComma(str) {
+    return str.replace(/,/g, "");
+}
+
+function isValidNumber(str) {
+    return /^[+-]?[0-9.,]+$/.test(str);
+}
+
+function parseValue(value) {
+    if (value == null) {
+        return "";
+    }
+
+    const originalValue = value;
+    value = value.toString();
+
+    if (isValidNumber(value)) {
+        value = removeComma(value);
+    }
+
+    if (!isNaN(Number(value)) && value !== "") {
+        return Number(value);
+    }
+    return originalValue;
+}
+
 const isValidNumberButWithCommaValidator = (value1, value2) => {
-    let originalValue1 = value1
-    let originalValue2 = value2
 
-    value1 = value1.toString()
-    value2 = value2.toString()
-
-    value1 = /(^|^-|^\+)[0-9,.]+$/.test(value1) ? value1.replaceAll(/,/g, '') : value1 
-    value2 = /(^|^-|^\+)[0-9,.]+$/.test(value2) ? value2.replaceAll(/,/g, '') : value2
-
-    value1 = value1 === '' ? originalValue1 : value1
-    value2 = value2 === '' ? originalValue2 : value2
-
-    value1 = (!isNaN(Number(value1)) && value1 !== "") ? Number(value1) : value1 
-    value2 = (!isNaN(Number(value2)) && value2 !== "") ? Number(value2) : value2
+    value1 = parseValue(value1)
+    value2 = parseValue(value2)
     
     return [
         value1,
