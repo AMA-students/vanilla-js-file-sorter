@@ -47,7 +47,11 @@ function merge(left, right, dataPointIndex, dataRecorder) {
     
     // Concatenating the leftover elements
     // (in case we didn't go through the entire left or right array)
-	dataRecorder?.fileContentRecords = [ ...arr, ...left, ...right ]
+
+	if(dataRecorder) {
+		dataRecorder.fileContentRecords = [ ...arr, ...left, ...right ]
+	}
+	
     return [ ...arr, ...left, ...right ]
 }
 
