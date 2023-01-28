@@ -1,4 +1,4 @@
-import { alphanumericComparator, isValidNumberButWithCommaValidator, sortingMode } from "../../classes/utility.js"
+import { alphanumericComparator, sortingMode } from "../../classes/utility.js"
 
 function merge(left, right, dataPointIndex, dataRecorder) {
     let arr = []
