@@ -388,11 +388,13 @@ const onUpdate = (dataRecorder) => {
 
   console.log(sorted); // should be a sorted parsedFileContentBody
 
-  if(dataRecorder.fileContentRecords.length < 1) {
+  if(dataRecorder.fileContentRecords.length < 2 || sorted.parsedFileContentLine) {
    dataRecorder.fileContentRecords = sorted;
    sorted = sorted.map(records => records.parsedFileContentLine)
+   console.log('test', sorted);
   }
 
+  console.log(sorted, dataRecorder.fileContentRecords);
   displayMethod(headerColumn, sorted)
 
   Status.dynamicElementObserver(
@@ -422,12 +424,12 @@ const onUpdate = (dataRecorder) => {
   
   dataRecorder.initializeSortedFileContent();
   
-  const  sortedFileContent = arrayOrderMapper(columnToSort, [dataRecorder.fileContentHeader,...sortedData]).organized;
+  // const  sortedFileContent = arrayOrderMapper(columnToSort, [dataRecorder.fileContentHeader,...sortedData]).organized;
 
-  console.log(dataRecorder);
+  // console.log(dataRecorder);
   downloadBtn.onclick = () => {
     // downloadCSVFile(sortedFileContent.join("\n"), `Sorted-by-${select.value}-${selectedFile.name}`)
-    downloadCSVFile(sortedFileContent.join("\n"), `Sorted-by-${select.value}-${selectedFile.name}`)
+    downloadCSVFile(dataRecorder.sortedFileContent.join("\n"), `Sorted-by-${select.value}-${selectedFile.name}`)
   }
 
 }
