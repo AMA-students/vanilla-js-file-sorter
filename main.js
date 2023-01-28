@@ -385,7 +385,18 @@ const onUpdate = (dataRecorder) => {
   })
   
   console.time('algorithm')
-  let sorted = sortingAlgorithm( algorithmName, [dataRecorder, select.selectedIndex]);
+  let sorted = sortingAlgorithm(
+    algorithmName, 
+
+    [
+      dataRecorder.fileContentRecords,
+      select.selectedIndex,
+      dataRecorder
+    ]
+
+  );
+  dataRecorder.initializeSortedFileContent()
+  dataRecorder.initializeSortedParsedFileContent()
   console.timeEnd('algorithm')
 
   console.log(sorted); // should be a sorted parsedFileContentBody
@@ -397,7 +408,7 @@ const onUpdate = (dataRecorder) => {
   }
 
   console.log(sorted, dataRecorder.fileContentRecords);
-  displayMethod(headerColumn, sorted)
+  displayMethod(headerColumn, dataRecorder.sortedParsedFileContent)
 
   Status.dynamicElementObserver(
     `table :nth-child(${select.selectedIndex + 1}):not(tr):not(thead)`,
@@ -420,17 +431,7 @@ const onUpdate = (dataRecorder) => {
     }
   )
 
-  const sortedData = dataRecorder.fileContentRecords.map(record => {
-    return record.fileContentLine;
-  })
-  
-  dataRecorder.initializeSortedFileContent();
-  
-  // const  sortedFileContent = arrayOrderMapper(columnToSort, [dataRecorder.fileContentHeader,...sortedData]).organized;
-
-  // console.log(dataRecorder);
   downloadBtn.onclick = () => {
-    // downloadCSVFile(sortedFileContent.join("\n"), `Sorted-by-${select.value}-${selectedFile.name}`)
     downloadCSVFile(dataRecorder.sortedFileContent.join("\n"), `Sorted-by-${select.value}-${selectedFile.name}`)
   }
 
