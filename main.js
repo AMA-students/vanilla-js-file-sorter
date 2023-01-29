@@ -409,7 +409,8 @@ const onUpdate = (dataRecorder) => {
   }
 
   console.log(sorted, dataRecorder.fileContentRecords);
-  displayMethod(headerColumn, dataRecorder.sortedParsedFileContent)
+  console.log(dataRecorder.sortedParsedFileContent);
+  displayMethod(headerColumn, dataRecorder.sortedParsedFileContent.slice(1))
 
   Status.dynamicElementObserver(
     `table :nth-child(${select.selectedIndex + 1}):not(tr):not(thead)`,
