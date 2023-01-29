@@ -56,7 +56,7 @@ import {
   downloadBtn,
 } from './js/buttons.js';
 
-import { removeUndefined, arrayOrderMapper } from './js/classes/utility.js';
+import { removeUndefined } from './js/classes/utility.js';
 
 const settingsCover = document.querySelector('#settings-cover');
 const parsingMethods = document.querySelectorAll('input[name=parsing-method]');
