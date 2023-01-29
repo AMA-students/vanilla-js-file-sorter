@@ -362,7 +362,7 @@ const onUpdate = (dataRecorder) => {
 
   const dataBody = [...dataRecorder.parsedFileContentBody];
 
-  console.log(dataBody);
+  // console.log(dataBody);
 
   const headerColumn = dataRecorder.parsedFileContentHeader;
 
@@ -377,7 +377,7 @@ const onUpdate = (dataRecorder) => {
   }
 
   const algorithmName = document.querySelector('input[name=sorting-method]:checked').value;
-  console.log(dataBody);
+  // console.log(dataBody);
   const columnToSort = dataBody.map(row => row[select.selectedIndex])
 
   Status.setStatus({
@@ -400,7 +400,7 @@ const onUpdate = (dataRecorder) => {
   dataRecorder.initializeSortedParsedFileContent()
   console.timeEnd('algorithm')
 
-  console.log(sorted); // should be a sorted parsedFileContentBody
+  // console.log(sorted); // should be a sorted parsedFileContentBody
 
   if(dataRecorder.fileContentRecords.length < 2 || sorted.parsedFileContentLine) {
    dataRecorder.fileContentRecords = sorted;
@@ -408,13 +408,12 @@ const onUpdate = (dataRecorder) => {
    console.log('test', sorted);
   }
 
-  console.log(sorted, dataRecorder.fileContentRecords);
-  console.log(dataRecorder.sortedParsedFileContent);
+  // console.log(sorted, dataRecorder.fileContentRecords);
+  // console.log(dataRecorder.sortedParsedFileContent);
   displayMethod(headerColumn, dataRecorder.sortedParsedFileContent.slice(1))
 
   Status.dynamicElementObserver(
     `table :nth-child(${select.selectedIndex + 1}):not(tr):not(thead)`,
-
     (sortedColumn, observer) => {
 
       sortedColumn.forEach( elem => {
