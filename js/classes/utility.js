@@ -1,18 +1,3 @@
-export default class {
-
-    twoDementionalArrayElemenentComparator(arr) {
-        /*
-            will return the values of the selected demension in an array
-        */
-        return 
-    }    
-}
-
-// consoles
-const warnNoDataPointIndex = () => {
-    console.warn(`the dataPointIndex is undefined`);
-}
-
 const removeUndefined = data => data.filter(element => element !== undefined && element != '');
 
 // stringsToNumbers
@@ -87,32 +72,6 @@ const isStringWithoutNum = (value) => {
     return typeof(value) === "string";
 }
 
-// const isValidNumberButWithCommaValidator = (value1, value2) => {
-
-//     value1 = value1 == null ? '': value1
-//     value2 = value2 == null ? '': value2
-
-//     const originalValue1 = value1
-//     const originalValue2 = value2
-
-//     value1 = value1.toString()
-//     value2 = value2.toString()
-
-//     value1 = /(^|^-|^\+)[0-9,.]+$/.test(value1) ? value1.replaceAll(/,/g, '') : value1 
-//     value2 = /(^|^-|^\+)[0-9,.]+$/.test(value2) ? value2.replaceAll(/,/g, '') : value2
-
-//     value1 = value1 === '' ? originalValue1 : value1
-//     value2 = value2 === '' ? originalValue2 : value2
-
-//     value1 = (!isNaN(Number(value1)) && value1 !== "") ? Number(value1) : value1 
-//     value2 = (!isNaN(Number(value2)) && value2 !== "") ? Number(value2) : value2
-    
-//     return [
-//         value1,
-//         value2
-//     ]
-// }
-
 function removeComma(str) {
     return str.replace(/,/g, "");
 }
@@ -149,25 +108,6 @@ const isValidNumberButWithCommaValidator = (value1, value2) => {
         value2
     ]
 }
-
-const stringStartsWithNumber = value => {
-
-    if(typeof(value) !== 'string') return console.error(`this function expects a string as an argument`);
-
-    // check the first char if it's a number
-    const firstChar = value.charAt(0);
-
-    // check if the firstChar is a number
-    
-    return !isNaN(parseFloat(firstChar))
-}
-
-/* 
-    let startsWithNumber, containsSymbols
-
-    if isStringWithoutNum === true, 
-    => startsWith number = false, containsSymbols ?
-*/
 
 const hasComma = value => {
 
@@ -241,47 +181,6 @@ const  parseStringNumWithComma = (value) => {
 
     return Number(removedComma);
 }
-
-const classifier = (data) => {
-
-    const dataClassification = {
-
-        data: data,
-        dataType: typeof(data),
-        isNan: isNaN(data),
-        isNum: !isNaN(data),
-        isFinite: isFinite(data)
-        
-    }
-
-    return dataClassification;
-}
-
-const DatasetClassifier = (dataset) => {
-
-    let hasNum, hasString;
-    hasNum = dataset.some( data => !isNaN(data));
-    hasString = dataset.some( data => typeof(data) === 'string');
-
-    const datasetClassification = {
-
-        dataset: dataset,
-        hasNum: hasNum,
-        hasString: hasString,
-
-        
-        // dataType: typeof(dataset),
-        // isNan: isNaN(dataset),
-        // isNum: !isNaN(dataset),
-        // isFinite: isFinite(dataset)
-        
-    }
-
-    return datasetClassification;
-}
-
-// 
-let testArray = ['03','3',"1",'2', "09", '10', '11', '20'];
 
 const alphanumericComparator = (a, b, collator, compareUndefined) => {
 
