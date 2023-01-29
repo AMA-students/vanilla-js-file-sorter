@@ -13,7 +13,8 @@ import { CSVRecorder } from './js/classes/FileRecorders.js';
 // import { selectionSortCSV as selectionSort } from './js/functions/algo/selectionSort.js';
 import { selectionSort } from './js/functions/data-based-sorters/selectionSort.js';
 
-import quickSort from './js/functions/algo/quickSort.test copy.js';
+// import quickSort from './js/functions/algo/quickSort.test copy.js';
+import quickSort from './js/functions/data-based-sorters/quickSort.js';
 // import { mergeSort } from './js/functions/algo/mergeSort.js';
 import {mergeSort} from './js/functions/data-based-sorters/mergeSort.js';
 
