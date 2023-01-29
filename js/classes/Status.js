@@ -157,6 +157,12 @@ export default class {
     dynamicElementObserver = (selector, cb) => {
         const observer = new MutationObserver(() => {
             const dynamicElements = document.querySelectorAll(selector);
+
+            if(!dynamicElements) {
+                console.error('no dynamic element is found', dynamicElements);
+                return null;
+            }
+            
             cb(dynamicElements, observer);
         });
         
