@@ -1,30 +1,24 @@
 import CSV from './js/classes/Csv.js';
 import STATUS from './js/classes/Status.js';
-import State from './js/classes/state.js';
 import TableController from './js/classes/TableController.js';
-import DataRecorder from './js/classes/DataRecorder.js';
 import { CSVRecorder } from './js/classes/FileRecorders.js';
-
-// import {scaleLinear} from "https://cdn.skypack.dev/d3-scale@4";
-// import {max} from "https://cdn.skypack.dev/d3-array@3";
 
 /*============================={ algorithms }=============================*/
 
-// import { selectionSortCSV as selectionSort } from './js/functions/algo/selectionSort.js';
 import { selectionSort } from './js/functions/data-based-sorters/selectionSort.js';
 
-// import quickSort from './js/functions/algo/quickSort.test copy.js';
+
 import quickSort from './js/functions/data-based-sorters/quickSort.js';
-// import { mergeSort } from './js/functions/algo/mergeSort.js';
+
 import {mergeSort} from './js/functions/data-based-sorters/mergeSort.js';
 
-// import bubbleSort from './js/functions/algo/bubbleSort.js';
+
 import bubbleSort from './js/functions/data-based-sorters/bubbleSort.js';
 
 /*============================={ side effect funtions }=============================*/
 
 import setDataPoints from './js/functions/sideEffectes/setDataPoints.js';
-import htmlToCSV, {arrayToCsv, downloadCSVFile } from './js/functions/sideEffectes/htmlToCSV.js';
+import { downloadCSVFile } from './js/functions/sideEffectes/htmlToCSV.js';
  
 /*============================={ parsers }=============================*/
 
@@ -38,7 +32,6 @@ const table = document.querySelector('table')
 
 /*============================={ class instances }=============================*/
 
-const state = new State();
 const csv = new CSV(table)
 const tableController = new TableController(table);
 const Status = new STATUS(document.querySelector('#status'));
