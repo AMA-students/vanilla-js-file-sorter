@@ -226,32 +226,66 @@ const papaparseParse = (dataRecorder, cb) => {
   console.timeEnd('papaparse')
 
 };
+let headerIndex = 0;
 
 const updateBtnWithoutClass = () => {
-  Status.delegateOnclickEvent(
-    {
-      elements:[select, sortingMethodGroup],
 
-      func: ()=>{
-        const selectedSortingMethod = document.querySelector('input[name=sorting-method]:checked').value;
-        const headerIndexToHighlight = select.selectedIndex
-        tableController.headerHighlighter(headerIndexToHighlight)
+  Status.dynamicElementObserver(
+    `thead th`,
+    (headerColumns)=>{
 
-        Status.setStatusText(
-          `Sort {${select.value}} using {${selectedSortingMethod}}`
-        )
+      headerColumns.forEach(column => {
+        column.classList.add('header-clickable')
+      })
+
+      delegateClickEvent(headerColumns)
+    }
+    ,5000
+  )
+
+  function delegateClickEvent(headerColumns) {
+    Status.delegateOnclickEvent(
+      {
+        elements:[select, sortingMethodGroup,...headerColumns],
+
+        func: (e)=>{
+          const selectedSortingMethod = document.querySelector('input[name=sorting-method]:checked').value;
+          // const headerIndexToHighlight = select.selectedIndex
+
+
+          let clickedHeaderIndex = Array.from(headerColumns).indexOf(e.target)
+          tableController.headerHighlighter(clickedHeaderIndex)
+
+          if(e.target.tagName === 'TH') {
+            headerIndex = Array.from(headerColumns).indexOf(e.target)
+          }
+
+          tableController.headerHighlighter(headerIndex)
+
+          Status.setStatusText(
+            `Sort {${select[headerIndex].value}} using {${selectedSortingMethod}}`
+          )
+
+        }
 
       }
-
-    }
-  ) 
+    ) 
+  }
+  
 }
 
 const updateBtnDisabledObserverConfig = {
   elements:[updateBtn],
   classToObserve: 'disabled',
   withClass: () => {
-    Status.removeElementOnclickEvent([select, sortingMethodGroup])
+
+    Status.dynamicElementObserver(
+      `thead th`,
+      (headerColumns)=>{
+        Status.removeElementOnclickEvent([select, sortingMethodGroup, ...headerColumns])
+      }
+      ,5000
+    )
   },
   withoutClass: () => {
     updateBtnWithoutClass()
@@ -355,13 +389,11 @@ const onUpdate = (dataRecorder) => {
 
   const dataBody = [...dataRecorder.parsedFileContentBody];
 
-  // console.log(dataBody);
-
   const headerColumn = dataRecorder.parsedFileContentHeader;
 
   dataRecorder.initializeFileContentRecords()
 
-  dataRecorder.initializeDatapointIndex(select.selectedIndex)
+  dataRecorder.initializeDatapointIndex(headerIndex)
 
   if(!document.querySelector('input[name=sorting-method]:checked')) {
 
@@ -384,7 +416,7 @@ const onUpdate = (dataRecorder) => {
 
     [
       dataRecorder.fileContentRecords,
-      select.selectedIndex,
+      headerIndex,
       dataRecorder
     ]
 
@@ -406,7 +438,7 @@ const onUpdate = (dataRecorder) => {
   displayMethod(headerColumn, dataRecorder.sortedParsedFileContent.slice(1))
 
   Status.dynamicElementObserver(
-    `table :nth-child(${select.selectedIndex + 1}):not(tr):not(thead)`,
+    `table :nth-child(${headerIndex + 1}):not(tr):not(thead)`,
     (sortedColumn, observer) => {
 
       sortedColumn.forEach( elem => {
