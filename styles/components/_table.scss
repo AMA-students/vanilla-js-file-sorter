@@ -23,3 +23,11 @@
         background-color: $dark-onyx;	
     }
 }
+
+.header-clickable {
+    cursor: pointer;
+
+    &:hover {
+        outline: 3px solid $dark-wood;
+    }
+}
