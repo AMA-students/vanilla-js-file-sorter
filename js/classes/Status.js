@@ -154,7 +154,7 @@ export default class {
 
         return elementClassObserver;
     }
-    dynamicElementObserver = (selector, cb) => {
+    dynamicElementObserver = (selector, cb, secs) => {
         const observer = new MutationObserver(() => {
             const dynamicElements = document.querySelectorAll(selector);
 
@@ -165,11 +165,16 @@ export default class {
             
             cb(dynamicElements, observer);
         });
+
+        if(secs !== null) {
+            setTimeout(()=>{
+                observer.disconnect();
+            },secs)
+        }
         
         observer.observe(document.body, {
             childList: true,
             subtree: true,
         });
-
     }
 }
