@@ -117,8 +117,8 @@ export default class {
         const {elements, func} = config;
         
         elements.forEach(element => {
-            element.onclick = () => {
-                func()
+            element.onclick = (e) => {
+                func(e)
             }
         });
     }
