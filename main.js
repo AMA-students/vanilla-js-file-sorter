@@ -452,7 +452,7 @@ const onUpdate = (dataRecorder) => {
   )
 
   downloadBtn.onclick = () => {
-    downloadCSVFile(dataRecorder.sortedFileContent.join("\n"), `Sorted-by-${select.value}-${selectedFile.name}`)
+    downloadCSVFile(dataRecorder.sortedFileContent.join("\n"), `Sorted-by-${select[headerIndex].value}-${selectedFile.name}`)
   }
 
 }
