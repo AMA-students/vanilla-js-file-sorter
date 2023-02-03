@@ -104,21 +104,4 @@ const bubbleSort = (array, dataPointIndex, dataRecorder) => {
 
 }
 
-const mode = (currentX, currentY, dataPointIndex) => {
-
-    if(dataPointIndex == null) {
-
-        return [
-            currentX,
-            currentY
-        ] = isValidNumberButWithCommaValidator(currentX, currentY);
-    }
-
-
-    return [
-        currentX,
-        currentY
-    ] = isValidNumberButWithCommaValidator(currentX[dataPointIndex], currentY[dataPointIndex]);
-}
-
 export default bubbleSort;
