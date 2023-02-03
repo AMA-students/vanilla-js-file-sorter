@@ -296,7 +296,6 @@ Status.delegateClassMutationObserver(updateBtnDisabledObserverConfig)
 const statusConfigOnDisplay = {
 
   setStatusText: 'Loading...',
-  show: [selectGroup],
   enable: [clearBtn, updateBtn],
   disable: [submitBtn, displayBtn, inputFile],
   restrictSettings: parsingMethods
