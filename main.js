@@ -449,12 +449,7 @@ const onUpdate = (dataRecorder) => {
         elem.classList.add('highlight');
         elem.classList.add('outline');
       })
-
-      setTimeout(()=>{
-        observer.disconnect();
-      },5000)
-
-    }
+    }, 5000
   )
 
   downloadBtn.onclick = () => {
