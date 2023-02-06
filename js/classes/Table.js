@@ -120,7 +120,7 @@ export default class {
         
         const MAX_ELEMENT_LIMIT = (dataLength/ columnLength) * 0.2;
 
-        const renderDelay = (dataLength/ columnLength) * 0.015;
+        const renderDelay = (dataLength/ columnLength) * 0.90;
 
         const renders = elementLimiter(data, MAX_ELEMENT_LIMIT);
 
@@ -167,7 +167,7 @@ export default class {
 
         }
 
-        const delayedRendering = (renders) => {
+        const delayedRendering = async (renders) => {
             const tbody = document.createElement('tbody');
 
             let x = 0;
