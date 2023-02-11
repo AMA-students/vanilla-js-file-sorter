@@ -248,11 +248,6 @@ const updateBtnWithoutClass = () => {
 
         func: (e)=>{
           const selectedSortingMethod = document.querySelector('input[name=sorting-method]:checked').value;
-          // const headerIndexToHighlight = select.selectedIndex
-
-
-          let clickedHeaderIndex = Array.from(headerColumns).indexOf(e.target)
-          tableController.headerHighlighter(clickedHeaderIndex)
 
           if(e.target.tagName === 'TH') {
             headerIndex = Array.from(headerColumns).indexOf(e.target)
@@ -308,17 +303,11 @@ const parseHandler = (parser, cb) => {
   reader.onload = async function (e) {
     var data = e.target.result
 
-    // const  dataRecorder = new DataRecorder();
-    // dataRecorder.setFileContent(data)
-    // dataRecorder.fileContentSplitter('\n');
-
     const dataRecorder = new CSVRecorder();
 
     dataRecorder.initializeFileContent(data)
 
     const [headerColumn, dataBody] = parser(dataRecorder);
-
-    // dataRecorder.setParsedFileContent([headerColumn, ...dataBody])
 
     dataRecorder.initializeParsedFileContent([headerColumn, ...dataBody])
 
@@ -381,8 +370,6 @@ const statusConfigOnUpdate = {
 
 const onUpdate = (dataRecorder) => {
 
-  const data = dataRecorder.fileContent;
-
   const dataBody = [...dataRecorder.parsedFileContentBody];
 
   const headerColumn = dataRecorder.parsedFileContentHeader;
@@ -398,7 +385,7 @@ const onUpdate = (dataRecorder) => {
   }
 
   const algorithmName = document.querySelector('input[name=sorting-method]:checked').value;
-  // console.log(dataBody);
+
   const columnToSort = dataBody.map(row => row[select.selectedIndex])
 
   Status.setStatus({
@@ -416,8 +403,8 @@ const onUpdate = (dataRecorder) => {
     }
   )
 
+  const finalHeaderIndex = headerIndex;
   sortWorker.onmessage = function(message) {
-    console.log(message);
 
     dataRecorder = message.data;
 
@@ -427,8 +414,6 @@ const onUpdate = (dataRecorder) => {
       record.__proto__ = FileContentRecord.prototype;
     })
 
-    const sorted = dataRecorder.fileContentRecords
-
     dataRecorder.initializeSortedFileContent()
     dataRecorder.initializeSortedParsedFileContent()
 
@@ -436,7 +421,7 @@ const onUpdate = (dataRecorder) => {
     displayMethod(headerColumn, dataRecorder.sortedParsedFileContent.slice(1))
 
     Status.dynamicElementObserver(
-      `table :nth-child(${headerIndex + 1}):not(tr):not(thead)`,
+      `table :nth-child(${finalHeaderIndex + 1}):not(tr):not(thead)`,
       sortedColumn => {
 
         sortedColumn.forEach( elem => {
