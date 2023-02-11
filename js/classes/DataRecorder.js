@@ -72,7 +72,7 @@ export default class {
         this.parsedFileContentBody = parsedFileContentBody
     }
 
-    comparisonHistoryRecorder = (comparison) => {
+    comparisonHistoryRecorder(comparison) {
         this.comparisonHistory.push(comparison)
     }
 }
