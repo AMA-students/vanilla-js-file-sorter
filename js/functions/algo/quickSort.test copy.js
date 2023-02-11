@@ -1,4 +1,4 @@
-import { alphanumericComparator, stringToNumber } from "../../classes/utility.js";
+import { alphanumericComparator, stringToNumber, isValidNumberButWithCommaValidator } from "../../classes/utility.js";
 
 const quickSort = (array, dataPointIndex) => {
     
@@ -40,12 +40,18 @@ const quickSort = (array, dataPointIndex) => {
   // default
   for (let i = 1; i < array.length; i++) {
 
-    let leftValue = array[i][dataPointIndex]
-    let rightValue = pivot[dataPointIndex]
+    let leftValue = stringToNumber(array[i][dataPointIndex]).realVal;
+    let rightValue = stringToNumber(pivot[dataPointIndex]).realVal;
 
+    // let leftValue = array[i][dataPointIndex];
+    // let rightValue = pivot[dataPointIndex];
+
+    // [leftValue, rightValue] = isValidNumberButWithCommaValidator(leftValue, rightValue);
+
+    // const [leftValue, rightValue] = isValidNumberButWithCommaValidator(array[i][dataPointIndex], pivot[dataPointIndex])
     if(typeof(leftValue) === 'string' || typeof(rightValue) === 'string') {
-      leftValue = stringToNumber(array[i][dataPointIndex]).realVal;
-      rightValue = stringToNumber(pivot[dataPointIndex]).realVal;
+      // leftValue = stringToNumber(array[i][dataPointIndex]).realVal;
+      // rightValue = stringToNumber(pivot[dataPointIndex]).realVal;
 
       alphanumericComparator(rightValue, leftValue, collator)  ? less.push(array[i]) : greater.push(array[i]);
 
