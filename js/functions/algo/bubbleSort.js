@@ -8,6 +8,10 @@ const bubbleSort = (array, dataPointIndex) => {
 
     let aux;
 
+    const columnToSort = array.map(row => row[dataPointIndex])
+    const initialOrder = columnToSort.map((elem, index) => { return {elem: elem, index: index} })
+  
+
     const option = { numeric: true, sensitivity: 'base' };
     const collator = new Intl.Collator(undefined, option);
 
@@ -19,8 +23,8 @@ const bubbleSort = (array, dataPointIndex) => {
             for(let y = 0; y < array.length; y++) {
 
                 const [
-                    currentY,
-                    currentX
+                    currentX,
+                    currentY
                 ] = isValidNumberButWithCommaValidator(array[x][dataPointIndex], array[y][dataPointIndex]);
 
                 if(typeof(currentY) === 'string' || typeof(currentX) === 'string') {
@@ -28,6 +32,11 @@ const bubbleSort = (array, dataPointIndex) => {
                         aux = array[y]
                         array[y] = array[x]
                         array[x] = aux
+
+                        aux = initialOrder[y]
+                        console.log('test');
+                        initialOrder[y] = initialOrder[x]
+                        initialOrder[x] = aux
                     }
                     continue;
                 }
@@ -36,9 +45,15 @@ const bubbleSort = (array, dataPointIndex) => {
                     aux = array[y]
                     array[y] = array[x]
                     array[x] = aux
+
+                    aux = initialOrder[y]
+                    console.log('test');
+                    initialOrder[y] = initialOrder[x]
+                    initialOrder[x] = aux
                 }
             }
         }
+        console.log(initialOrder);
         return array
     }
 
