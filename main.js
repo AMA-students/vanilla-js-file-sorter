@@ -268,6 +268,7 @@ const updateBtnWithoutClass = () => {
   }
   
 }
+let updateClicked = false;
 
 const updateBtnDisabledObserverConfig = {
   elements:[updateBtn],
@@ -283,6 +284,9 @@ const updateBtnDisabledObserverConfig = {
     )
   },
   withoutClass: () => {
+
+    updateClicked = false;
+    
     updateBtnWithoutClass()
   }
 }
@@ -323,8 +327,6 @@ const parseHandler = (parser, cb) => {
 }
 
 /*============================={ on display state }=============================*/
-
-let updateClicked = false;
 
 displayBtn.onclick = () => {
   const parsingMethod = document.querySelector('input[name=parsing-method]:checked').value;
