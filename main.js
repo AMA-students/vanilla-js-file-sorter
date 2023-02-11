@@ -231,14 +231,14 @@ let headerIndex = 0;
 const updateBtnWithoutClass = () => {
   Status.dynamicElementObserver(
     `thead th`,
-    (headerColumns)=>{
+    headerColumns =>{
       headerColumns.forEach(column => {
         column.classList.add('header-clickable')
       })
 
       delegateClickEvent(headerColumns)
-    }
-    ,5000
+    },
+    1000
   )
 
   function delegateClickEvent(headerColumns) {
@@ -257,7 +257,6 @@ const updateBtnWithoutClass = () => {
           if(e.target.tagName === 'TH') {
             headerIndex = Array.from(headerColumns).indexOf(e.target)
           }
-
           tableController.headerHighlighter(headerIndex)
 
           Status.setStatusText(
@@ -281,8 +280,8 @@ const updateBtnDisabledObserverConfig = {
       `thead th`,
       (headerColumns)=>{
         Status.removeElementOnclickEvent([select, sortingMethodGroup, ...headerColumns])
-      }
-      ,5000
+      },
+      1000
     )
   },
   withoutClass: () => {
