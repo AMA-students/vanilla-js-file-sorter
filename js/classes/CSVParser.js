@@ -131,7 +131,7 @@ const CSVParser = data => {
 // 25K upperhalf
 // './test2.csv'
 
-fileParse('./8.csv','\n').then(data => {
+// fileParse('./8.csv','\n').then(data => {
     // let CSV = CSVParser(data)
     // console.log(data[0])
     // const aux = data[0]
@@ -155,7 +155,7 @@ fileParse('./8.csv','\n').then(data => {
     // const sorted = mergeSort(CSV.slice(1), 7);
 
     // csv.onSummarize(CSV[0], sorted)
-});
+// });
 
 // fileParse('./sample4.json').then(data => {
 //     let arrofObj = JSONParser(data);
