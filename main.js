@@ -247,6 +247,9 @@ const updateBtnWithoutClass = () => {
         elements:[select, sortingMethodGroup,...headerColumns],
 
         func: (e)=>{
+          
+          if(updateClicked === true) return;
+
           const selectedSortingMethod = document.querySelector('input[name=sorting-method]:checked').value;
 
           if(e.target.tagName === 'TH') {
@@ -319,6 +322,10 @@ const parseHandler = (parser, cb) => {
   }
 }
 
+/*============================={ on display state }=============================*/
+
+let updateClicked = false;
+
 displayBtn.onclick = () => {
   const parsingMethod = document.querySelector('input[name=parsing-method]:checked').value;
 
@@ -326,7 +333,11 @@ displayBtn.onclick = () => {
 
   parsingMethodSelector(parsingMethod, (dataRecorder) => {
 
+/*============================={ on update state }=============================*/
+
     updateBtn.onclick = () => {
+
+      updateClicked = true;
 
       onUpdate(dataRecorder)
 
