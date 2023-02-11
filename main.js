@@ -415,9 +415,20 @@ const onUpdate = (dataRecorder) => {
       JSONdataRecorder: JSON.stringify(dataRecorder)
     }
   )
-
+  
   const finalHeaderIndex = headerIndex;
   sortWorker.onmessage = function(message) {
+
+    if(message.data === null) {
+      csv.clear();
+      Status.setStatus({
+        ...statusConfigOnClear,
+        setStatusText: `The ${algorithmName} failed to sort your data. Choose another file or a different algorithm`
+      })
+      select.innerHTML = '';
+
+      return;
+    }
 
     dataRecorder = message.data;
 

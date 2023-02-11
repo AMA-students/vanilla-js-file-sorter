@@ -46,15 +46,22 @@ onmessage = (message) => {
 
     console.time('algorithm')
 
-    sortingAlgorithm(
-        algorithmName, 
-
-        [
-            dataRecorder.fileContentRecords,
-            headerIndex,
-            dataRecorder
-        ]
-    )
+    try {
+        sortingAlgorithm(
+            algorithmName, 
+    
+            [
+                dataRecorder.fileContentRecords,
+                headerIndex,
+                dataRecorder
+            ]
+        )
+    
+    } catch (error) {
+        console.log(error);    
+        postMessage(null);
+        return
+    }
 
     postMessage(dataRecorder);
 
