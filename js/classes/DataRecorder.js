@@ -127,3 +127,7 @@ class FileContentRecord {
     the moveHistory of that data, 
     the value to be sorted on the data,
 */
+
+export {
+    FileContentRecord
+}
