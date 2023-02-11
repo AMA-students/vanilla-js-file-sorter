@@ -19,9 +19,15 @@ const bubbleSort = (array, dataPointIndex, dataRecorder) => {
 
             const someString = typeof(currentY) === 'string' || typeof(currentX) === 'string';
              
+            // const comparison = {
+            //     left: currentX, 
+            //     right: currentY,
+            //     comparison: false 
+            // }
+
             const comparison = {
-                left: currentX, 
-                right: currentY,
+                left: x, 
+                right: y,
                 comparison: false 
             }
 
