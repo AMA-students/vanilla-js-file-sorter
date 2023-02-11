@@ -2,7 +2,7 @@ import CSV from './js/classes/Csv.js';
 import STATUS from './js/classes/Status.js';
 import TableController from './js/classes/TableController.js';
 import { CSVRecorder } from './js/classes/FileRecorders.js';
-
+import { FileContentRecord } from './js/classes/DataRecorder.js';
 /*============================={ algorithms }=============================*/
 
 import { selectionSort } from './js/functions/data-based-sorters/selectionSort.js';
@@ -229,11 +229,9 @@ const papaparseParse = (dataRecorder, cb) => {
 let headerIndex = 0;
 
 const updateBtnWithoutClass = () => {
-
   Status.dynamicElementObserver(
     `thead th`,
     (headerColumns)=>{
-
       headerColumns.forEach(column => {
         column.classList.add('header-clickable')
       })
@@ -409,50 +407,53 @@ const onUpdate = (dataRecorder) => {
     restrictSettings: sortingAlgorithms
   })
   
-  console.time('algorithm')
-  let sorted = sortingAlgorithm(
-    algorithmName, 
+  const sortWorker = new Worker('./sort-worker.js', {type: 'module'});
 
-    [
-      dataRecorder.fileContentRecords,
-      headerIndex,
-      dataRecorder
-    ]
-
-  );
-  dataRecorder.initializeSortedFileContent()
-  dataRecorder.initializeSortedParsedFileContent()
-  console.timeEnd('algorithm')
-
-  // console.log(sorted); // should be a sorted parsedFileContentBody
-
-  if(dataRecorder.fileContentRecords.length < 2 || sorted.parsedFileContentLine) {
-   dataRecorder.fileContentRecords = sorted;
-   sorted = sorted.map(records => records.parsedFileContentLine)
-   console.log('test', sorted);
-  }
-
-  // console.log(sorted, dataRecorder.fileContentRecords);
-  // console.log(dataRecorder.sortedParsedFileContent);
-  displayMethod(headerColumn, dataRecorder.sortedParsedFileContent.slice(1))
-
-  Status.dynamicElementObserver(
-    `table :nth-child(${headerIndex + 1}):not(tr):not(thead)`,
-    (sortedColumn, observer) => {
-
-      sortedColumn.forEach( elem => {
-        if(elem.tagName === 'TH') {
-          elem.classList.add('outline');
-          return;
-        }
-        elem.classList.add('highlight');
-        elem.classList.add('outline');
-      })
-    }, 5000
+  sortWorker.postMessage(
+    {
+      algorithmName: algorithmName,
+      headerIndex: headerIndex,
+      JSONdataRecorder: JSON.stringify(dataRecorder)
+    }
   )
 
-  downloadBtn.onclick = () => {
-    downloadCSVFile(dataRecorder.sortedFileContent.join("\n"), `Sorted-by-${select[headerIndex].value}-${selectedFile.name}`)
-  }
+  sortWorker.onmessage = function(message) {
+    console.log(message);
 
+    dataRecorder = message.data;
+
+    dataRecorder.__proto__ = CSVRecorder.prototype;
+
+    dataRecorder.fileContentRecords.forEach(record => {
+      record.__proto__ = FileContentRecord.prototype;
+    })
+
+    const sorted = dataRecorder.fileContentRecords
+
+    dataRecorder.initializeSortedFileContent()
+    dataRecorder.initializeSortedParsedFileContent()
+
+
+    displayMethod(headerColumn, dataRecorder.sortedParsedFileContent.slice(1))
+
+    Status.dynamicElementObserver(
+      `table :nth-child(${headerIndex + 1}):not(tr):not(thead)`,
+      sortedColumn => {
+
+        sortedColumn.forEach( elem => {
+          if(elem.tagName === 'TH') {
+            elem.classList.add('outline');
+            return;
+          }
+          elem.classList.add('highlight');
+          elem.classList.add('outline');
+        })
+      }, 5000
+    )
+
+    downloadBtn.onclick = () => {
+      downloadCSVFile(dataRecorder.sortedFileContent.join("\n"), `Sorted-by-${select[headerIndex].value}-${selectedFile.name}`)
+    }
+
+  }
 }
