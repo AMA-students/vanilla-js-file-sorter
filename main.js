@@ -441,7 +441,7 @@ const onUpdate = (dataRecorder) => {
     dataRecorder.initializeSortedFileContent()
     dataRecorder.initializeSortedParsedFileContent()
 
-
+    Status.setStatusText('displaying ...')
     displayMethod(headerColumn, dataRecorder.sortedParsedFileContent.slice(1))
 
     Status.dynamicElementObserver(
