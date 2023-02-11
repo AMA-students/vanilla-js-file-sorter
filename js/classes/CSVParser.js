@@ -81,7 +81,8 @@ const CSVParser = data => {
 
     // csv grouper
     let unpolishedCSV = arr.map( rowChar => {
-        const CSVColumnValues = /(?<=^|,)(("[^"]*")|([^,]*))(?=$|,)/g
+        // const CSVColumnValues = /(?<=^|,)(("[^"]*")|([^,]*))(?=$|,)/g
+        const CSVColumnValues = /(?<=^|,)(("[^"]*(?:""[^"]*)*")|([^,]*))(?=$|,)/g
         const excessSpaces = /(?<=^|,) [^\w\d"]| +(?=$|,)/g
 
         /*
@@ -95,6 +96,17 @@ const CSVParser = data => {
             (("[^"]*")|([^,]*)) === (group1 | group2) === get group1 or group2
             (?=$|,) === positive lookahead for the end of the string or a (,)
 
+        */
+
+        /* 
+            modified version:
+
+            (?<=^|,)  === positive lookbehind for the start of each line or (,)
+            ("[^"]*(?:""[^"]*)*") === group1 === get any one or more char that doesn't have (") but is in the middle of ("") 
+            and if there is a char inside ("") but doesn't have a ("), match everything
+            ([^,]*) === group2 === get any one or more char that doesn't have (,)
+            (("[^"]*(?:""[^"]*)*")|([^,]*)) === (group1 | group2) === get group1 or group2
+            (?=$|,) === positive lookahead for the end of the string or a (,)
         */
 
         return rowChar.replaceAll(/[\r]/ig,"").replaceAll(excessSpaces,"").match(CSVColumnValues)
