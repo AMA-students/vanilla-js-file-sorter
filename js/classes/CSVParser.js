@@ -27,7 +27,7 @@ export default class {
 const fileParse = async (text, splitter) => {
     const result = await fetch(text)
     const file = await result.text()
-    console.log(file)
+    // console.log(file)
 
     if(splitter !== undefined) {
         return file.split(splitter);
@@ -40,14 +40,10 @@ const JSONParser = data => {
     console.log(data)
 
     let arr = data.match(/(?!^)({[^}]+})/gi);
-
+    console.log(arr);
     arr = arr.map(elem => {
         return elem.match(/(?<=)("[^,[}]+)(?=,|\n)/gi)
     })
-
-    // let arr = JSON.parse(data).people;
-
-    // console.log(arr, 'yeet');
 
     arr = arr.map(elem => {
         elem = elem.map(el => el.replaceAll(`\"`, ""))
@@ -62,15 +58,6 @@ const JSONParser = data => {
     })
 
     console.log(arrofObj);
-    // console.log(arrofObj);
-    // csv.onUpdate([], arr)
-    // csv.onUpdate([], [...arr].sort((a,b)=> Number(a[3][1]) - Number(b[3][1])))
-    const keys = getObjKeys(arrofObj[0])
-    const values = arrofObj.map(obj => {
-        return getObjValues(obj);
-    })
-    // console.log(keys, values);
-    // csv.onUpdate(keys, values.sort((a,b) => a[4] - b[4]))
     return arrofObj
 }
 
@@ -141,13 +128,34 @@ const CSVParser = data => {
     // csv.onSummarize(polishedCSV[0], mergeSort(polishedCSV.slice(1), 1))
     return polishedCSV
 }
+// 25K upperhalf
+// './test2.csv'
 
-// fileParse('./test2.csv','\n').then(data => {
-//     let CSV = CSVParser(data)
-//     const sorted = mergeSort(CSV.slice(1), 7);
+fileParse('./8.csv','\n').then(data => {
+    // let CSV = CSVParser(data)
+    // console.log(data[0])
+    // const aux = data[0]
+    // data[0] = data[2]
+    // data[2] = aux;
+    // downloadCSVFile(data.join("\n"), 'test.csv')
 
-//     csv.onSummarize(CSV[0], sorted)
-// });
+    // data = removeUndefined(data)
+    // const dataRecorder = new DataRecorder(data.join('\n'),'\n', 0);
+
+    // let CSV = removeUndefined(CSVParser(data))
+    // console.log(CSV);
+
+    // dataRecorder.setParsedData(CSV);
+
+    // console.log(
+    //     dataRecorder
+    // );
+
+    // console.log(CSV, data);
+    // const sorted = mergeSort(CSV.slice(1), 7);
+
+    // csv.onSummarize(CSV[0], sorted)
+});
 
 // fileParse('./sample4.json').then(data => {
 //     let arrofObj = JSONParser(data);
