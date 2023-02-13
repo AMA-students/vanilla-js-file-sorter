@@ -88,6 +88,8 @@ class JSONRecorder extends DataRecorder {
 
         this.type = "JSON";
 
+        if(!(fileContent && datapointIndex)) return;
+
         this.initializeFileContent(fileContent)
         
         this.initializeDatapointIndex(datapointIndex)
@@ -96,56 +98,38 @@ class JSONRecorder extends DataRecorder {
     initializeFileContent(fileContent) {
         this.setFileContent(fileContent)
 
-        // if(!this.fileContent) return null;
-
-        // this.parsedFileContent = JSON.parse(this.fileContent)
-
-        // if(!this.splitFileContent) return null;
-        // this.setFileContentHeader(this.splitFileContent[0])
-        // this.setFileContentBody(this.splitFileContent.slice(1))
-
-        // this.initializeFileContentRecords()
     }
 
-    initializeDatapointIndex() {
-
-    }
-
-    initializeParsedFileContent() {
+    initializeParsedFileContent(headerColumn, dataBody, errorHandler) {
         if(!this.fileContent) return;
 
-        this.parsedFileContent = JSON.parse(this.fileContent);
+        this.setParsedFileContentHeader(headerColumn)
+        
+        this.setParsedFileContentBody(dataBody)
 
-        // if(!Array.isArray(this.parsedFileContent)) return;
-        // console.log(this.parsedFileContent, Array.isArray(this.parsedFileContent.people));
+        try {
+            this.parsedFileContent = JSON.parse(this.fileContent);
+
+        } catch (error) {
+            errorHandler(error)
+        }
+
+        this.setComparisonHistory([])
 
     }
 
     initializeFileContentRecords() {
-        // if(!this.parsedFileContentBody) return null;
-        // this.setFileContentRecords()
-
-        // if(!this.fileContentRecords) return null;
-        // this.setFileContentLines()
-        
-        // if(!this.datapointIndex) return null;
-        // this.setFileContentValues()
+        if(!this.parsedFileContentBody) return null;
+        this.setFileContentRecords()
     }
 
-    getKeys(obj) {
-        let keys = [];
-      
-        for (let key in obj) {
-          keys.push(key);
-      
-          if (typeof obj[key] === "object") {
-            keys = keys.concat([this.getKeys(obj[key])]);
-          }
-        }
-        console.log(keys);
-        return keys;
-    }
+    initializeDatapointIndex(datapointIndex) {
+        this.datapointIndex = datapointIndex
 
+        if(!this.fileContentRecords) return null;
+        this.setFileContentValues()
+    }
+    
 }
 
 function traverser(obj, propertyPath, level = 0) {
