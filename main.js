@@ -238,7 +238,7 @@ const updateBtnWithoutClass = () => {
 
       delegateClickEvent(headerColumns)
     },
-    1000
+    500
   )
 
   function delegateClickEvent(headerColumns) {
