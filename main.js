@@ -1,7 +1,7 @@
 import CSV from './js/classes/Csv.js';
 import STATUS from './js/classes/Status.js';
 import TableController from './js/classes/TableController.js';
-import { CSVRecorder } from './js/classes/FileRecorders.js';
+import { CSVRecorder, dataRecorderSetter } from './js/classes/FileRecorders.js';
 import { FileContentRecord } from './js/classes/DataRecorder.js';
 /*============================={ algorithms }=============================*/
 
@@ -238,7 +238,7 @@ const updateBtnWithoutClass = () => {
 
       delegateClickEvent(headerColumns)
     },
-    1000
+    500
   )
 
   function delegateClickEvent(headerColumns) {
@@ -310,14 +310,24 @@ const parseHandler = (parser, cb) => {
   reader.onload = async function (e) {
     var data = e.target.result
 
-    const dataRecorder = new CSVRecorder();
+    // const dataRecorder = new CSVRecorder();
+    const dataRecorder = dataRecorderSetter(selectedFile.name);
 
     dataRecorder.initializeFileContent(data)
 
     const [headerColumn, dataBody] = parser(dataRecorder);
 
-    dataRecorder.initializeParsedFileContent([headerColumn, ...dataBody])
-
+    if(dataRecorder.type === 'JSON') {
+      console.log('JSON test');
+      dataRecorder.initializeParsedFileContent(headerColumn, dataBody, (err) => {
+        console.log(err);
+        Status.setStatusText('failed to parse the JSON file. Make sure that it is a JSON array file')
+      })  
+    } 
+    else {
+      dataRecorder.initializeParsedFileContent([headerColumn, ...dataBody])
+    }
+    
     console.log(dataRecorder);
     setDataPoints(headerColumn, select)
     displayMethod(headerColumn, dataBody)  
@@ -383,7 +393,7 @@ const statusConfigOnUpdate = {
 
 const onUpdate = (dataRecorder) => {
 
-  const dataBody = [...dataRecorder.parsedFileContentBody];
+  // const dataBody = [...dataRecorder.parsedFileContentBody];
 
   const headerColumn = dataRecorder.parsedFileContentHeader;
 
@@ -399,7 +409,7 @@ const onUpdate = (dataRecorder) => {
 
   const algorithmName = document.querySelector('input[name=sorting-method]:checked').value;
 
-  const columnToSort = dataBody.map(row => row[select.selectedIndex])
+  // const columnToSort = dataBody.map(row => row[select.selectedIndex])
 
   Status.setStatus({
     ...statusConfigOnUpdate,

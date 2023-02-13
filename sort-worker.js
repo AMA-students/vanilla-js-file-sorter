@@ -8,7 +8,7 @@ import {mergeSort} from './js/functions/data-based-sorters/mergeSort.js';
 
 import bubbleSort from './js/functions/data-based-sorters/bubbleSort.js';
 
-import { CSVRecorder } from './js/classes/FileRecorders.js';
+import { CSVRecorder, JSONRecorder } from './js/classes/FileRecorders.js';
 
 import { FileContentRecord } from "./js/classes/DataRecorder.js";
 
@@ -39,7 +39,13 @@ onmessage = (message) => {
     
     const dataRecorder = JSON.parse(JSONdataRecorder);
 
-    dataRecorder.__proto__ = CSVRecorder.prototype;
+    if(dataRecorder.type === "JSON") {
+        dataRecorder.__proto__ = JSONRecorder.prototype;
+    }
+    else {
+        dataRecorder.__proto__ = CSVRecorder.prototype;
+    }
+
     dataRecorder.fileContentRecords.forEach(record => {
         record.__proto__ = FileContentRecord.prototype;
     })
