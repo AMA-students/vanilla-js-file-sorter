@@ -4,7 +4,7 @@
 
 .disabled {
     cursor: not-allowed;
-    background: gray;
+    background: $light-onyx;
 }
 
 .text-center {
@@ -17,7 +17,7 @@
 }
 
 .highlight {
-    background-color: #ffff74;
+    background-color: $wood;
 }
 
 .outline {
@@ -30,4 +30,16 @@
 
 .show {
     opacity: 1;
+}
+
+.compare {
+    background-color: blue;
+}
+
+.cover {
+    position: absolute;
+    top: 0;
+    height:100%;
+    width: 100%;
+    cursor: not-allowed;
 }

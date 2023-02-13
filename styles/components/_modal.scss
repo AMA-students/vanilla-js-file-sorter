@@ -3,6 +3,7 @@
     cursor: default;
     background-color: black;
     overflow: auto;
+    @include color-scheme($scheme-woody...)
 }
   
 .screen {

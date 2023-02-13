@@ -1,18 +1,3 @@
-export default class {
-
-    twoDementionalArrayElemenentComparator(arr) {
-        /*
-            will return the values of the selected demension in an array
-        */
-        return 
-    }    
-}
-
-// consoles
-const warnNoDataPointIndex = () => {
-    console.warn(`the dataPointIndex is undefined`);
-}
-
 const removeUndefined = data => data.filter(element => element !== undefined && element != '');
 
 // stringsToNumbers
@@ -87,46 +72,42 @@ const isStringWithoutNum = (value) => {
     return typeof(value) === "string";
 }
 
+function removeComma(str) {
+    return str.replace(/,/g, "");
+}
+
+function isValidNumber(str) {
+    return /^[+-]?[0-9.,]+$/.test(str);
+}
+
+function parseValue(value) {
+    if (value == null) {
+        return "";
+    }
+
+    const originalValue = value;
+    value = value.toString();
+
+    if (isValidNumber(value)) {
+        value = removeComma(value);
+    }
+
+    if (!isNaN(Number(value)) && value !== "") {
+        return Number(value);
+    }
+    return originalValue;
+}
+
 const isValidNumberButWithCommaValidator = (value1, value2) => {
-    let originalValue1 = value1
-    let originalValue2 = value2
 
-    value1 = value1.toString()
-    value2 = value2.toString()
-
-    value1 = /(^|^-|^\+)[0-9,.]+$/.test(value1) ? value1.replaceAll(/,/g, '') : value1 
-    value2 = /(^|^-|^\+)[0-9,.]+$/.test(value2) ? value2.replaceAll(/,/g, '') : value2
-
-    value1 = value1 === '' ? originalValue1 : value1
-    value2 = value2 === '' ? originalValue2 : value2
-
-    value1 = (!isNaN(Number(value1)) && value1 !== "") ? Number(value1) : value1 
-    value2 = (!isNaN(Number(value2)) && value2 !== "") ? Number(value2) : value2
+    value1 = parseValue(value1)
+    value2 = parseValue(value2)
     
     return [
         value1,
         value2
     ]
 }
-
-const stringStartsWithNumber = value => {
-
-    if(typeof(value) !== 'string') return console.error(`this function expects a string as an argument`);
-
-    // check the first char if it's a number
-    const firstChar = value.charAt(0);
-
-    // check if the firstChar is a number
-    
-    return !isNaN(parseFloat(firstChar))
-}
-
-/* 
-    let startsWithNumber, containsSymbols
-
-    if isStringWithoutNum === true, 
-    => startsWith number = false, containsSymbols ?
-*/
 
 const hasComma = value => {
 
@@ -201,52 +182,11 @@ const  parseStringNumWithComma = (value) => {
     return Number(removedComma);
 }
 
-const classifier = (data) => {
-
-    const dataClassification = {
-
-        data: data,
-        dataType: typeof(data),
-        isNan: isNaN(data),
-        isNum: !isNaN(data),
-        isFinite: isFinite(data)
-        
-    }
-
-    return dataClassification;
-}
-
-const DatasetClassifier = (dataset) => {
-
-    let hasNum, hasString;
-    hasNum = dataset.some( data => !isNaN(data));
-    hasString = dataset.some( data => typeof(data) === 'string');
-
-    const datasetClassification = {
-
-        dataset: dataset,
-        hasNum: hasNum,
-        hasString: hasString,
-
-        
-        // dataType: typeof(dataset),
-        // isNan: isNaN(dataset),
-        // isNum: !isNaN(dataset),
-        // isFinite: isFinite(dataset)
-        
-    }
-
-    return datasetClassification;
-}
-
-// 
-let testArray = ['03','3',"1",'2', "09", '10', '11', '20'];
-
-const alphanumericComparator = (a, b, collator) => {
+const alphanumericComparator = (a, b, collator, compareUndefined) => {
 
     let someUndefined = (a == null || b == null);
 
-    if(someUndefined) {
+    if(someUndefined && !compareUndefined) {
         console.error(`compared to an undefined a:${a} b:${b}`);
         return null;
     }
@@ -298,14 +238,41 @@ const getCheckedRadio = (radioName) => {
     return document.querySelector(`input[name=${radioName}]:checked`);
 }
 
+const sortingMode = (currentX, currentY, dataPointIndex, dataRecorder) => {
+
+    if(dataPointIndex == null) {
+        
+        return [
+            currentX,
+            currentY
+        ] = isValidNumberButWithCommaValidator(currentX, currentY);
+    }
+
+    if(dataRecorder != null) {
+        return [
+            currentX,
+            currentY
+        ] = isValidNumberButWithCommaValidator(
+            currentX.parsedFileContentLine[dataPointIndex], 
+            currentY.parsedFileContentLine[dataPointIndex]
+        );
+    }
+
+
+    return [
+        currentX,
+        currentY
+    ] = isValidNumberButWithCommaValidator(currentX[dataPointIndex], currentY[dataPointIndex]);
+}
+
 // strings
 
 // pure numbers
 
 export {
-
     testParser,
     getRealValue,
+    sortingMode,
     getRealValues,
     stringToNumber,
     getCheckedRadio,

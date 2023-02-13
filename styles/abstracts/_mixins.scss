@@ -1,0 +1,13 @@
+@mixin btn-color-scheme($text, $bg, $bg-hov) {
+    background-color: $bg;
+    color:$text;
+  
+    &:hover:not(.disabled) {
+      background: $bg-hov;
+    }
+}
+  
+@mixin color-scheme($text, $bg) {
+    background-color: $bg;
+    color:$text;
+}

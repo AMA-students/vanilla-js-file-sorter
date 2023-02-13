@@ -30,7 +30,7 @@ export default class {
     Options = {
         hide: function(elements) {
 
-            elements.map(element => {
+            elements.forEach(element => {
                 
                 if(element.classList.contains('hide')) return;
 
@@ -46,7 +46,7 @@ export default class {
         },
         show: function(elements) {
 
-            elements.map(element => {
+            elements.forEach(element => {
 
                 if(element.classList.contains('show')) return;
 
@@ -62,14 +62,14 @@ export default class {
         },
 
         disable: function(elements) {
-            elements.map(element => {
+            elements.forEach(element => {
                 element.disabled = true;
                 element.classList.add('disabled')
             })
             
         },
         enable: function(elements) {
-            elements.map(element => {
+            elements.forEach(element => {
                 element.disabled = false;
                 element.classList.remove('disabled')
             })
@@ -81,17 +81,29 @@ export default class {
             if(coverExist) return;
             const cover = document.createElement('div');
             cover.classList.add('cover')
-            // console.log(element)
             element.style.position = 'relative';
-            cover.style.position = 'absolute';
-            cover.style.top = '0'
-            cover.style.height = '100%'
-            cover.style.width = '100%'
             element.appendChild(cover);
         },
         uncover: function(element) {
             const cover = element.querySelector('.cover');
             if(cover) element.removeChild(cover);
+        },
+
+        restrictSettings: function(elements) {
+            elements.forEach(element => {
+                this.disable([element]);
+                this.disable([element.nextElementSibling]);
+
+                this.cover(element.parentElement)
+            })
+        }, 
+        unrestrictSettings: function(elements) {
+            elements.forEach(element => {
+                this.enable([element]);
+                this.enable([element.nextElementSibling]);
+
+                this.uncover(element.parentElement)
+            })
         }
     }
     delegateEvent(elements, eventObj) {
@@ -105,8 +117,8 @@ export default class {
         const {elements, func} = config;
         
         elements.forEach(element => {
-            element.onclick = () => {
-                func()
+            element.onclick = (e) => {
+                func(e)
             }
         });
     }
@@ -142,16 +154,27 @@ export default class {
 
         return elementClassObserver;
     }
-    dynamicElementObserver = (selector, cb) => {
+    dynamicElementObserver = (selector, cb, secs) => {
         const observer = new MutationObserver(() => {
             const dynamicElements = document.querySelectorAll(selector);
+
+            if(!dynamicElements) {
+                console.error('no dynamic element is found', dynamicElements);
+                return null;
+            }
+            
             cb(dynamicElements, observer);
         });
+
+        if(secs !== null) {
+            setTimeout(()=>{
+                observer.disconnect();
+            },secs)
+        }
         
         observer.observe(document.body, {
             childList: true,
             subtree: true,
         });
-
     }
 }

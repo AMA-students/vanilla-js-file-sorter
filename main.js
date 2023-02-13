@@ -1,23 +1,28 @@
 import CSV from './js/classes/Csv.js';
 import STATUS from './js/classes/Status.js';
-import State from './js/classes/state.js';
 import TableController from './js/classes/TableController.js';
-
+import { CSVRecorder, dataRecorderSetter } from './js/classes/FileRecorders.js';
+import { FileContentRecord } from './js/classes/DataRecorder.js';
 /*============================={ algorithms }=============================*/
 
-import { selectionSortCSV as selectionSort } from './js/functions/algo/selectionSort.js';
-import quickSort from './js/functions/algo/quickSort.test copy.js';
-import { mergeSortTest as mergeSort } from './js/functions/algo/mergeSort.js';
-import bubbleSort from './js/functions/algo/bubbleSort.js';
+import { selectionSort } from './js/functions/data-based-sorters/selectionSort.js';
+
+
+import quickSort from './js/functions/data-based-sorters/quickSort.js';
+
+import {mergeSort} from './js/functions/data-based-sorters/mergeSort.js';
+
+
+import bubbleSort from './js/functions/data-based-sorters/bubbleSort.js';
 
 /*============================={ side effect funtions }=============================*/
 
 import setDataPoints from './js/functions/sideEffectes/setDataPoints.js';
-import htmlToCSV, {arrayToCsv, downloadCSVFile } from './js/functions/sideEffectes/htmlToCSV.js';
+import { downloadCSVFile } from './js/functions/sideEffectes/htmlToCSV.js';
  
 /*============================={ parsers }=============================*/
 
-import { CSVParser, JSONParser, fileParse } from './js/classes/CSVParser.js';
+import { CSVParsing, JSONParsing } from './js/parsingMethods.js';
 
 const form = document.querySelector("#getfile");
 const selectGroup = document.querySelector('#sort-select-group')
@@ -27,7 +32,6 @@ const table = document.querySelector('table')
 
 /*============================={ class instances }=============================*/
 
-const state = new State();
 const csv = new CSV(table)
 const tableController = new TableController(table);
 const Status = new STATUS(document.querySelector('#status'));
@@ -48,7 +52,8 @@ import {
 import { removeUndefined } from './js/classes/utility.js';
 
 const settingsCover = document.querySelector('#settings-cover');
-
+const parsingMethods = document.querySelectorAll('input[name=parsing-method]');
+const sortingAlgorithms =  document.querySelectorAll('input[name=sorting-method]')
 
 /*============================={ initial state }=============================*/
 
@@ -67,15 +72,58 @@ const sortingAlgorithm = (algo, args) => {
     quickSort: (...args) => quickSort(...args),
     bubbleSort: (...args) => bubbleSort(...args),
     mergeSort: (...args) => mergeSort(...args),
+    // mergeSort: (...args) => {
+    //   const [dataRecorder, dataPointIndex] = args
+
+    //   // mergeSort(...args)
+    //   return mergeSort(
+    //     dataRecorder.fileContentRecords,
+    //     dataPointIndex,
+    //     dataRecorder
+    //   )
+    // },
+
     selectionSort: (...args) => selectionSort(...args),
 
-    test: (...args) => {
-      console.log(...args)
-    }
-    
   }
 
   return algos[algo](...args)
+
+};
+
+const parsingMethodSelector = (method, cb) => {
+
+  const methods = {
+    CSV: () => {
+      parseHandler(data => CSVParsing(data), cb)
+    },
+    JSON: () => {
+      parseHandler(data => JSONParsing(data), cb)
+    },
+    papaparse: () => {
+      if(!selectedFile) return;
+  
+      var reader = new FileReader();
+
+      reader.readAsText(selectedFile)
+
+      reader.onload = async function (e) {
+        var data = e.target.result
+        
+        // const dataRecorder = new DataRecorder()
+        // dataRecorder.setFileContent(data)
+        // dataRecorder.fileContentSplitter('\n')
+
+        const dataRecorder = new CSVRecorder()
+        dataRecorder.initializeFileContent(data)
+
+        papaparseParse(dataRecorder, cb)
+      }
+
+    }
+  }
+
+  return methods[method]()
 
 };
 
@@ -136,27 +184,6 @@ form.onsubmit = async e => {
   if(!selectedFile) return;
   csv.clear();
 
-  var reader = new FileReader();
-
-  // reader.readAsDataURL(selectedFile)
-  reader.readAsText(selectedFile)
-
-  reader.onload = async function (e) {
-    const data = e.target.result
-    const CSV = CSVParser(data.split('\n'))
-    const headerColumn = CSV[0];
-
-    setDataPoints(headerColumn, select)
-  }
-
-  // Papa.parse(selectedFile, {
-
-  //   complete: results => {
-  //     setDataPoints(results, select);
-  //   }
-
-  // });
-
   Status.setStatus({
     ...statusConfigOnSubmit,
     setStatusText: selectedFile.name
@@ -164,26 +191,16 @@ form.onsubmit = async e => {
 
   form.reset();
 
-}
-
-const statusConfigOnDisplay = {
-
-  setStatusText: 'Loading...',
-  show: [selectGroup],
-  enable: [clearBtn, updateBtn],
-  disable: [submitBtn, displayBtn, inputFile],
+  settingsCover.classList.toggle('hidden')
 
 }
 
 // displayBtn initiate's the loading state
 
-const papaparseParse = () => {
+const papaparseParse = (dataRecorder, cb) => {
   console.time('papaparse')
 
   if(!selectedFile) return;
-
-  Status.setStatus(statusConfigOnDisplay);
-  Status.Options.disable([submitBtn])
 
   Papa.parse(selectedFile, {
     worker: true,
@@ -197,10 +214,11 @@ const papaparseParse = () => {
 
       // addToConfig -> settings for what algorithm to use
       displayMethod(headerColumn, dataBody)      
+      setDataPoints(headerColumn, select)
 
-      updateBtn.onclick = () => {
-        onUpdate(headerColumn, dataBody)
-      }
+      dataRecorder.initializeParsedFileContent(results.data)
+
+      cb(dataRecorder)
 
     }
 
@@ -208,59 +226,39 @@ const papaparseParse = () => {
   console.timeEnd('papaparse')
 
 };
+let headerIndex = 0;
 
-const CSVParsing = () => {
-  console.time('CSVParse')
+const updateBtnWithoutClass = () => {
+  Status.dynamicElementObserver(
+    `thead th`,
+    headerColumns =>{
+      headerColumns.forEach(column => {
+        column.classList.add('header-clickable')
+      })
 
-  if(!selectedFile) return;
+      delegateClickEvent(headerColumns)
+    },
+    500
+  )
 
-  Status.setStatus(statusConfigOnDisplay);
-  
-  var reader = new FileReader();
-
-  // reader.readAsDataURL(selectedFile)
-  reader.readAsText(selectedFile)
-
-  reader.onload = async function (e) {
-    var data = e.target.result
-    
-    // let CSV = await fileParse(data, '\n')
-
-    const CSV = CSVParser(data.split('\n'));
-
-    const headerColumn = CSV[0];
-    const csvBody = CSV.slice(1)
-    const dataBody = removeUndefined(csvBody)
-
-    displayMethod(headerColumn, dataBody)      
-    Status.Options.disable([submitBtn])
-
-    updateBtn.onclick = () => {
-      onUpdate(headerColumn, dataBody)
-    }
-
-  }
-  console.timeEnd('CSVParse')
-}
-
-const updateBtnDisabledObserverConfig = {
-  elements:[updateBtn],
-  classToObserve: 'disabled',
-  withClass: () => {
-    Status.removeElementOnclickEvent([select, sortingMethodGroup])
-  },
-  withoutClass: () => {
+  function delegateClickEvent(headerColumns) {
     Status.delegateOnclickEvent(
       {
-        elements:[select, sortingMethodGroup],
+        elements:[select, sortingMethodGroup,...headerColumns],
 
-        func: ()=>{
+        func: (e)=>{
+          
+          if(updateClicked === true) return;
+
           const selectedSortingMethod = document.querySelector('input[name=sorting-method]:checked').value;
-          const headerIndexToHighlight = select.selectedIndex
-          tableController.headerHighlighter(headerIndexToHighlight)
+
+          if(e.target.tagName === 'TH') {
+            headerIndex = Array.from(headerColumns).indexOf(e.target)
+          }
+          tableController.headerHighlighter(headerIndex)
 
           Status.setStatusText(
-            `Sort {${select.value}} using {${selectedSortingMethod}}`
+            `Sort {${select[headerIndex].value}} using {${selectedSortingMethod}}`
           )
 
         }
@@ -268,12 +266,96 @@ const updateBtnDisabledObserverConfig = {
       }
     ) 
   }
+  
+}
+let updateClicked = false;
+
+const updateBtnDisabledObserverConfig = {
+  elements:[updateBtn],
+  classToObserve: 'disabled',
+  withClass: () => {
+
+    Status.dynamicElementObserver(
+      `thead th`,
+      (headerColumns)=>{
+        Status.removeElementOnclickEvent([select, sortingMethodGroup, ...headerColumns])
+      },
+      1000
+    )
+  },
+  withoutClass: () => {
+
+    updateClicked = false;
+    
+    updateBtnWithoutClass()
+  }
 }
 Status.delegateClassMutationObserver(updateBtnDisabledObserverConfig)
 
+const statusConfigOnDisplay = {
+
+  setStatusText: 'Loading...',
+  enable: [clearBtn, updateBtn],
+  disable: [submitBtn, displayBtn, inputFile],
+  restrictSettings: parsingMethods
+}
+
+const parseHandler = (parser, cb) => {
+  if(!selectedFile) return;
+  
+  var reader = new FileReader();
+
+  reader.readAsText(selectedFile)
+  console.log(selectedFile);
+  reader.onload = async function (e) {
+    var data = e.target.result
+
+    // const dataRecorder = new CSVRecorder();
+    const dataRecorder = dataRecorderSetter(selectedFile.name);
+
+    dataRecorder.initializeFileContent(data)
+
+    const [headerColumn, dataBody] = parser(dataRecorder);
+
+    if(dataRecorder.type === 'JSON') {
+      console.log('JSON test');
+      dataRecorder.initializeParsedFileContent(headerColumn, dataBody, (err) => {
+        console.log(err);
+        Status.setStatusText('failed to parse the JSON file. Make sure that it is a JSON array file')
+      })  
+    } 
+    else {
+      dataRecorder.initializeParsedFileContent([headerColumn, ...dataBody])
+    }
+    
+    console.log(dataRecorder);
+    setDataPoints(headerColumn, select)
+    displayMethod(headerColumn, dataBody)  
+
+    cb(dataRecorder)
+  }
+}
+
+/*============================={ on display state }=============================*/
+
 displayBtn.onclick = () => {
-  // CSVParsing()
-  papaparseParse()
+  const parsingMethod = document.querySelector('input[name=parsing-method]:checked').value;
+
+  Status.setStatus(statusConfigOnDisplay);
+
+  parsingMethodSelector(parsingMethod, (dataRecorder) => {
+
+/*============================={ on update state }=============================*/
+
+    updateBtn.onclick = () => {
+
+      updateClicked = true;
+
+      onUpdate(dataRecorder)
+
+    }
+
+  })
 }
 
 const statusConfigOnClear = {
@@ -282,6 +364,7 @@ const statusConfigOnClear = {
   hide: [selectGroup],
   enable: [inputFile],
   disable: [clearBtn, stopBtn, updateBtn, downloadBtn, submitBtn, displayBtn],
+  unrestrictSettings: [...parsingMethods, ...sortingAlgorithms]
 
 }
 
@@ -296,7 +379,7 @@ clearBtn.onclick = () => {
   csv.clear();
   Status.setStatus(statusConfigOnClear)
   select.innerHTML = '';
-
+  
 }
 
 const statusConfigOnUpdate = {
@@ -308,9 +391,15 @@ const statusConfigOnUpdate = {
 
 }
 
-const onUpdate = (headerColumn, dataBody) => {
-  // const algorithmName = 'quickSort'
-  // let algorithmName;
+const onUpdate = (dataRecorder) => {
+
+  // const dataBody = [...dataRecorder.parsedFileContentBody];
+
+  const headerColumn = dataRecorder.parsedFileContentHeader;
+
+  dataRecorder.initializeFileContentRecords()
+
+  dataRecorder.initializeDatapointIndex(headerIndex)
 
   if(!document.querySelector('input[name=sorting-method]:checked')) {
 
@@ -319,43 +408,70 @@ const onUpdate = (headerColumn, dataBody) => {
   }
 
   const algorithmName = document.querySelector('input[name=sorting-method]:checked').value;
-  // const algorithmName = 'mergeSortTest'
 
-  Status.setStatus(statusConfigOnUpdate)
+  // const columnToSort = dataBody.map(row => row[select.selectedIndex])
+
+  Status.setStatus({
+    ...statusConfigOnUpdate,
+    restrictSettings: sortingAlgorithms
+  })
   
-  console.time('algorithm')
-  let sorted = sortingAlgorithm( algorithmName,[dataBody, select.selectedIndex]);
-  console.timeEnd('algorithm')
-  console.log(sorted)
-  displayMethod(headerColumn, sorted)
+  const sortWorker = new Worker('./sort-worker.js', {type: 'module'});
 
-  Status.dynamicElementObserver(
-    `table :nth-child(${select.selectedIndex + 1}):not(tr):not(thead)`,
-
-    (sortedColumn, observer) => {
-
-      sortedColumn.forEach( elem => {
-        if(elem.tagName === 'TH') {
-          elem.classList.add('outline');
-          return;
-        }
-        elem.classList.add('highlight');
-        elem.classList.add('outline');
-      })
-      observer.disconnect();
+  sortWorker.postMessage(
+    {
+      algorithmName: algorithmName,
+      headerIndex: headerIndex,
+      JSONdataRecorder: JSON.stringify(dataRecorder)
     }
   )
   
+  const finalHeaderIndex = headerIndex;
+  sortWorker.onmessage = function(message) {
 
-  // test download button
-  if(document.querySelector('.downloadBtn')) return;
+    if(message.data === null) {
+      csv.clear();
+      Status.setStatus({
+        ...statusConfigOnClear,
+        setStatusText: `The ${algorithmName} failed to sort your data. Choose another file or a different algorithm`
+      })
+      select.innerHTML = '';
 
-  downloadBtn.onclick = () => {
+      return;
+    }
 
-    var html = document.querySelector("table").outerHTML;
-    arrayToCsv(headerColumn, sorted, `Sorted-by-${select.value}-${selectedFile.name}`, downloadCSVFile);
+    dataRecorder = message.data;
 
-  } 
+    dataRecorder.__proto__ = CSVRecorder.prototype;
 
-  console.log(3);
+    dataRecorder.fileContentRecords.forEach(record => {
+      record.__proto__ = FileContentRecord.prototype;
+    })
+
+    dataRecorder.initializeSortedFileContent()
+    dataRecorder.initializeSortedParsedFileContent()
+
+    Status.setStatusText('displaying ...')
+    displayMethod(headerColumn, dataRecorder.sortedParsedFileContent.slice(1))
+
+    Status.dynamicElementObserver(
+      `table :nth-child(${finalHeaderIndex + 1}):not(tr):not(thead)`,
+      sortedColumn => {
+
+        sortedColumn.forEach( elem => {
+          if(elem.tagName === 'TH') {
+            elem.classList.add('outline');
+            return;
+          }
+          elem.classList.add('highlight');
+          elem.classList.add('outline');
+        })
+      }, 5000
+    )
+
+    downloadBtn.onclick = () => {
+      downloadCSVFile(dataRecorder.sortedFileContent.join("\n"), `Sorted-by-${select[headerIndex].value}-${selectedFile.name}`)
+    }
+
+  }
 }

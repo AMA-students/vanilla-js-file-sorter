@@ -1,4 +1,5 @@
-import { alphanumericComparator, stringToNumber } from "../../classes/utility.js"
+import { alphanumericComparator, sortingMode } from "../../classes/utility.js"
+
 
 function selectionSort(arr) {
     for (let i = 0; i < arr.length; i++) {
@@ -27,9 +28,12 @@ function selectionSortCSV(arr, dataPointIndex) {
 
     // for loop for determining the actual lowest
     for (let j = i + 1; j < arr.length; j++) {
-      const currentValue = stringToNumber(arr[j][dataPointIndex]).realVal;
-      const currentLowest = stringToNumber(arr[lowest][dataPointIndex]).realVal;
 
+      // const currentValue = stringToNumber(arr[j][dataPointIndex]).realVal;
+      // const currentLowest = stringToNumber(arr[lowest][dataPointIndex]).realVal;
+
+      const [currentValue, currentLowest] = sortingMode(arr[j], arr[lowest], dataPointIndex);
+      
       if(typeof(currentValue) === 'string' || typeof(currentLowest) === 'string') {
 
         if(alphanumericComparator(currentLowest, currentValue, collator)) {

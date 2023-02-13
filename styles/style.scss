@@ -7,37 +7,22 @@
   margin-top: 60px;
 } */
 
-// colors
-$dark-green: #006b56;
-$green: #009578;
-$light-green: #00a382;
+// @charset 'utf-8';
 
-// colors -- button
-$clr-primary-btn:$green;
-$clr-primary-btn-hov:$dark-green;
+// //Vendor
+// @import "vendor/__vendor-dir";
 
-// text
-$primary-font: "Quicksand", sans-serif;
+//Abstracts
+@import "abstracts/__abstracts-dir";
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: $primary-font;
-}
-  
-// table 
-@import "components/table";
-  
-// buttons
-@import "components/btn";
-  
+//Base Styles
+@import "base/__base-dir";
 
-// modal
-@import "components/modal";
-  
-/* settings */
-@import "components/settings";
+//Components
+@import "components/__components-dir";
+
+// //Layout
+// @import "layouts/__layouts-dir";
 
 // utility
 @import "utility";
