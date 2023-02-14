@@ -1,7 +1,7 @@
 // factory functions
 const moveRecorder = state => ({ recordMove: indexMoved => state.moveHistory.push(indexMoved)});
 
-const ValueSetter = state => ({ setValue: value => state.value = value });
+const valueSetter = state => ({ setValue: value => state.value = value });
 
 const parsedLineSetter = state => ({
      setParsedLine: parsedLine => state.parsedLine = parsedLine
@@ -26,7 +26,7 @@ const CSVFileRecord = (parsedFileContentLine, index) => {
     return Object.assign(
         state,
         moveRecorder(state),
-        ValueSetter(state),
+        valueSetter(state),
         parsedLineSetter(state),
         lineSetter(state)
     )
@@ -47,5 +47,6 @@ const JSONFileRecord = (parsedFileContentLine, index) => {
     return Object.assign(
         state,
         moveRecorder(state),
+        valueSetter(state),
     )
 }
