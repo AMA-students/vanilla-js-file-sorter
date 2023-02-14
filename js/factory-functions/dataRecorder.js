@@ -86,11 +86,14 @@ const comparisonRecorder = state => ({
     }
 })
 
-const dataRecorder = (fileContent, datapointIndex) => {
+const dataRecorder = (fileContent = null, datapointIndex = null) => {
 
-    let state = {};
+    const state = {
+        fileContent: fileContent,
+        datapointIndex: datapointIndex
+    };
 
-    state = Object.assign(
+    return Object.assign(
         state,
         fileContentSetter(state), 
         dataPointIndexSetter(state), 
@@ -105,10 +108,8 @@ const dataRecorder = (fileContent, datapointIndex) => {
         parsedFileBodySetter(state), 
         comparisonRecorder(state) 
     )
+}
 
-    state.setFileContent(fileContent) // fileContent data
-
-    state.setDataPointIndex(datapointIndex) // index of the column to be sorted
-
-    return state;
+export {
+    dataRecorder
 }
