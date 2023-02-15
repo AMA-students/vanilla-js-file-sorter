@@ -486,6 +486,10 @@ const onUpdate = (dataRecorder) => {
     )
 
     downloadBtn.onclick = () => {
+      if(dataRecorder.type === "JSON") {
+        downloadCSVFile(dataRecorder.sortedFileContent.join("\n"), `Sorted-by-${select[headerIndex].value}-${selectedFile.name}`)
+      }
+      console.log(dataRecorder);
       downloadCSVFile(dataRecorder.sortedFileContent.join("\n"), `Sorted-by-${select[headerIndex].value}-${selectedFile.name}`)
     }
 
