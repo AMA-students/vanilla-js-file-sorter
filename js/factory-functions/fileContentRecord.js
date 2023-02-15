@@ -67,3 +67,14 @@ const JSONFileRecord = (parsedFileContentLine, index) => {
         valueSetter(state),
     )
 }
+
+const recordType = {
+    CSV: (...args) => CSVFileRecord(...args),
+    JSON: (...args) => JSONFileRecord(...args),
+}
+
+export {
+    recordType,
+    CSVFileRecord,
+    JSONFileRecord
+}
