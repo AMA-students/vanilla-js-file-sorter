@@ -1,21 +1,40 @@
 // factory functions
-const moveRecorder = state => ({ recordMove: indexMoved => state.moveHistory.push(indexMoved)});
+// const moveRecorder = () => ({ recordMove: indexMoved => this.moveHistory.push(indexMoved)});
 
-const valueSetter = state => ({ setValue: value => state.value = value });
+// const valueSetter = () => ({ setValue: value => this.value = value });
+function moveRecorder() {
+    return {
+        recordMove (indexMoved) {
+            this.moveHistory.push(indexMoved)
+        }
+    }
+}
 
-const parsedLineSetter = state => ({
-     setParsedLine: parsedLine => state.parsedLine = parsedLine
+function valueSetter () {
+    return {
+        setValue(value) {
+            this.value = value;
+        }
+    }
+}
+
+const parsedLineSetter = () => ({
+     setParsedLine: parsedLine => this.parsedLine = parsedLine
 });
 
-const lineSetter = state => ({ setLine: line => state.line = line });
+function lineSetter() {
+     return {
+        setLine(line) {
+            this.line = line
+        }
+     } 
+};
 
 // states
 
 const CSVFileRecord = (parsedFileContentLine, index) => {
 
     const state = {
-        fileContentLine: null,
-
         parsedFileContentLine: parsedFileContentLine,
 
         value: null,
@@ -35,8 +54,6 @@ const CSVFileRecord = (parsedFileContentLine, index) => {
 const JSONFileRecord = (parsedFileContentLine, index) => {
 
     const state = {
-        fileContentLine: null,
-
         parsedFileContentLine: parsedFileContentLine,
 
         value: null,
