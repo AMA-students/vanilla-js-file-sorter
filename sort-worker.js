@@ -12,7 +12,8 @@ import { CSVRecorder, JSONRecorder } from './js/classes/FileRecorders.js';
 
 import { FileContentRecord } from "./js/classes/DataRecorder.js";
 
-
+import { CSVDataRecorder } from './js/factory-functions/dataRecorder.js';
+import { recordType } from './js/factory-functions/fileContentRecord.js';
 
 // importScripts('./js/classes/FileRecorders.js');
 
@@ -37,19 +38,34 @@ onmessage = (message) => {
 
     const {algorithmName, headerIndex, JSONdataRecorder} = data;
     
-    const dataRecorder = JSON.parse(JSONdataRecorder);
+    let dataRecorder = JSON.parse(JSONdataRecorder);
 
     if(dataRecorder.type === "JSON") {
         dataRecorder.__proto__ = JSONRecorder.prototype;
     }
     else {
-        dataRecorder.__proto__ = CSVRecorder.prototype;
+        // dataRecorder.__proto__ = CSVRecorder.prototype;
+
+        dataRecorder = Object.assign(
+            CSVDataRecorder(),
+            dataRecorder
+        )
     }
 
-    dataRecorder.fileContentRecords.forEach(record => {
-        record.__proto__ = FileContentRecord.prototype;
+    // dataRecorder.fileContentRecords.forEach(record => {
+    //     record.__proto__ = FileContentRecord.prototype;
+    // })
+
+    const fileType = dataRecorder.type;
+
+    dataRecorder.fileContentRecords = dataRecorder.fileContentRecords.map(record => {
+        return record = Object.assign(
+            recordType[fileType](),
+            record
+        )
     })
 
+    console.log(dataRecorder.fileContentRecords);
     console.time('algorithm')
 
     try {
@@ -69,7 +85,9 @@ onmessage = (message) => {
         return
     }
 
-    postMessage(dataRecorder);
+    dataRecorder = JSON.stringify(dataRecorder)
+
+    postMessage(JSON.parse(dataRecorder));
 
     console.timeEnd('algorithm')
 }
