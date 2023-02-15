@@ -3,6 +3,9 @@ import STATUS from './js/classes/Status.js';
 import TableController from './js/classes/TableController.js';
 import { CSVRecorder, dataRecorderSetter } from './js/classes/FileRecorders.js';
 import { FileContentRecord } from './js/classes/DataRecorder.js';
+
+import { CSVDataRecorder } from './js/factory-functions/dataRecorder.js';
+import { CSVFileRecord } from './js/factory-functions/fileContentRecord.js';
 /*============================={ algorithms }=============================*/
 
 import { selectionSort } from './js/functions/data-based-sorters/selectionSort.js';
@@ -19,7 +22,7 @@ import bubbleSort from './js/functions/data-based-sorters/bubbleSort.js';
 
 import setDataPoints from './js/functions/sideEffectes/setDataPoints.js';
 import { downloadCSVFile } from './js/functions/sideEffectes/htmlToCSV.js';
- 
+
 /*============================={ parsers }=============================*/
 
 import { CSVParsing, JSONParsing } from './js/parsingMethods.js';
@@ -311,10 +314,12 @@ const parseHandler = (parser, cb) => {
     var data = e.target.result
 
     // const dataRecorder = new CSVRecorder();
-    const dataRecorder = dataRecorderSetter(selectedFile.name);
+    // const dataRecorder = dataRecorderSetter(selectedFile.name);
+    const dataRecorder = CSVDataRecorder();
+
 
     dataRecorder.initializeFileContent(data)
-
+    console.log(dataRecorder);
     const [headerColumn, dataBody] = parser(dataRecorder);
 
     if(dataRecorder.type === 'JSON') {
@@ -345,7 +350,7 @@ displayBtn.onclick = () => {
 
   parsingMethodSelector(parsingMethod, (dataRecorder) => {
 
-/*============================={ on update state }=============================*/
+    /*============================={ on update state }=============================*/
 
     updateBtn.onclick = () => {
 
@@ -442,11 +447,22 @@ const onUpdate = (dataRecorder) => {
 
     dataRecorder = message.data;
 
-    dataRecorder.__proto__ = CSVRecorder.prototype;
+    console.log(dataRecorder);
+
+    dataRecorder = Object.assign(
+      CSVDataRecorder(),
+      dataRecorder
+    )
 
     dataRecorder.fileContentRecords.forEach(record => {
-      record.__proto__ = FileContentRecord.prototype;
+      // record.__proto__ = FileContentRecord.prototype;
+      record = Object.assign(
+        CSVFileRecord(),
+        record
+      )
+
     })
+    console.log(dataRecorder.fileContentRecords[0]);
 
     dataRecorder.initializeSortedFileContent()
     dataRecorder.initializeSortedParsedFileContent()
