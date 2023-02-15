@@ -1,115 +1,229 @@
-const fileContentSetter = state => ({ 
+import { removeUndefined } from "../classes/utility.js"
 
-    setFileContent(fileContent) {
-        state.fileContent = fileContent 
+import { CSVFileRecord, JSONFileRecord } from "./fileContentRecord.js"
+
+function setFileContent() {
+    return { 
+        setFileContent(fileContent) {
+            this.fileContent = fileContent 
+        }
     }
+}
 
-});
-
-const dataPointIndexSetter = state => ({ 
-
-    setDataPointIndex(datapointIndex) {
-        state.datapointIndex = datapointIndex
-    } 
-
-});
-
-const comparisonHistorySetter = state => ({ 
-
-    setComparisonHistory(history) {
-        state.comparisonHistory = history
+function setDataPointIndex() { 
+    return {
+        setDataPointIndex(datapointIndex) {
+            this.datapointIndex = datapointIndex
+        }
     }
+}
 
-});
-
-const fileContentSplitter = state => ({
-
-    splitFileContent(delimiter) {
-        state.delimiter = delimiter
-        state.splitFileContent = state.fileContent.split(state.delimiter)
-        state.splitFileContent = removeUndefined(state.splitFileContent)
+function setComparisonHistory() {
+    return {
+        setComparisonHistory(history) {
+            this.comparisonHistory = history
+        }
     }
+}
 
-})
-
-const fileValuesSetter = state => ({
-    setFileContentValues() {
-        state.fileContentRecords.forEach((record, index) => {
-            record.setValue(
-                state.parsedFileContentBody[index][state.datapointIndex]
-            )    
-        });
-    }    
-})
-
-const fileRecordsSetter = state => ({
-    setFileContentRecords() {
-        state.fileContentRecords = state.parsedFileContentBody.map((parsedFileContentLine, index) => {
-            return new FileContentRecord(parsedFileContentLine, index) // create data record for each line of the data body
-        })
+function splitFileContent(delimiter) {
+    return {
+        splitFileContent(delimiter) {
+            this.delimiter = delimiter
+            this.splitFile = this.fileContent.split(this.delimiter)
+            this.splitFile = removeUndefined(this.splitFile)
+        }
     }
-})
+}
 
-const fileHeaderSetter = state => ({
-    setFileContentHeader(fileContentHeader) {
-        state.fileContentHeader = fileContentHeader
+function setFileContentValues() {
+    return {
+        setFileContentValues() {
+            this.fileContentRecords.forEach((record, index) => {
+                record.setValue(
+                    this.parsedFileContentBody[index][this.datapointIndex]
+                )    
+            });
+        }    
     }
-})
+}
 
-const setFileContentBody = state => ({
-    setFileContentBody(fileContentBody) {
-        state.fileContentBody = fileContentBody
+function setFileContentRecords() {
+    return {
+        setFileContentRecords() {
+
+            const recordType = {
+                CSV: (...args) => CSVFileRecord(...args),
+                JSON: (...args) => JSONFileRecord(...args),
+            }
+
+            this.fileContentRecords = this.parsedFileContentBody.map((parsedFileContentLine, index) => {
+                return recordType[this.type](parsedFileContentLine, index);
+            })
+        }
+    }
+}
+
+function setFileHeader() {
+    return {
+        setFileHeader(fileContentHeader) {
+            this.fileContentHeader = fileContentHeader
+        }
+    }
+}
+
+function setFileBody() {
+    return {
+        setFileBody(fileContentBody) {
+            this.fileContentBody = fileContentBody
+        }
     }  
-})
+}
 
-const parsedFileSetter = state => ({
-    setParsedFileContent(parsedFileContent) {
-        state.parsedFileContent = removeUndefined(parsedFileContent);
-    }   
-})
-
-const parsedFileHeaderSetter = state => ({
-    setParsedFileContentHeader(setParsedFileContentHeader) {
-        state.parsedFileContentHeader = setParsedFileContentHeader
-    }  
-})
-
-const parsedFileBodySetter = state => ({
-    setParsedFileContentBody(parsedFileContentBody) {
-        state.parsedFileContentBody = parsedFileContentBody
-    }    
-})
-
-const comparisonRecorder = state => ({
-    recordComparison(comparison) {
-        state.comparisonHistory.push(comparison)
+function setParsedFileContent() {
+    return {
+        setParsedFileContent(parsedFileContent) {
+            this.parsedFileContent = removeUndefined(parsedFileContent);
+        }
     }
-})
+}
+
+function setParsedFileContentHeader() {
+    return {
+        setParsedFileContentHeader(setParsedFileContentHeader) {
+            this.parsedFileContentHeader = setParsedFileContentHeader
+        }  
+    }
+}
+
+function setParsedFileContentBody() {
+    return {
+        setParsedFileContentBody(parsedFileContentBody) {
+            this.parsedFileContentBody = parsedFileContentBody
+        }
+    }
+}
+
+function setFileContentLines() {
+    return {
+        setFileContentLines() {
+            this.fileContentRecords.forEach((record, index) => {
+                record.setLine(
+                    this.fileContentBody[index]
+                )
+            });
+        }
+    }
+}
+
+function recordComparison(comparison) {
+    return {
+        recordComparison(comparison) {
+            this.comparisonHistory.push(comparison)
+        }
+    }
+}
 
 const dataRecorder = (fileContent = null, datapointIndex = null) => {
 
     const state = {
         fileContent: fileContent,
-        datapointIndex: datapointIndex
+        datapointIndex: datapointIndex,
+        comparisonHistory: []
     };
 
     return Object.assign(
         state,
-        fileContentSetter(state), 
-        dataPointIndexSetter(state), 
-        comparisonHistorySetter(state), 
-        fileContentSplitter(state), 
-        fileValuesSetter(state),
-        fileRecordsSetter(state), 
-        fileHeaderSetter(state), 
-        setFileContentBody(state), 
-        parsedFileSetter(state), 
-        parsedFileHeaderSetter(state), 
-        parsedFileBodySetter(state), 
-        comparisonRecorder(state) 
+        setFileContent(state), 
+        setDataPointIndex(state), 
+        setComparisonHistory(state), 
+        splitFileContent(state), 
+        setFileContentValues(state),
+        setFileContentRecords(state), 
+        setFileHeader(state), 
+        setFileBody(state), 
+        setParsedFileContent(state), 
+        setParsedFileContentHeader(state), 
+        setParsedFileContentBody(state), 
+        recordComparison(state),
+        setFileContentLines(state)
+    )
+}
+
+const CSVDataRecorder = (fileContent = null, datapointIndex = null) => {
+
+    const state = {
+        type: "CSV",
+        
+        initializeFileContent(fileContent) {
+            this.setFileContent(fileContent)
+    
+            if(!this.fileContent) return null;
+    
+            this.splitFileContent('\n')
+    
+            if(!this.splitFileContent) return null;
+            this.setFileHeader(this.splitFile[0])
+            this.setFileBody(this.splitFile.slice(1))
+    
+            this.initializeFileContentRecords()
+        },
+        
+        initializeFileContentRecords() {
+            if(!this.parsedFileContentBody) return null;
+            this.setFileContentRecords()
+    
+            if(!this.fileContentRecords) return null;
+            this.setFileContentLines()
+            
+            if(!this.datapointIndex) return null;
+            this.setFileContentValues()
+            console.log(this);
+        },
+
+        initializeParsedFileContent(parsedFileContent) {
+            this.setParsedFileContent(parsedFileContent)
+            this.setParsedFileContentHeader(this.parsedFileContent[0])
+            this.setParsedFileContentBody(this.parsedFileContent.slice(1))
+    
+            this.setComparisonHistory([])
+    
+            this.initializeFileContentRecords()
+        },
+
+        initializeDatapointIndex(datapointIndex) {
+            this.datapointIndex = datapointIndex
+    
+            if(!this.fileContentRecords) return null;
+            this.setFileContentValues()
+        },
+
+        initializeSortedFileContent() {
+
+            this.sortedFileContent = [
+                this.fileContentHeader,
+                ...this.fileContentRecords.map(record => record.fileContentLine)
+            ]
+    
+        },
+    
+        initializeSortedParsedFileContent() {
+    
+            this.sortedParsedFileContent = [
+                this.parsedFileContentHeader,
+                ...this.fileContentRecords.map(record => record.parsedFileContentLine)
+            ]
+    
+        }
+    };
+
+    return Object.assign(
+        state,
+        dataRecorder(fileContent, datapointIndex)
     )
 }
 
 export {
-    dataRecorder
+    dataRecorder,
+    CSVDataRecorder
 }
