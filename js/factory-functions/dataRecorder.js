@@ -1,6 +1,6 @@
 import { removeUndefined } from "../classes/utility.js"
 
-import { CSVFileRecord, JSONFileRecord } from "./fileContentRecord.js"
+import { recordType } from "./fileContentRecord.js"
 
 function setFileContent() {
     return { 
@@ -51,12 +51,6 @@ function setFileContentValues() {
 function setFileContentRecords() {
     return {
         setFileContentRecords() {
-
-            const recordType = {
-                CSV: (...args) => CSVFileRecord(...args),
-                JSON: (...args) => JSONFileRecord(...args),
-            }
-
             this.fileContentRecords = this.parsedFileContentBody.map((parsedFileContentLine, index) => {
                 return recordType[this.type](parsedFileContentLine, index);
             })
