@@ -217,7 +217,12 @@ const CSVDataRecorder = (fileContent = null, datapointIndex = null) => {
     )
 }
 
+const recorderType = {
+    CSV: () => CSVDataRecorder(),
+}
+
 export {
+    recorderType,
     dataRecorder,
     CSVDataRecorder
 }
