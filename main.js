@@ -53,6 +53,7 @@ import {
 } from './js/buttons.js';
 
 import { removeUndefined } from './js/classes/utility.js';
+import { dataRecordersMap } from './js/maps/dataRecorderMaps.js';
 
 const settingsCover = document.querySelector('#settings-cover');
 const parsingMethods = document.querySelectorAll('input[name=parsing-method]');
@@ -315,8 +316,8 @@ const parseHandler = (parser, cb) => {
 
     // const dataRecorder = new CSVRecorder();
     // const dataRecorder = dataRecorderSetter(selectedFile.name);
-    const dataRecorder = CSVDataRecorder();
-
+    // const dataRecorder = CSVDataRecorder();
+    const dataRecorder = dataRecordersMap(selectedFile.name, 'v2');
 
     dataRecorder.initializeFileContent(data)
     console.log(dataRecorder);
