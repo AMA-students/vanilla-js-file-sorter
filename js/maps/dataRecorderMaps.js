@@ -21,6 +21,11 @@ const dataRecordersMap = (fileName, version = "v1") => {
 
     const fileRecorders = dataRecorders[version];
 
+    if(!fileRecorders.hasOwnProperty(fileExtension)) {
+        console.error(`The fileRecorder.${version} does not provide a fileRecorder for ${fileExtension}`);
+        return null;
+    }
+
     return fileRecorders[fileExtension]();
 }
 
