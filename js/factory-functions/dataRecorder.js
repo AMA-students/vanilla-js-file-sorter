@@ -202,10 +202,12 @@ const CSVDataRecorder = (fileContent = null, datapointIndex = null) => {
         },
     
         initializeSortedParsedFileContent() {
-    
+            
+            this.sortedParsedFileContentBody = this.fileContentRecords.map(record => record.parsedFileContentLine);
+
             this.sortedParsedFileContent = [
                 this.parsedFileContentHeader,
-                ...this.fileContentRecords.map(record => record.parsedFileContentLine)
+                ...this.sortedParsedFileContentBody
             ]
     
         }
