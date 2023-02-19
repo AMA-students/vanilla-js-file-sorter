@@ -27,8 +27,6 @@ import {
   downloadBtn,
 } from './js/buttons.js';
 
-import { removeUndefined } from './js/classes/utility.js';
-
 /*============================={ dataRecorder maps }=============================*/
 
 import { dataRecordersMap } from './js/maps/dataRecorderMaps.js';
@@ -84,9 +82,8 @@ settingsCover.onclick = (e) => {
 }
 
 inputFile.addEventListener('change', (e)=> {
-  console.log(e.target.value, e.target.value === "")
+
   if(e.target.value === '') {
-    console.log('yeet')
     Status.Options.disable([submitBtn])
     return;
   }
@@ -126,35 +123,6 @@ form.onsubmit = async e => {
 
 // displayBtn initiate's the loading state
 
-const papaparseParse = (dataRecorder, cb) => {
-  console.time('papaparse')
-
-  if(!selectedFile) return;
-
-  Papa.parse(selectedFile, {
-    worker: true,
-    // Header: true,
-
-    complete: results => {
-
-      const headerColumn = results.data[0];
-      const csvBody = results.data.slice(1)
-      const dataBody = removeUndefined(csvBody)
-
-      // addToConfig -> settings for what algorithm to use
-      displayMethod(headerColumn, dataBody)      
-      setDataPoints(headerColumn, select)
-
-      dataRecorder.initializeParsedFileContent(results.data)
-
-      cb(dataRecorder)
-
-    }
-
-  });
-  console.timeEnd('papaparse')
-
-};
 let headerIndex = 0;
 
 const updateBtnWithoutClass = () => {
@@ -235,7 +203,7 @@ const parseHandler = (cb) => {
   var reader = new FileReader();
 
   reader.readAsText(selectedFile)
-  console.log(selectedFile);
+
   reader.onload = async function (e) {
     var data = e.target.result
 
@@ -244,8 +212,6 @@ const parseHandler = (cb) => {
     dataRecorder.initializeFileContent(data)
 
     dataRecorder.initializeParsedFileContent()
-    
-    console.log(dataRecorder);
 
     setDataPoints(dataRecorder.parsedFileContentHeader, select)
     displayMethod(dataRecorder.parsedFileContentHeader, dataRecorder.parsedFileContentBody) 
@@ -263,7 +229,6 @@ displayBtn.onclick = () => {
   parseHandler(dataRecorder => {
     updateBtn.onclick = () => {
       updateClicked = true;
-      console.log('test');
       onUpdate(dataRecorder)
     }
   })
