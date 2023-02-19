@@ -40,11 +40,13 @@ function splitFileContent(delimiter) {
 function setFileContentValues() {
     return {
         setFileContentValues() {
-            this.fileContentRecords.forEach((record, index) => {
-                record.setValue(
-                    this.parsedFileContentBody[index][this.datapointIndex]
-                )    
-            });
+            this.fileContentRecords.forEach(
+                record => {
+                    record.setValue(
+                        record.parsedFileContentLine[this.datapointIndex]
+                    )    
+                }
+            );
         }    
     }
 }
