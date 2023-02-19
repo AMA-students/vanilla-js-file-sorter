@@ -1,11 +1,7 @@
 import CSV from './js/classes/Csv.js';
 import STATUS from './js/classes/Status.js';
 import TableController from './js/classes/TableController.js';
-import { CSVRecorder, dataRecorderSetter } from './js/classes/FileRecorders.js';
-import { FileContentRecord } from './js/classes/DataRecorder.js';
 
-import { CSVDataRecorder } from './js/factory-functions/dataRecorder.js';
-import { CSVFileRecord } from './js/factory-functions/fileContentRecord.js';
 /*============================={ algorithms }=============================*/
 
 import { selectionSort } from './js/functions/data-based-sorters/selectionSort.js';
@@ -23,21 +19,12 @@ import bubbleSort from './js/functions/data-based-sorters/bubbleSort.js';
 import setDataPoints from './js/functions/sideEffectes/setDataPoints.js';
 import { downloadCSVFile } from './js/functions/sideEffectes/htmlToCSV.js';
 
-/*============================={ parsers }=============================*/
-
-import { CSVParsing, JSONParsing } from './js/parsingMethods.js';
 
 const form = document.querySelector("#getfile");
 const selectGroup = document.querySelector('#sort-select-group')
 const sortingMethodGroup = document.querySelector('.settings-selection');
 const select = document.querySelector('#select');
 const table = document.querySelector('table')
-
-/*============================={ class instances }=============================*/
-
-const csv = new CSV(table)
-const tableController = new TableController(table);
-const Status = new STATUS(document.querySelector('#status'));
 
 /*============================={ buttons }=============================*/
 
@@ -53,7 +40,19 @@ import {
 } from './js/buttons.js';
 
 import { removeUndefined } from './js/classes/utility.js';
+
+/*============================={ dataRecorder maps }=============================*/
+
 import { dataRecordersMap } from './js/maps/dataRecorderMaps.js';
+import { recordType } from './js/factory-functions/fileContentRecord.js';
+
+/*============================={ class instances }=============================*/
+
+const csv = new CSV(table)
+const tableController = new TableController(table);
+const Status = new STATUS(document.querySelector('#status'));
+
+/*============================={ settings }=============================*/
 
 const settingsCover = document.querySelector('#settings-cover');
 const parsingMethods = document.querySelectorAll('input[name=parsing-method]');
