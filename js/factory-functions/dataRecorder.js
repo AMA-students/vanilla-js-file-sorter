@@ -210,8 +210,9 @@ const CSVDataRecorder = (fileContent = null, datapointIndex = null) => {
             console.log(this);
         },
 
-        initializeParsedFileContent(parsedFileContent) {
-            this.setParsedFileContent(parsedFileContent)
+        initializeParsedFileContent() {
+
+            this.setParsedFileContent()
             this.setParsedFileContentHeader(this.parsedFileContent[0])
             this.setParsedFileContentBody(this.parsedFileContent.slice(1))
     
