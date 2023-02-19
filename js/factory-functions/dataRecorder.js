@@ -124,6 +124,35 @@ function recordComparison(comparison) {
     }
 }
 
+function setParsedJSON() {
+    return {
+        setParsedJSON() {
+            this.parsedJSON = JSON.parse(this.fileContent)
+
+            if(Array.isArray(this.parsedJSON)) {
+                Object.entries(this.parsedJSON)
+            }
+            
+            else {
+
+                this.JSONKey = Object.keys(this.parsedJSON)
+
+                this.parsedJSON = this.parsedJSON[this.JSONKey]
+
+            }
+        }
+    }
+}
+
+function setParsedJSONHeader() {
+    return {
+        getJSONHeader() {
+            
+        }
+    }
+}
+
+
 const dataRecorder = (fileContent = null, datapointIndex = null) => {
 
     const state = {
@@ -225,8 +254,127 @@ const CSVDataRecorder = (fileContent = null, datapointIndex = null) => {
     )
 }
 
+const JSONDataRecorder = (fileContent = null, datapointIndex = null) => {
+    console.log('JSON instance')
+    const state = {
+        type: "JSON",
+        
+        initializeFileContent(fileContent) {
+            this.setFileContent(fileContent)
+    
+            // if(!this.fileContent) return null;
+            // this.setParsedJSON(this.fileContent)
+
+            // this.initializeFileContentRecords()
+        },
+        
+        initializeFileContentRecords() {
+            // console.log('test');
+            if(!this.parsedFileContentBody) return null;
+            this.setFileContentRecords()
+    
+            if(!this.fileContentRecords) return null;
+            // this.setFileContentLines()
+            
+            if(!this.datapointIndex) return null;
+            this.setFileContentValues()
+            console.log(this);
+        },
+
+        initializeParsedFileContent(parsedFileContent) {
+            if(!this.fileContent) return null;
+            this.setParsedJSON(this.fileContent)
+
+            this.parsedFileContentBody = [];
+
+            this.parsedFileContentHeader = 
+            Object.keys(this.parsedJSON[0]);
+            
+            this.parsedJSON.map(obj => {
+                this.parsedFileContentBody.push(Object.values(obj))
+            });
+
+            this.parsedFileContent = [
+                this.parsedFileContentHeader,
+                ...this.parsedFileContentBody
+            ]
+
+            this.initialDataToRender = [
+                this.parsedFileContentHeader,
+                ...this.parsedFileContentBody
+            ]
+    
+            this.setComparisonHistory([])
+    
+            // this.initializeFileContentRecords()
+        },
+
+        initializeDatapointIndex(datapointIndex) {
+            this.datapointIndex = datapointIndex
+    
+            if(!this.fileContentRecords) return null;
+            this.setFileContentValues()
+        },
+
+        initializeSortedFileContent() {
+
+            this.sortedFileContent = [
+                this.fileContentHeader,
+                ...this.fileContentRecords.map(record => record.line)
+            ]
+            console.log('test1');
+        },
+    
+        initializeSortedParsedFileContent() {
+            console.log('test2');
+            this.sortedParsedFileContentBody = this.fileContentRecords.map(record => record.parsedFileContentLine);
+
+            this.sortedParsedFileContent = [
+                this.parsedFileContentHeader,
+                ...this.sortedParsedFileContentBody
+            ]
+
+            this.parsedFileContentHeader
+
+            // assign a key for each value of the sortedBody
+            this.sortedJSON = []
+
+            this.sortedParsedFileContentBody.map(values => {
+                const obj = {}
+                values.map((value, index) => {
+                    const key = this.parsedFileContentHeader[index];
+
+                    obj[key] = value;
+                })
+                this.sortedJSON.push(obj)
+            })
+
+            if(this.JSONKey) {
+                this.sortedJSON = 
+                { 
+                    [this.JSONKey] : this.parsedJSON
+                }
+            }
+
+            this.sortedFileContent = JSON.stringify(this.sortedJSON, undefined, " ").split('\n');
+            console.log(this.sortedFileContent);
+        }
+    };
+
+    return Object.assign(
+        state,
+        setParsedJSON(),
+        setFileContent(),
+        setFileContentRecords(),
+        setFileContentValues(),
+        recordComparison(),
+        setComparisonHistory()
+    )
+}
+
 const recorderType = {
     CSV: () => CSVDataRecorder(),
+    JSON: () => JSONDataRecorder(),
 }
 
 export {
