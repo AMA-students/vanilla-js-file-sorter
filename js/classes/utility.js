@@ -253,8 +253,8 @@ const sortingMode = (currentX, currentY, dataPointIndex, dataRecorder) => {
             currentX,
             currentY
         ] = isValidNumberButWithCommaValidator(
-            currentX.parsedFileContentLine[dataPointIndex], 
-            currentY.parsedFileContentLine[dataPointIndex]
+            currentX.value, 
+            currentY.value
         );
     }
 
