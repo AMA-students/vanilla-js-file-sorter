@@ -1,3 +1,4 @@
+import { CSVParser } from "../classes/CSVParser.js"
 import { removeUndefined } from "../classes/utility.js"
 
 import { recordType } from "./fileContentRecord.js"
@@ -76,8 +77,11 @@ function setFileBody() {
 
 function setParsedFileContent() {
     return {
-        setParsedFileContent(parsedFileContent) {
-            this.parsedFileContent = removeUndefined(parsedFileContent);
+        setParsedFileContent() {
+            // this.parsedFileContent = removeUndefined(parsedFileContent);
+            this.parsedFileContent = removeUndefined(
+                CSVParser(this.splitFile)
+            );
         }
     }
 }
