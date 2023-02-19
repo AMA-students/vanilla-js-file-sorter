@@ -4,8 +4,9 @@ import { removeUndefined } from './classes/utility.js';
 const CSVParsing = (dataRecorder) => {
   console.time('CSVParse')
   
-  const CSV = CSVParser(dataRecorder.splitFileContent);
-
+  // console.log(dataRecorder.splitFileContent);
+  // const CSV = CSVParser(dataRecorder.splitFileContent);
+  const CSV = CSVParser(dataRecorder.splitFile);
   const headerColumn = CSV[0];
   const csvBody = CSV.slice(1)
   const dataBody = removeUndefined(csvBody)

@@ -1,40 +1,18 @@
 import CSV from './js/classes/Csv.js';
 import STATUS from './js/classes/Status.js';
 import TableController from './js/classes/TableController.js';
-import { CSVRecorder, dataRecorderSetter } from './js/classes/FileRecorders.js';
-import { FileContentRecord } from './js/classes/DataRecorder.js';
-/*============================={ algorithms }=============================*/
-
-import { selectionSort } from './js/functions/data-based-sorters/selectionSort.js';
-
-
-import quickSort from './js/functions/data-based-sorters/quickSort.js';
-
-import {mergeSort} from './js/functions/data-based-sorters/mergeSort.js';
-
-
-import bubbleSort from './js/functions/data-based-sorters/bubbleSort.js';
 
 /*============================={ side effect funtions }=============================*/
 
 import setDataPoints from './js/functions/sideEffectes/setDataPoints.js';
 import { downloadCSVFile } from './js/functions/sideEffectes/htmlToCSV.js';
- 
-/*============================={ parsers }=============================*/
 
-import { CSVParsing, JSONParsing } from './js/parsingMethods.js';
 
 const form = document.querySelector("#getfile");
 const selectGroup = document.querySelector('#sort-select-group')
 const sortingMethodGroup = document.querySelector('.settings-selection');
 const select = document.querySelector('#select');
 const table = document.querySelector('table')
-
-/*============================={ class instances }=============================*/
-
-const csv = new CSV(table)
-const tableController = new TableController(table);
-const Status = new STATUS(document.querySelector('#status'));
 
 /*============================={ buttons }=============================*/
 
@@ -51,6 +29,19 @@ import {
 
 import { removeUndefined } from './js/classes/utility.js';
 
+/*============================={ dataRecorder maps }=============================*/
+
+import { dataRecordersMap } from './js/maps/dataRecorderMaps.js';
+import { recordType } from './js/factory-functions/fileContentRecord.js';
+
+/*============================={ class instances }=============================*/
+
+const csv = new CSV(table)
+const tableController = new TableController(table);
+const Status = new STATUS(document.querySelector('#status'));
+
+/*============================={ settings }=============================*/
+
 const settingsCover = document.querySelector('#settings-cover');
 const parsingMethods = document.querySelectorAll('input[name=parsing-method]');
 const sortingAlgorithms =  document.querySelectorAll('input[name=sorting-method]')
@@ -64,68 +55,6 @@ const statusConfigOnInitial = {
 }
 
 Status.setStatus(statusConfigOnInitial)
-
-const sortingAlgorithm = (algo, args) => {
-
-  const algos = {
-
-    quickSort: (...args) => quickSort(...args),
-    bubbleSort: (...args) => bubbleSort(...args),
-    mergeSort: (...args) => mergeSort(...args),
-    // mergeSort: (...args) => {
-    //   const [dataRecorder, dataPointIndex] = args
-
-    //   // mergeSort(...args)
-    //   return mergeSort(
-    //     dataRecorder.fileContentRecords,
-    //     dataPointIndex,
-    //     dataRecorder
-    //   )
-    // },
-
-    selectionSort: (...args) => selectionSort(...args),
-
-  }
-
-  return algos[algo](...args)
-
-};
-
-const parsingMethodSelector = (method, cb) => {
-
-  const methods = {
-    CSV: () => {
-      parseHandler(data => CSVParsing(data), cb)
-    },
-    JSON: () => {
-      parseHandler(data => JSONParsing(data), cb)
-    },
-    papaparse: () => {
-      if(!selectedFile) return;
-  
-      var reader = new FileReader();
-
-      reader.readAsText(selectedFile)
-
-      reader.onload = async function (e) {
-        var data = e.target.result
-        
-        // const dataRecorder = new DataRecorder()
-        // dataRecorder.setFileContent(data)
-        // dataRecorder.fileContentSplitter('\n')
-
-        const dataRecorder = new CSVRecorder()
-        dataRecorder.initializeFileContent(data)
-
-        papaparseParse(dataRecorder, cb)
-      }
-
-    }
-  }
-
-  return methods[method]()
-
-};
 
 // addToConfig -> settings for the maximum limit before non summarized display
 const MAX_ELEMENT_LIMIT = 10000
@@ -300,7 +229,7 @@ const statusConfigOnDisplay = {
   restrictSettings: parsingMethods
 }
 
-const parseHandler = (parser, cb) => {
+const parseHandler = (cb) => {
   if(!selectedFile) return;
   
   var reader = new FileReader();
@@ -310,28 +239,16 @@ const parseHandler = (parser, cb) => {
   reader.onload = async function (e) {
     var data = e.target.result
 
-    // const dataRecorder = new CSVRecorder();
-    const dataRecorder = dataRecorderSetter(selectedFile.name);
-
+    const dataRecorder = dataRecordersMap(selectedFile.name, 'v2');
+    dataRecorder.fileName = selectedFile.name;
     dataRecorder.initializeFileContent(data)
 
-    const [headerColumn, dataBody] = parser(dataRecorder);
-
-    if(dataRecorder.type === 'JSON') {
-      console.log('JSON test');
-      dataRecorder.initializeParsedFileContent(headerColumn, dataBody, (err) => {
-        console.log(err);
-        Status.setStatusText('failed to parse the JSON file. Make sure that it is a JSON array file')
-      })  
-    } 
-    else {
-      dataRecorder.initializeParsedFileContent([headerColumn, ...dataBody])
-    }
+    dataRecorder.initializeParsedFileContent()
     
     console.log(dataRecorder);
-    setDataPoints(headerColumn, select)
-    displayMethod(headerColumn, dataBody)  
 
+    setDataPoints(dataRecorder.parsedFileContentHeader, select)
+    displayMethod(dataRecorder.parsedFileContentHeader, dataRecorder.parsedFileContentBody) 
     cb(dataRecorder)
   }
 }
@@ -339,22 +256,16 @@ const parseHandler = (parser, cb) => {
 /*============================={ on display state }=============================*/
 
 displayBtn.onclick = () => {
-  const parsingMethod = document.querySelector('input[name=parsing-method]:checked').value;
 
   Status.setStatus(statusConfigOnDisplay);
 
-  parsingMethodSelector(parsingMethod, (dataRecorder) => {
-
-/*============================={ on update state }=============================*/
-
+  /*============================={ on update state }=============================*/
+  parseHandler(dataRecorder => {
     updateBtn.onclick = () => {
-
       updateClicked = true;
-
+      console.log('test');
       onUpdate(dataRecorder)
-
     }
-
   })
 }
 
@@ -393,8 +304,6 @@ const statusConfigOnUpdate = {
 
 const onUpdate = (dataRecorder) => {
 
-  // const dataBody = [...dataRecorder.parsedFileContentBody];
-
   const headerColumn = dataRecorder.parsedFileContentHeader;
 
   dataRecorder.initializeFileContentRecords()
@@ -408,8 +317,6 @@ const onUpdate = (dataRecorder) => {
   }
 
   const algorithmName = document.querySelector('input[name=sorting-method]:checked').value;
-
-  // const columnToSort = dataBody.map(row => row[select.selectedIndex])
 
   Status.setStatus({
     ...statusConfigOnUpdate,
@@ -442,15 +349,23 @@ const onUpdate = (dataRecorder) => {
 
     dataRecorder = message.data;
 
-    dataRecorder.__proto__ = CSVRecorder.prototype;
+    dataRecorder = Object.assign(
+      dataRecordersMap(dataRecorder.fileName, 'v2'),
+      dataRecorder
+    )
 
+    const fileType = dataRecorder.type;
     dataRecorder.fileContentRecords.forEach(record => {
-      record.__proto__ = FileContentRecord.prototype;
-    })
+      record = Object.assign(
+        recordType[fileType](),
+        record
+      )
 
+    })
+    
     dataRecorder.initializeSortedFileContent()
     dataRecorder.initializeSortedParsedFileContent()
-
+    
     Status.setStatusText('displaying ...')
     displayMethod(headerColumn, dataRecorder.sortedParsedFileContent.slice(1))
 

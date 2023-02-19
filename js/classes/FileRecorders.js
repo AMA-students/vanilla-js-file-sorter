@@ -118,6 +118,18 @@ class JSONRecorder extends DataRecorder {
 
     }
 
+    initializeSortedFileContent() {
+
+        if(!this.parsedFileContent) return;
+
+        if(!Array.isArray(this.parsedFileContent)) {
+
+        }
+        this.sortedFileContent = this.parsedFileContent
+        
+
+    }
+
     initializeFileContentRecords() {
         if(!this.parsedFileContentBody) return null;
         this.setFileContentRecords()
@@ -130,6 +142,14 @@ class JSONRecorder extends DataRecorder {
         this.setFileContentValues()
     }
     
+}
+
+const getObjKeys = (obj) => {
+    return Object.entries(obj).map(entry => entry[0])
+}
+
+const getObjValues = (obj) => {
+    return Object.entries(obj).map(entry => entry[1])
 }
 
 function traverser(obj, propertyPath, level = 0) {
@@ -156,8 +176,6 @@ const dataRecorderSetter = (fileName) => {
 
     return fileRecorders[fileExtension]();
 }
-
-
 
 export {
     traverser,

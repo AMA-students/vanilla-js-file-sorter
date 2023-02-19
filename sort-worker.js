@@ -5,16 +5,11 @@ import quickSort from './js/functions/data-based-sorters/quickSort.js';
 
 import {mergeSort} from './js/functions/data-based-sorters/mergeSort.js';
 
-
 import bubbleSort from './js/functions/data-based-sorters/bubbleSort.js';
 
-import { CSVRecorder, JSONRecorder } from './js/classes/FileRecorders.js';
+import { recordType } from './js/factory-functions/fileContentRecord.js';
 
-import { FileContentRecord } from "./js/classes/DataRecorder.js";
-
-
-
-// importScripts('./js/classes/FileRecorders.js');
+import { dataRecordersMap } from './js/maps/dataRecorderMaps.js';
 
 const sortingAlgorithm = (algo, args) => {
 
@@ -37,19 +32,24 @@ onmessage = (message) => {
 
     const {algorithmName, headerIndex, JSONdataRecorder} = data;
     
-    const dataRecorder = JSON.parse(JSONdataRecorder);
+    let dataRecorder = JSON.parse(JSONdataRecorder);
 
-    if(dataRecorder.type === "JSON") {
-        dataRecorder.__proto__ = JSONRecorder.prototype;
-    }
-    else {
-        dataRecorder.__proto__ = CSVRecorder.prototype;
-    }
 
-    dataRecorder.fileContentRecords.forEach(record => {
-        record.__proto__ = FileContentRecord.prototype;
+    dataRecorder = Object.assign(
+        dataRecordersMap(dataRecorder.fileName, 'v2'),
+        dataRecorder
+    )
+
+    const fileType = dataRecorder.type;
+
+    dataRecorder.fileContentRecords = dataRecorder.fileContentRecords.map(record => {
+        return record = Object.assign(
+            recordType[fileType](),
+            record
+        )
     })
 
+    console.log(dataRecorder.fileContentRecords);
     console.time('algorithm')
 
     try {
@@ -66,10 +66,12 @@ onmessage = (message) => {
     } catch (error) {
         console.log(error);    
         postMessage(null);
-        return
+        return null
     }
 
-    postMessage(dataRecorder);
+    dataRecorder = JSON.stringify(dataRecorder)
+
+    postMessage(JSON.parse(dataRecorder));
 
     console.timeEnd('algorithm')
 }

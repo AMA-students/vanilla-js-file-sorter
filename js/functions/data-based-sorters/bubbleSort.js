@@ -34,7 +34,7 @@ const bubbleSort = (array, dataPointIndex, dataRecorder) => {
             if(someString) {
 
 
-                dataRecorder?.comparisonHistoryRecorder(comparison)
+                dataRecorder?.recordComparison(comparison)
 
                 if(alphanumericComparator(currentY, currentX, collator)) {
 
@@ -43,8 +43,8 @@ const bubbleSort = (array, dataPointIndex, dataRecorder) => {
                     aux = array[y]
 
                     if(dataRecorder) { 
-                        array[y]?.moveHistoryRecorder(x), 
-                        array[x]?.moveHistoryRecorder(y) 
+                        array[y]?.recordMove(x), 
+                        array[x]?.recordMove(y) 
                     }
                     
                     array[y] = array[x]
@@ -58,7 +58,7 @@ const bubbleSort = (array, dataPointIndex, dataRecorder) => {
             // isAscending
             if(isAscending) {
 
-                dataRecorder?.comparisonHistoryRecorder(comparison)
+                dataRecorder?.recordComparison(comparison)
 
                 if( currentX < currentY ) {
 
@@ -67,8 +67,9 @@ const bubbleSort = (array, dataPointIndex, dataRecorder) => {
                     aux = array[y]
 
                     if(dataRecorder) { 
-                        array[y]?.moveHistoryRecorder(x), 
-                        array[x]?.moveHistoryRecorder(y) 
+                        console.log(array[y], array[x]);
+                        array[y]?.recordMove(x), 
+                        array[x]?.recordMove(y) 
                     }
                     
                     array[y] = array[x]
@@ -82,7 +83,7 @@ const bubbleSort = (array, dataPointIndex, dataRecorder) => {
             // !isAscending
             if(isAscending) return;
 
-            dataRecorder?.comparisonHistoryRecorder(comparison)
+            dataRecorder?.recordComparison(comparison)
 
             if( currentX < currentY ) {
 
@@ -91,8 +92,8 @@ const bubbleSort = (array, dataPointIndex, dataRecorder) => {
                 aux = array[y]
 
                 if(dataRecorder) { 
-                    array[y]?.moveHistoryRecorder(x), 
-                    array[x]?.moveHistoryRecorder(y) 
+                    array[y]?.recordMove(x), 
+                    array[x]?.recordMove(y) 
                 }
                 
                 array[y] = array[x]

@@ -22,7 +22,7 @@ function merge(left, right, dataPointIndex, dataRecorder) {
 			right: rightValue, 
 		}
 
-		dataRecorder?.comparisonHistoryRecorder(comparison)
+		dataRecorder?.recordComparison(comparison)
 
 		let result;
 
