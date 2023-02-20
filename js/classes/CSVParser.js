@@ -1,12 +1,4 @@
-import CSV from '../classes/Csv.js';
 import { removeUndefined } from "../classes/utility.js";
-import { mergeSort } from '../functions/algo/mergeSort.js';
-import quickSort from '../functions/algo/quickSort.test.js';
-import bubbleSort from '../functions/algo/bubbleSort.js';
-import htmlToCSV, {arrayToCsv, downloadCSVFile } from '../functions/sideEffectes/htmlToCSV.js';
-
-const table = document.querySelector('table');
-const csv = new CSV(table)
 
 export default class {
     constructor(array) {
@@ -57,7 +49,6 @@ const JSONParser = data => {
         return Object.fromEntries(new Map(elem));
     })
 
-    console.log(arrofObj);
     return arrofObj
 }
 
