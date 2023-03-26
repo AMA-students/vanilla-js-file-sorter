@@ -1,114 +1,102 @@
-import { alphanumericComparator, sortingMode } from "../../classes/utility.js"
+import { alphanumericComparator, sortingMode } from "../../classes/utility.js";
 
 const bubbleSort = (array, dataPointIndex, dataRecorder) => {
-    
-    if (array.length <= 1) return array;
+	if (array.length <= 1) return array;
 
-    let isAscending = true;
+	let isAscending = true;
 
-    let aux; 
+	let aux;
 
-    const option = { numeric: true, sensitivity: 'base' };
-    const collator = new Intl.Collator(undefined, option);
+	const option = { numeric: true, sensitivity: "base" };
+	const collator = new Intl.Collator(undefined, option);
 
-    for(let x = 0; x < array.length; x++) {
-        
-        for(let y = 0; y < array.length; y++) {
+	for (let x = 0; x < array.length; x++) {
+		for (let y = 0; y < array.length; y++) {
+			const [currentX, currentY] = sortingMode(
+				array[x],
+				array[y],
+				dataPointIndex,
+				dataRecorder
+			);
 
-            const [currentX, currentY] = sortingMode(array[x], array[y], dataPointIndex, dataRecorder);
+			const someString =
+				typeof currentY === "string" || typeof currentX === "string";
 
-            const someString = typeof(currentY) === 'string' || typeof(currentX) === 'string';
-             
-            // const comparison = {
-            //     left: currentX, 
-            //     right: currentY,
-            //     comparison: false 
-            // }
+			// const comparison = {
+			//     left: currentX,
+			//     right: currentY,
+			//     comparison: false
+			// }
 
-            const comparison = {
-                left: x, 
-                right: y,
-                comparison: false 
-            }
+			const comparison = {
+				left: x,
+				right: y,
+				comparison: false,
+			};
 
-            if(someString) {
+			if (someString) {
+				dataRecorder?.recordComparison(comparison);
 
+				if (alphanumericComparator(currentY, currentX, collator)) {
+					comparison.comparison = true;
 
-                dataRecorder?.recordComparison(comparison)
+					aux = array[y];
 
-                if(alphanumericComparator(currentY, currentX, collator)) {
+					if (dataRecorder) {
+						array[y]?.recordMove(x), array[x]?.recordMove(y);
+					}
 
-                    comparison.comparison = true
+					array[y] = array[x];
+					array[x] = aux;
+				}
+				continue;
+			}
 
-                    aux = array[y]
+			// isAscending
+			if (isAscending) {
+				dataRecorder?.recordComparison(comparison);
 
-                    if(dataRecorder) { 
-                        array[y]?.recordMove(x), 
-                        array[x]?.recordMove(y) 
-                    }
-                    
-                    array[y] = array[x]
-                    array[x] = aux
+				if (currentX < currentY) {
+					comparison.comparison = true;
 
-                }
-                continue;
+					aux = array[y];
 
-            }
+					if (dataRecorder) {
+						// console.log(array[y], array[x]);
+						array[y]?.recordMove(x);
+						array[x]?.recordMove(y);
+					}
 
-            // isAscending
-            if(isAscending) {
+					array[y] = array[x];
+					array[x] = aux;
+				}
+				continue;
+			}
 
-                dataRecorder?.recordComparison(comparison)
+			// !isAscending
+			if (isAscending) return;
 
-                if( currentX < currentY ) {
+			dataRecorder?.recordComparison(comparison);
 
-                    comparison.comparison = true
+			if (currentX < currentY) {
+				comparison.comparison = true;
 
-                    aux = array[y]
+				aux = array[y];
 
-                    if(dataRecorder) { 
-                        console.log(array[y], array[x]);
-                        array[y]?.recordMove(x), 
-                        array[x]?.recordMove(y) 
-                    }
-                    
-                    array[y] = array[x]
-                    array[x] = aux
+				if (dataRecorder) {
+					array[y]?.recordMove(x);
+					array[x]?.recordMove(y);
+				}
 
-                }
-                continue;
+				array[y] = array[x];
+				array[x] = aux;
+			}
+		}
+	}
 
-            }
-
-            // !isAscending
-            if(isAscending) return;
-
-            dataRecorder?.recordComparison(comparison)
-
-            if( currentX < currentY ) {
-
-                comparison.comparison = true
-
-                aux = array[y]
-
-                if(dataRecorder) { 
-                    array[y]?.recordMove(x), 
-                    array[x]?.recordMove(y) 
-                }
-                
-                array[y] = array[x]
-                array[x] = aux
-              
-            }
-
-
-        }
-    }
-
-    dataRecorder?.initializeSortedParsedFileContent();
-    console.log(dataRecorder);
-    return array
-
-}
+	dataRecorder?.initializeSortedParsedFileContent();
+	console.log(dataRecorder);
+	return array;
+};
 
 export default bubbleSort;
