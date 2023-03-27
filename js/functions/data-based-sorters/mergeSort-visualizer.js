@@ -1,13 +1,10 @@
 import { alphanumericComparator, sortingMode } from "../../classes/utility.js";
-let idx = 0;
 
 const option = { numeric: true, sensitivity: "base" };
 const collator = new Intl.Collator(undefined, option);
 
 function merge(left, right, dataPointIndex, dataRecorder, startIndex) {
 	let arr = [];
-
-	// console.table({ arr, left, right, startIndex, idx });
 
 	let result;
 
@@ -30,39 +27,14 @@ function merge(left, right, dataPointIndex, dataRecorder, startIndex) {
 			// each array removes the pushed elements until one or both of them is empty
 			result ? arr.push(left.shift()) : arr.push(right.shift());
 
-			const leftStartIndex = startIndex + arr.length - left.length;
-			const rightStartIndex = leftStartIndex + left.length;
-
-			if (result) {
-				right[0].recordMove(startIndex + arr.length);
-				comparison.left = [arr[0].value, arr[0].moveHistory?.slice(-1)[0]];
-				comparison.right = [
-					right[0].value,
-					startIndex + right[0].moveHistory?.slice(-1)[0],
-				];
-				comparison.arr = arr;
-				comparison.leftArr = left;
-				comparison.rightArr = right;
-				comparison.startIdx = startIndex;
-
-				comparison.currArrMoveHistory = [...arr[0].moveHistory];
-				comparison.currRightMoveHistory = [...right[0].moveHistory];
-
-				comparison.complete = [...arr, ...left, ...right];
-			} else {
-				left[0].recordMove(arr.length);
-				comparison.startIdx;
-				comparison.left = left[0].moveHistory?.slice(-1)[0];
-				comparison.right = arr[0].moveHistory?.slice(-1)[0];
-
-				comparison.value = left[0].value;
-				comparison.comparedTo = arr[0].value;
-			}
+			// // test for recordDataForVisualizer
+			// if (dataRecorder) {
+			// 	recordDataForVisualizer(result, comparison, arr, left, right);
+			// }
 
 			comparison.comparison = result;
 
-			// dataRecorder?.recordComparison(comparison);
-			dataRecorder.recordComparison({
+			dataRecorder?.recordComparison({
 				currSubArr: [...arr, ...left, ...right],
 				result: result,
 			});
@@ -74,38 +46,15 @@ function merge(left, right, dataPointIndex, dataRecorder, startIndex) {
 
 		result ? arr.push(left.shift()) : arr.push(right.shift());
 
-		idx++;
-
-		dataRecorder.recordComparison({
+		dataRecorder?.recordComparison({
 			currSubArr: [...arr, ...left, ...right],
 			result: result,
 		});
 
-		if (result) {
-			right[0].recordMove(startIndex + arr.length);
-			comparison.left = [arr[0].value, arr[0].moveHistory?.slice(-1)[0]];
-			comparison.right = [
-				right[0].value,
-				startIndex + right[0].moveHistory?.slice(-1)[0],
-			];
-			comparison.arr = arr;
-			comparison.leftArr = left;
-			comparison.rightArr = right;
-			comparison.startIdx = startIndex;
-
-			comparison.currArrMoveHistory = [...arr[0].moveHistory];
-			comparison.currRightMoveHistory = [...right[0].moveHistory];
-
-			comparison.complete = [...arr, ...left, ...right];
-		} else {
-			left[0].recordMove(arr.length);
-			comparison.startIdx;
-			comparison.left = left[0].moveHistory?.slice(-1)[0];
-			comparison.right = arr[0].moveHistory?.slice(-1)[0];
-
-			comparison.value = left[0].value;
-			comparison.comparedTo = arr[0].value;
-		}
+		// // test for recordDataForVisualizer
+		// if (dataRecorder) {
+		// 	recordDataForVisualizer(result, comparison, arr, left, right);
+		// }
 
 		comparison.comparison = result;
 	}
@@ -134,8 +83,17 @@ function mergeSort(array, dataPointIndex, dataRecorder, startIndex = 0) {
 	);
 }
 
-function sortRecorder(dataRecorder) {
-	dataRecorder.fileContentRecords;
+function recordDataForVisualizer(result, comparison, arr, left, right) {
+	if (result) {
+		right[0].recordMove(arr.length);
+		comparison.left = [arr[0].value, arr[0].moveHistory?.slice(-1)[0]];
+		comparison.right = [right[0].value, right[0].moveHistory?.slice(-1)[0]];
+	} else {
+		left[0].recordMove(arr.length);
+		comparison.left = left[0].moveHistory?.slice(-1)[0];
+		comparison.right = arr[0].moveHistory?.slice(-1)[0];
+		comparison.value = left[0].value;
+		comparison.comparedTo = arr[0].value;
+	}
 }
-
 export { mergeSort };
