@@ -27,10 +27,10 @@ function merge(left, right, dataPointIndex, dataRecorder, startIndex) {
 			// each array removes the pushed elements until one or both of them is empty
 			result ? arr.push(left.shift()) : arr.push(right.shift());
 
-			// // test for recordDataForVisualizer
-			// if (dataRecorder) {
-			// 	recordDataForVisualizer(result, comparison, arr, left, right);
-			// }
+			// test for recordDataForVisualizer
+			if (dataRecorder) {
+				recordDataForVisualizer(result, comparison, arr, left, right);
+			}
 
 			comparison.comparison = result;
 
@@ -51,10 +51,10 @@ function merge(left, right, dataPointIndex, dataRecorder, startIndex) {
 			result: result,
 		});
 
-		// // test for recordDataForVisualizer
-		// if (dataRecorder) {
-		// 	recordDataForVisualizer(result, comparison, arr, left, right);
-		// }
+		// test for recordDataForVisualizer
+		if (dataRecorder) {
+			recordDataForVisualizer(result, comparison, arr, left, right);
+		}
 
 		comparison.comparison = result;
 	}
