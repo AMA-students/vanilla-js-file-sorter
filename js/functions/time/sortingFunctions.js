@@ -62,7 +62,9 @@ export function insertionSort(arr)
         } 
         arr[j + 1] = key; 
         // console.log("Test");
-    } 
+        // console.log(arr);
+    }
+    return arr
 }
 
 // Quick Sort

@@ -1,3 +1,4 @@
+import { insertionSort } from "./sortingFunctions.js"; 
 
 // Function array of the time complexity of each sorting algorithm
 const sortingFunctions = [
@@ -26,18 +27,23 @@ class sortingList{
 
 
 function checkTime(arr){ // To compare all sorting functions
-    let time;
+    // console.log(arr);
     let n = arr.length;
+    const time = allSortingFunctions(n);
+    const x = insertionSort(time);
+
 
     // f(n) = O(g(n))
     // f(n) > c.g(n)
     // c and n0 are constant
     
-
     //Big O: Worst Case   : Upperbound Function
     //Omega: Best case    : Lowerbound Function
     //Theta: Average Case : Average
- 
+
+    
+
+    return x; // [0] = fastest, [n] = slowest
 }
 
 function checkAllSorting(arr){
@@ -75,7 +81,7 @@ function oneEquation(n){
     return [x_arr];
 }
 
-// This calculates the time complexity of all sorting functions
+// This calculates the time complexity of all sorting functions based on the array size
 // Uncomment elevenFunction() if you want to calculate the time complexity with 11 modifiers
 // Only choose one between elevenFunction() and oneFunction()
 function allSortingFunctions(n){ // n = array length
@@ -171,5 +177,6 @@ export {
     quickF,
     allSortingFunctions,
     checkAllSorting,
-    oneEquation
+    oneEquation,
+    checkTime
 }
