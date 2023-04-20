@@ -1,12 +1,31 @@
 
+// Function array of the time complexity of each sorting algorithm
 const sortingFunctions = [
     selectionF,
     bubbleF,
     insertionF,
     mergeF,
-    quickF];
+    quickF]; 
 
-function checkTime(arr){ // To compare everything
+
+const sorts = ['Selection', 'Bubble', 'Insertion', 'Merge', 'Quick'];
+
+class sortingList{
+    constructor(sortMethod, modifier, values){
+        this.sortMethod = sortMethod;
+        this.modifier = [modifier];
+        this.values = [values];
+    };
+
+
+}
+
+
+// console.log(trySort);
+// console.log("Test above");
+
+
+function checkTime(arr){ // To compare all sorting functions
     let time;
     let n = arr.length;
 
@@ -22,44 +41,29 @@ function checkTime(arr){ // To compare everything
 }
 
 function checkAllSorting(arr){
-    const sorts = [
-        ['Selection: ', 0],
-        ['Bubble: ', 0],
-        ['Insertion: ', 0],
-        ['Merge: ', 0],
-        ['Quick: ', 0]
-    ];
+    console.log("Array below");
+    console.log(arr);
+    let temp_arr = {};
+    const trySort = new sortingList();
 
-    // console.log("Array");
-    // console.log(arr);
-    
-    let n = arr.length;
+    let n = arr.length; //Modifier
     console.log(n);
 
-    let x = allSortingFunctions(n);
+    let resultOf = allSortingFunctions(n); // Returns the math equivalent result of the sorting algorithm
 
-    // console.log(x);
-    // console.log(sorts[0][1]);    
-    for(let i = 0; i<sorts.length; i++){
-        // sorts.splice(1, 1, x[i]);
-        // console.log(sorts[i]);
-        // console.log(x[i]);
-        sorts[i][1] = n;
-    }
-    for(let i = 0; i<sorts.length; i++){
-        // sorts.splice(1, 1, x[i]);
-        // console.log(sorts[i]);
-        // console.log(x[i]);
-        sorts[i][2] = x[i];
+    for(let index in sorts){
+        console.log(sorts[index]);
+        trySort.sortMethod = sorts[index];
+        temp_arr[index] = trySort
+        console.log(temp_arr);
     }
 
-    // console.log(sorts);
+    console.log('temp arr below');
+    // console.log(temp_arr);
+    
+    // return temp_arr;
+};
 
-    // for(i = 0; i<=4; i++){
-    //     sorts.set(sorts[i].)
-    // }
-    return sorts;
-}
 function oneEquation(n){
     let x_arr = [];
     // sortingFunctions[i]
@@ -71,6 +75,9 @@ function oneEquation(n){
     return [x_arr];
 }
 
+// This calculates the time complexity of all sorting functions
+// Uncomment elevenFunction() if you want to calculate the time complexity with 11 modifiers
+// Only choose one between elevenFunction() and oneFunction()
 function allSortingFunctions(n){ // n = array length
     let x_arr = [];
 
@@ -89,8 +96,10 @@ function allSortingFunctions(n){ // n = array length
 }
 
 
-const c = 1; // constant time
 
+// Sorting algorithm as mathematical / representations below
+
+const c = 1; // constant time
 
 function elevenFunction(func, n) // n = array length
 {
@@ -140,6 +149,8 @@ function insertionF(n){
                                          // Big O(n^2)
     return result;
 }
+
+// Merge and quick sort is temporarily at n log n
 
 function mergeF(n){
     let result = n*Math.log2(n);;
