@@ -18,7 +18,8 @@ import {
     mergeF,
     quickF,
     allSortingFunctions, // Only this needed
-    checkAllSorting
+    checkAllSorting,
+    oneEquation
 } from "./js/functions/time/timeComplexityTest.js";
 
 
@@ -129,6 +130,11 @@ let z = checkAllSorting(toSort);
 // console.log(toSort.length);
 // console.log("Checked");
 // console.log(z);
-printTime(z);
 
+console.log('Check all sorting');
+console.log(z);
+printTime(z); // Prints the result of the allSortingFunction from timeComplexityTest
 
+// let equation = oneEquation(arr);
+
+// console.log(oneEquation(n));
