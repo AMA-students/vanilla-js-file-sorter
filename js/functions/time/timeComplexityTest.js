@@ -1,4 +1,10 @@
 
+const sortingFunctions = [
+    selectionF,
+    bubbleF,
+    insertionF,
+    mergeF,
+    quickF];
 
 function checkTime(arr){ // To compare everything
     let time;
@@ -31,13 +37,20 @@ function checkAllSorting(arr){
     console.log(n);
 
     let x = allSortingFunctions(n);
+
     // console.log(x);
     // console.log(sorts[0][1]);    
     for(let i = 0; i<sorts.length; i++){
         // sorts.splice(1, 1, x[i]);
         // console.log(sorts[i]);
         // console.log(x[i]);
-        sorts[i][1] = x[i];
+        sorts[i][1] = n;
+    }
+    for(let i = 0; i<sorts.length; i++){
+        // sorts.splice(1, 1, x[i]);
+        // console.log(sorts[i]);
+        // console.log(x[i]);
+        sorts[i][2] = x[i];
     }
 
     // console.log(sorts);
@@ -47,18 +60,23 @@ function checkAllSorting(arr){
     // }
     return sorts;
 }
+function oneEquation(n){
+    let x_arr = [];
+    // sortingFunctions[i]
+
+    for(let i = 0; i < 5; i++){
+        x_arr[i] = oneFunction(sortingFunctions[i], n);
+    }
+
+    return [x_arr];
+}
 
 function allSortingFunctions(n){ // n = array length
     let x_arr = [];
-    let sortingFunctions = [
-        selectionF,
-        bubbleF,
-        insertionF,
-        mergeF,
-        quickF ];
-    
+
     for(let i = 0; i < 5; i++){
-        x_arr[i] = elevenFunction(sortingFunctions[i], n)
+        // x_arr[i] = elevenFunction(sortingFunctions[i], n);
+        x_arr[i] = oneFunction(sortingFunctions[i], n);
     }
     
     // console.log(elevenFunction(selectionF, n));
@@ -80,8 +98,8 @@ function elevenFunction(func, n) // n = array length
     let arr = [];
     console.log();
     for(let i = 0; i<=10; i++) // n - 5 , n - 4, n -3 ... n + 5
-    {
-        // console.log(n-(i-5));
+    {       
+        // console.log(n-(i-5));    
         if(n-(i-5) < 0){ // If value becomes less than 0
             continue
         }else
@@ -94,7 +112,15 @@ function elevenFunction(func, n) // n = array length
     return [arr];
     // console.log(counter);
 }
+function oneFunction(func, n){
+    let result;
+    console.log();
+    
+    result = func(n);
 
+    return result;
+    // console.log(counter);
+}
 
 // Mathematical Expressions of Sorting Algorithms
 function selectionF(n){
@@ -133,5 +159,6 @@ export {
     mergeF,
     quickF,
     allSortingFunctions,
-    checkAllSorting
+    checkAllSorting,
+    oneEquation
 }
