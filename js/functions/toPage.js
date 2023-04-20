@@ -1,5 +1,6 @@
 export const container = document.querySelector("#output");
 export const resultContainer = document.querySelector("#result");
+const timeTable = document.querySelector(".timeTable");
 
 export function printArray(arr)
 {
@@ -15,7 +16,7 @@ export function printArray(arr)
     }
 }
 
-export function copyUnsorted(arr){
+export function copyUnsorted(arr){ // Unnecessary left over code (to be deleted)
     let testArr = [];
     for(let i = 0 ; i > 5 ; i++)
     {
@@ -23,33 +24,55 @@ export function copyUnsorted(arr){
         console.log("test");
     }
     return [...testArr];
-}
-export function printTime(arr){
-    console.log("test");
-    console.log(arr);
-    for(let i = 0; i<arr.length; i++)
-    {
-        for(let j=1; j<arr[i].length+1; j++)
-        {
-            if(j%2 == 0){
-                resultContainer.innerHTML += arr[i][j-1] + "<br>";
-            }else       
-                resultContainer.innerHTML += arr[i][j-1];
-        }
-    }
-    // arr.forEach(printResult);
-}
+} // Idk sa tingin ko naging shallow copy yung array tapos gusto ko deep copy?
 
-
-// export function printTime(arr)
-// {
-//     let i;
-//     let size = arr.length;
-//     for (i = 0; i < size; i++)
+// export function printTime(arr){
+//     for(let i = 0; i<arr.length; i++) // Select the sorting algorithm
 //     {
-//         resultContainer.innerHTML += arr[i] + "<br>";
+//         timeTable.innerHTML += "<tr>" + `<td>${arr[i][0]}</td>`;
+//         for(let j=1; j<arr[i][1][0].length + 1; j++) // Select the data result from the sorting algorithm
+//         {
+//             // console.log("Array 3 length");
+//             // console.log(arr[i][1][0][j-1].length);
+//             for(let r = 0; r<2; r++){
+//                 // console.log(r);
+//                 if(!r){
+//                     resultContainer.innerHTML += arr[i][1][0][j-1][r]; // 5th [] = [modifer, result]
+//                 }else
+//                     resultContainer.innerHTML += ", " + arr[i][1][0][j-1][r] + "<br>"; // 5th [] = [modifer, result]
+//             }            
+//         }
 //     }
+//     // arr.forEach(printResult);
 // }
+
+// export function printTime(arr){ 
+//     // console.log("test");
+//     // console.log(arr);
+//     for(let i = 0; i<arr.length; i++) // Select the sorting algorithm
+//     {
+//         timeTable.innerHTML += `<tr id="table ${i}">` + `<td>${arr[i][0]}</td>`;
+//         for(let j=1; j<arr[i].length; j++) // Select the data result from the sorting algorithm
+//         {   
+//             if(j%2 == 0){
+//                 timeTable.innerHTML += `<td>${arr[i][j]}</td>`;
+//             }else       
+//                 timeTable.innerHTML += `<td>${arr[i][j]}</td>`;
+//         }
+//     }
+//     // arr.forEach(printResult);
+// }
+
+
+export function printTime(arr)
+{
+    let i;
+    let size = arr.length;
+    for (i = 0; i < size; i++)
+    {
+        resultContainer.innerHTML += arr[i] + "<br>";
+    }
+}
 
 export function printResult(e, i)
 {
