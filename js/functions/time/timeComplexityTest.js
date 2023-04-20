@@ -16,7 +16,7 @@ function checkTime(arr){ // To compare everything
 }
 
 function checkAllSorting(arr){
-    const map = [
+    const sorts = [
         ['Selection: ', 0],
         ['Bubble: ', 0],
         ['Insertion: ', 0],
@@ -32,20 +32,20 @@ function checkAllSorting(arr){
 
     let x = allSortingFunctions(n);
     // console.log(x);
-    // console.log(map[0][1]);    
-    for(let i = 0; i<map.length; i++){
-        // map.splice(1, 1, x[i]);
-        // console.log(map[i]);
+    // console.log(sorts[0][1]);    
+    for(let i = 0; i<sorts.length; i++){
+        // sorts.splice(1, 1, x[i]);
+        // console.log(sorts[i]);
         // console.log(x[i]);
-        map[i][1] = x[i];
+        sorts[i][1] = x[i];
     }
 
-    // console.log(map);
+    // console.log(sorts);
 
     // for(i = 0; i<=4; i++){
-    //     map.set(map[i].)
+    //     sorts.set(sorts[i].)
     // }
-    return map;
+    return sorts;
 }
 
 function allSortingFunctions(n){ // n = array length
@@ -55,7 +55,7 @@ function allSortingFunctions(n){ // n = array length
         bubbleF,
         insertionF,
         mergeF,
-        quickF];
+        quickF ];
     
     for(let i = 0; i < 5; i++){
         x_arr[i] = elevenFunction(sortingFunctions[i], n)
@@ -91,7 +91,7 @@ function elevenFunction(func, n) // n = array length
         // counter++;
     }
 
-    return [...arr];
+    return [arr];
     // console.log(counter);
 }
 
