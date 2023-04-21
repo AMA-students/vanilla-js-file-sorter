@@ -7,19 +7,16 @@ import {
 } from "./js/functions/time/sortingFunctions.js";
 
 import {printArray, 
-    container, 
+    container,
+    resultContainer, 
     printTime,
 } from "./js/functions/toPage.js";
 
+// checkAllSorting and allSortingFunctions is the same
 import {
-    selectionF,
-    bubbleF,
-    insertionF,
-    mergeF,
-    quickF,
     allSortingFunctions, // Only this needed
     checkAllSorting,
-    oneEquation
+    checkTime
 } from "./js/functions/time/timeComplexityTest.js";
 
 
@@ -100,41 +97,18 @@ printArray(mergeResult);
 // console.log("Array after merge sort");
 // console.log(arr);
 
-// console.log('Selection Sort: ' + selectionF(n));
-// console.log('Bubble Sort: ' + bubbleF(n));
-// console.log('Insertion Sort: ' + insertionF(n));
-// console.log('Merge Sort: ' + mergeF(n));    
-// console.log('Quick Sort: ' + quickF(n));
 
+// To run/test all sorting functions
+// console.log('All sorting functions');
+// let y = allSortingFunctions(n)
+// console.log(y);
 
-
-// const algorithmTimeComplexity = {
-//     selectionSort: "O(n^2)",
-//     bubbleSort: "O(n^2)",
-//     insertionSort: "O(n^2)",
-//     mergeSort: "O(n log n)",
-//     quickSort: "O(n log n)"
-// };
-
-// let x = algorithmTimeComplexity;
-// console.log(x); 
-
-console.log('All sorting functions');
-let y = allSortingFunctions(n)
-console.log(y);
-
-// console.log(toSort);
-
-let z = checkAllSorting(toSort);
-// console.log(toSort);
-// console.log(toSort.length);
-// console.log("Checked");
+// console.log('Check all sorting');
+// let z = checkAllSorting(toSort);
 // console.log(z);
+// printTime(z); // Prints the result of the checkAllSorting function from timeComplexityTest
 
-console.log('Check all sorting');
-console.log(z);
-printTime(z); // Prints the result of the allSortingFunction from timeComplexityTest
-
-// let equation = oneEquation(arr);
-
-// console.log(oneEquation(n));
+let times = checkTime(n)
+resultContainer.innerHTML += "The fastest time is: ";
+resultContainer.innerHTML += `${times}`;
+// printArray(times)
