@@ -15,7 +15,6 @@ import {printArray,
 // checkAllSorting and allSortingFunctions is the same
 import {
     allSortingFunctions, // Only this needed
-    checkAllSorting,
     checkTime
 } from "./js/functions/time/timeComplexityTest.js";
 
