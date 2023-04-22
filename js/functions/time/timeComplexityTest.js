@@ -18,12 +18,12 @@ function checkTime(n){ // To compare all sorting functions
     // console.log(arr);
     const time = allSortingFunctions(n); // Returns the math equivalent result of the sorting algorithm
     let time2 = time.map((item) => {
-        return item
+        return item[1]
         }
     )
-    console.log(time);
+    console.log(time2);
     // console.log(time2);
-    const x = insertionSort(time);
+    const x = insertionSort(time2);
     // console.log(x);
 
 
@@ -35,7 +35,7 @@ function checkTime(n){ // To compare all sorting functions
     //Omega: Best case    : Lowerbound Function
     //Theta: Average Case : Average
     
-    return x; // [0] = fastest, [n] = slowest
+    return x[0]; // [0] = fastest, [n] = slowest
 }
 
 function checkAllSorting(arr){
