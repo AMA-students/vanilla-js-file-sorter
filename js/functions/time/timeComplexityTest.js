@@ -1,24 +1,30 @@
 import { insertionSort } from "./sortingFunctions.js"; 
 
 // Function array of the time complexity of each sorting algorithm
-const sortingFunctions = [selectionF, bubbleF, insertionF, mergeF, quickF]; 
+const sortingFunctions = [selectionF, bubbleF, insertionF, mergeF, quickF];  
 
-const sorts = [{'selection':{}}, {}, {}, {}, {}]; 
-console.log(sorts[0]);
-let tryTest =sorts[0].selection
+// console.log(sorts);
+// let tryTest =sorts[0].selection
 
-let x = 'test'; // Key
-sorts[0].selection[x] = 'test'; // Value
+// let x = 'test'; // Key
+// sorts[0][x] = 'test'; // Value
 
 
 // console.log(trySort);
 // console.log("Test above");
-console.log(sorts);
+// console.log(sorts);
 
 function checkTime(n){ // To compare all sorting functions
     // console.log(arr);
     const time = allSortingFunctions(n); // Returns the math equivalent result of the sorting algorithm
+    let time2 = time.map((item) => {
+        return item
+        }
+    )
+    console.log(time);
+    // console.log(time2);
     const x = insertionSort(time);
+    // console.log(x);
 
 
     // f(n) = O(g(n))
@@ -28,8 +34,8 @@ function checkTime(n){ // To compare all sorting functions
     //Big O: Worst Case   : Upperbound Function
     //Omega: Best case    : Lowerbound Function
     //Theta: Average Case : Average
-
-    return x[0]; // [0] = fastest, [n] = slowest
+    
+    return x; // [0] = fastest, [n] = slowest
 }
 
 function checkAllSorting(arr){
@@ -43,12 +49,12 @@ function checkAllSorting(arr){
 
     let resultOf = allSortingFunctions(n); // Returns the math equivalent result of the sorting algorithm
 
-    for(let index in sorts){
-        console.log(sorts[index]);
-        trySort.sortMethod = sorts[index];
-        temp_arr[index] = trySort
-        console.log(temp_arr);
-    }
+    // for(let index in sorts){
+    //     console.log(sorts[index]);
+    //     trySort.sortMethod = sorts[index];
+    //     temp_arr[index] = trySort
+    //     console.log(temp_arr);
+    // }
 
     console.log('temp arr below');
     // console.log(temp_arr);
@@ -59,26 +65,56 @@ function checkAllSorting(arr){
 // This calculates the time complexity of all sorting functions based on the array size
 // Uncomment elevenFunction() if you want to calculate the time complexity with 11 modifiers
 // Only choose one between elevenFunction() and oneFunction()
+// This also assigns to an object the modifier as the key and the result as the value
 function allSortingFunctions(n){ // n = array length
-    let x_arr = [];
+    const sorts = [{}, {}, {}, {}, {}];
+    // let x = 'test'; // Key
+    // sorts[0][x] = 'test'; // Value
 
+    
+    let x_arr = [];
     for(let i = 0; i < 5; i++){
         // x_arr[i] = elevenFunction(sortingFunctions[i], n);
         x_arr[i] = oneFunction(sortingFunctions[i], n);
     }
+    let nArr = x_arr.length;
+    let nArr2;
+    // console.log(x_arr[0][0].length);
+    // console.log(x_arr);
+    if(x_arr[0][0].length > 2){
+        nArr2 = x_arr[0][0].length; // If using elevenFunction
+    }else if(x_arr[0].length <= 2){
+        nArr2 = x_arr[0].length; // If using oneFunction
+    }
     
-    console.log();
-    // console.log(elevenFunction(selectionF, n));
-    // console.log(elevenFunction(bubbleF, n));
-    // console.log(elevenFunction(insertionF, n));
-    // console.log(elevenFunction(mergeF, n));
-    // console.log(elevenFunction(quickF, n));
+    // console.log("nArr");
+    // console.log(nArr);
+    // console.log("nArr2");
+    // console.log(nArr2);
 
-    return x_arr; // Returns the modifier and result values based on the modifier
+    for(let i = 0; i<nArr; i++){
+        for(let j = 0; j<nArr2; j++){
+            if(x_arr[0][0].length > 2){
+                sorts[i][x_arr[i][0][j]] = x_arr[i][1][j]; // If using elevenFunction
+                // console.log(sorts[i][x_arr[i][0][j]] = x_arr[i][1][j]);
+            }else if(x_arr[0].length <= 2){
+                sorts[i][x_arr[i][j]] = x_arr[i][j+1] // If using oneFunction
+                // console.log(sorts[i][x_arr[i][j]]);
+                break
+            }
+            
+        }
+        
+    }
+    // console.log(sorts);
+    // console.log(x_arr);
+
+    return x_arr; // [0][0] = modfier, [0][1] = result ; Returns the modifier and result values based on the modifier
 }
 
 
-
+// =====================================================================================================================================
+// Maybe to add to another module
 // Sorting algorithm as mathematical / representations below
 
 const c = 1; // constant time
@@ -98,21 +134,24 @@ const c = 1; // constant time
 function elevenFunction(func, n) // n = array length
 {
     // let counter = 0;
-    let arr = [];
+    let x_arr = [];
+    let y_arr = [];
     console.log();
     for(let i = 0; i<=10; i++) // n - 5 , n - 4, n -3 ... n + 5
     {       
         // console.log(n-(i-5));    
-        if(n-(i-5) < 0){ // If value becomes less than 0
+        if(n+(i-5) < 0){ // If value becomes less than 0
             continue
-        }else
-        
+        }else   
+        x_arr[i] = (n+(i-5));
+        y_arr[i] = func(n+(i-5));
+        // console.log(x_arr);
+        // console.log(y_arr);
         // arr.push(i-5);
-        arr.push([(i-5), func(n+(i-5))])
         // counter++;
     }
-
-    return [arr];
+    // console.log([x_arr, y_arr]);
+    return [x_arr, y_arr];
     // console.log(counter);
 }
 function oneFunction(func, n){
@@ -120,7 +159,7 @@ function oneFunction(func, n){
     console.log();
     
     result = func(n);
-
+    // console.log(n, result);
     return [n, result];
     // console.log(counter);
 }
