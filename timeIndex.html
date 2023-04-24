@@ -10,8 +10,19 @@
 </head>
 <body>
     <h1>Time tests</h1>
+    <form action="" id="fileUpload">
+        <input type="file" id="file" accept=".csv">
+        <button type="submit" id="fileSubmit">Submit</button>
+    </form>
+    <br>
+    <form action="" id="askSize">
+        <label for="sizeInput">Enter a file size: </label>
+        <input type="number" id="sizeInput">
+        <button type="submit" id="sizeSubmit">Submit</button>
+    </form>
     <div id="output" style="padding: 10px;"></div>
     <!-- Temporary paddings -->
+    <div id="preview"></div>
     <ul id="result" style="padding: 10px;"></ul> 
     <table class="timeTable">
         <tr>
