@@ -38,29 +38,42 @@ function checkTime(n){ // To compare all sorting functions
     return x[0]; // [0] = fastest, [n] = slowest
 }
 
-function checkAllSorting(arr){
-    console.log("Array below");
-    console.log(arr);
-    let temp_arr = {};
-    const trySort = new sortingList();
+// function checkAllSorting(arr){
+//     console.log("Array below");
+//     console.log(arr);
+//     let temp_arr = {};
+//     const trySort = new sortingList();
 
-    let n = arr.length; //Modifier
-    console.log(n);
+//     let n = arr.length; //Modifier
+//     console.log(n);
 
-    let resultOf = allSortingFunctions(n); // Returns the math equivalent result of the sorting algorithm
+//     let resultOf = allSortingFunctions(n); // Returns the math equivalent result of the sorting algorithm
 
-    // for(let index in sorts){
-    //     console.log(sorts[index]);
-    //     trySort.sortMethod = sorts[index];
-    //     temp_arr[index] = trySort
-    //     console.log(temp_arr);
-    // }
+//     // for(let index in sorts){
+//     //     console.log(sorts[index]);
+//     //     trySort.sortMethod = sorts[index];
+//     //     temp_arr[index] = trySort
+//     //     console.log(temp_arr);
+//     // }
 
-    console.log('temp arr below');
-    // console.log(temp_arr);
+//     console.log('temp arr below');
+//     // console.log(temp_arr);
     
-    // return temp_arr;
-};
+//     // return temp_arr;
+// };
+
+function getBigO(){
+    const sample = [10, 100, 1000, 10000, 100000, 1000000]
+    let bigQ = [], bigLL = [];
+    sample.forEach(elem => {
+        bigQ.push(quadratic(elem));
+        bigLL.push(linearLog(elem));
+    });
+    console.log(bigQ);
+    console.log(bigLL);
+    return {bigQ, bigLL}
+}
+
 
 // This calculates the time complexity of all sorting functions based on the array size
 // Uncomment elevenFunction() if you want to calculate the time complexity with 11 modifiers
@@ -109,8 +122,11 @@ function allSortingFunctions(n){ // n = array length
     // console.log(sorts);
     // console.log(x_arr);
 
-    return x_arr; // [0][0] = modfier, [0][1] = result ; Returns the modifier and result values based on the modifier
+    return x_arr; 
+    // Returns a 2d array[][] with these values:
+    // [0][0] = modfier, [0][1] = result ; Returns the modifier and result values based on the modifier
 }
+
 
 
 // =====================================================================================================================================
@@ -165,18 +181,20 @@ function oneFunction(func, n){
 }
 
 // Mathematical Expressions of Sorting Algorithms
+function quadratic(n){
+    let result = Math.pow(n,2);
+    return result;
+}
 function selectionF(n){
     let result = 4 * Math.pow(n,2) + n*c + c; // 4n^2 + n + 1
                                           // Big O(n^2)
     return result;
 }
-
 function bubbleF(n){
     let result = Math.pow(n,2) + 4*n + c; // n^2 + 4nc + c
                                         // Big O(n^2)
     return result;
 }
-
 function insertionF(n){
     let result = Math.pow(n,2) + 2*n + 2*c; // n^2c + 2nc + 2c
                                          // Big O(n^2)
@@ -184,12 +202,14 @@ function insertionF(n){
 }
 
 // Merge and quick sort is temporarily at n log n
-
-function mergeF(n){
-    let result = n*Math.log2(n);;
+function linearLog(n){
+    let result = (n*Math.log2(n));
     return result;
 }
-
+function mergeF(n){
+    let result = n*Math.log2(n);
+    return result;
+}
 function quickF(n){
     let result = n*Math.log2(n);
     return result;
@@ -198,5 +218,6 @@ function quickF(n){
 
 export {
     allSortingFunctions,
-    checkTime
+    checkTime,
+    getBigO
 }
