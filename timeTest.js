@@ -111,3 +111,76 @@ let times = checkTime(n)
 resultContainer.innerHTML += "The fastest time is: ";
 resultContainer.innerHTML += `${times}`;
 // printArray(times)
+
+
+// Parsing CSV files
+const fileUpload = document.querySelector('#fileUpload')
+const fileInput = document.querySelector('#file');
+const fileSubmit = document.querySelector('#fileSubmit');
+const preview = document.querySelector('#preview');
+
+fileUpload.addEventListener("change", () => {
+    const fr = new FileReader();
+    fr.readAsText(fileInput.files[0]);
+    
+    fr.addEventListener('load', () => {
+        const csv = fr.result;
+
+        const array = csv.split('\r\n').map((line) => {
+            return line.split(',');
+        })
+        console.log(array);
+
+
+        // Create the table to display data
+        // const table = document.createElement('table');
+
+        // array.forEach((line, index) => {
+        //     const tr = document.createElement('tr');
+
+        //     line.forEach(cell => {
+        //         let td;
+        //         if(index === 0){
+        //             td = document.createElement('th');
+        //             console.log(cell);
+        //         }else{
+        //             td = document.createElement('td');
+        //         }
+        //         td.textContent = cell;
+        //         tr.appendChild(td);
+        //     })
+        //     table.appendChild(tr);
+        // });
+
+        // preview.appendChild(table);
+
+        // const html = preview.innerHTML;
+
+        // const pre = document.createElement('pre');
+        // const code = document.createElement('code');
+
+        // code.innerText = html;
+
+        // pre.appendChild(code);
+        // document.body.appendChild(pre);
+    })
+})
+
+// fileSubmit.addEventListener("click", () => {
+    
+//     console.log(fileInput.files[0]);
+// })
+
+const sizeForm = document.querySelector('#askSize');
+const sizeInput = document.querySelector('#sizeInput');
+const sizeSubmit = document.querySelector('#sizeSubmit');
+let sizeGet;
+function fun1(){
+    preview.innerHTML = sizeInput.value;
+}
+sizeSubmit.addEventListener("click", (e) => {
+    e.preventDefault();
+    sizeGet = sizeInput.value
+    console.log(sizeGet);
+})
+
