@@ -15,7 +15,8 @@ import {printArray,
 // checkAllSorting and allSortingFunctions is the same
 import {
     allSortingFunctions, // Only this needed
-    checkTime
+    checkTime,
+    getBigO
 } from "./js/functions/time/timeComplexityTest.js";
 
 
@@ -184,3 +185,4 @@ sizeSubmit.addEventListener("click", (e) => {
     console.log(sizeGet);
 })
 
+console.log(getBigO());
