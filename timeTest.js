@@ -110,7 +110,8 @@ printArray(mergeResult);
 
 let times = checkTime(n)
 resultContainer.innerHTML += "The fastest time is: ";
-resultContainer.innerHTML += `${times}`;
+resultContainer.innerHTML += `${times}` + '<br>';
+// console.log(times);
 // printArray(times)
 
 
@@ -185,4 +186,19 @@ sizeSubmit.addEventListener("click", (e) => {
     console.log(sizeGet);
 })
 
-console.log(getBigO());
+// console.log(sizeGet);
+// console.log(allSortingFunctions(sizeGet));
+let notation = ["Value", "Quadratic", "Log-Linear"]
+const bigOArray = getBigO();
+bigOArray.forEach((element, index) => {
+    // console.log(element);
+resultContainer.innerHTML += `<br>` + notation[index];
+    element.forEach(element => {
+        console.log(element);
+        resultContainer.innerHTML += `<br>` + element;
+    });
+    resultContainer.innerHTML += `<br>`;
+});
+
+console.log(bigOArray);
+console.log(allSortingFunctions(n));
