@@ -17,13 +17,21 @@ const sortingFunctions = [selectionF, bubbleF, insertionF, mergeF, quickF];
 function checkTime(n){ // To compare all sorting functions
     // console.log(arr);
     const time = allSortingFunctions(n); // Returns the math equivalent result of the sorting algorithm
-    let time2 = time.map((item) => {
-        return item[1]
-        }
-    )
-    console.log(time2);
+    // console.log(time);
+    let time2 = [];
+    time.forEach((index, i) => {
+            time2[i] = Object.entries(index);
+    });
+        
+    let time3 = time2.flat()
+    let values = time3.map(index => {
+        return index[1];
+    })
+    // console.log(values);
+    // console.log(time3);
     // console.log(time2);
-    const x = insertionSort(time2);
+    const x = insertionSort(values);
+    // console.log(x);
     // console.log(x);
 
 
@@ -34,7 +42,7 @@ function checkTime(n){ // To compare all sorting functions
     //Big O: Worst Case   : Upperbound Function
     //Omega: Best case    : Lowerbound Function
     //Theta: Average Case : Average
-    
+    // console.log(x);
     return x[0]; // [0] = fastest, [n] = slowest
 }
 
@@ -69,9 +77,10 @@ function getBigO(){
         bigQ.push(quadratic(elem));
         bigLL.push(linearLog(elem));
     });
-    console.log(bigQ);
-    console.log(bigLL);
-    return {bigQ, bigLL}
+    // console.log(bigQ);
+    // console.log(bigLL);
+    // console.log([bigQ, bigLL]);
+    return [sample, bigQ, bigLL];
 }
 
 
@@ -86,7 +95,7 @@ function allSortingFunctions(n){ // n = array length
 
     
     let x_arr = [];
-    for(let i = 0; i < 5; i++){
+    for(let i = 0; i < 5; i++){ // Loops through all sorting algorithm functions that contain the mathematical expression
         // x_arr[i] = elevenFunction(sortingFunctions[i], n);
         x_arr[i] = oneFunction(sortingFunctions[i], n);
     }
@@ -117,15 +126,17 @@ function allSortingFunctions(n){ // n = array length
             }
             
         }
-        
     }
     // console.log(sorts);
     // console.log(x_arr);
 
-    return x_arr; 
+    return sorts; 
     // Returns a 2d array[][] with these values:
     // [0][0] = modfier, [0][1] = result ; Returns the modifier and result values based on the modifier
 }
+
+// function returnAllSorting(n){ // Takes in the array size
+//     const sorts = {{}, {}, {}, {}, {}};
 
 
 
@@ -150,13 +161,13 @@ const c = 1; // constant time
 function elevenFunction(func, n) // n = array length
 {
     // let counter = 0;
-    let x_arr = [];
-    let y_arr = [];
+    let x_arr = []; // Stores the modifier
+    let y_arr = []; // Stores the result value
     console.log();
     for(let i = 0; i<=10; i++) // n - 5 , n - 4, n -3 ... n + 5
     {       
         // console.log(n-(i-5));    
-        if(n+(i-5) < 0){ // If value becomes less than 0
+        if(n+(i-5) < 0){ // If modifier value becomes less than 0
             continue
         }else   
         x_arr[i] = (n+(i-5));
@@ -166,6 +177,7 @@ function elevenFunction(func, n) // n = array length
         // arr.push(i-5);
         // counter++;
     }
+
     // console.log([x_arr, y_arr]);
     return [x_arr, y_arr];
     // console.log(counter);
