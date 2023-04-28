@@ -194,11 +194,91 @@ bigOArray.forEach((element, index) => {
     // console.log(element);
 resultContainer.innerHTML += `<br>` + notation[index];
     element.forEach(element => {
-        console.log(element);
+        // console.log(element);
         resultContainer.innerHTML += `<br>` + element;
     });
     resultContainer.innerHTML += `<br>`;
 });
 
-console.log(bigOArray);
-console.log(allSortingFunctions(n));
+// console.log(bigOArray);
+// console.log(allSortingFunctions(n));
+
+// let chartData = {
+//     datasets: [{
+//         data: [10, 20, 30, 40, 50, 60, 70],
+//         // fill: false,
+//         // borderColor: 'red',
+//         // backgroundColor: 'transparent'
+//     }]
+// }
+// var chartOptions = {
+//     scales: {
+//       xAxes: [{
+//         ticks: {
+//           min: 0 // set the minimum value of the x-axis scale to 0
+//         }
+//       }],
+//       yAxes: [{
+//         ticks: {
+//           beginAtZero: true // set the y-axis scale to begin at 0
+//         }
+//       }]
+//     }
+// };
+window.onload = function () {
+	var chart = new CanvasJS.Chart("chartContainer", {
+		title:{
+			text: "My First Chart in CanvasJS"              
+		},
+		data: [              
+		{
+			// Change type to "doughnut", "line", "splineArea", etc.
+			type: "spline",
+			dataPoints: [
+				{ label: "Banana", y: 18 },
+                { label: "Orange", y: 29 },
+                { label: "Apple", y: 40 },                                    
+                { label: "Mango", y: 34 },
+                { label: "Grape", y: 24 },
+                { label: "Pineapple", y: 30}
+			],
+            fillOpacity: .5
+		},
+        {
+            type: "column",
+			dataPoints: [
+				{ label: "Banana", y: 15 },
+                { label: "Orange", y: 20 },
+                { label: "Apple", y: 30 },                                    
+                { label: "Mango", y: 35 },
+                { label: "Grape", y: 5 },
+                { label: "Pineapple", y: 20}
+			],
+            fillOpacity: .3
+        },
+        {
+            type: "area",
+			dataPoints: [
+				{ label: "Banana", y: 5 },
+                { label: "Orange", y: 6 },
+                { label: "Apple", y: 20 },                                    
+                { label: "Mango", y: 3 },
+                { label: "Grape", y: 10 },
+                { label: "Pineapple", y: 15}
+			],
+            fillOpacity: .6
+        }
+		],
+        axisX:{
+            title: "Fruits"
+            // minimum: 0,
+            // maximum: 5
+        },
+        axisY:{
+            title: "Amount of Fruits"
+        },
+        theme: 'dark1',
+        backgroundColor: "#2E11A4"
+	});
+	chart.render();
+}
